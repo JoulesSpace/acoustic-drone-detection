@@ -18,9 +18,11 @@ of how and why things are built.
 2. **Semantic / conventional commits.** `type(scope): summary`
    (`feat`, `fix`, `docs`, `build`, `chore`, `refactor`, `test`, `perf`).
    Commit in logical, in-between chunks rather than one giant commit.
-3. **Maintain `agent-memory/`.** It is the tracked memory directory: decisions,
-   DSP/domain notes, and handoffs live there. Update it as work happens, not
-   after. See `agent-memory/README.md` for the layout.
+3. **Maintain `agent-memory/`.** It is the tracked, layered Claude memory:
+   `decisions/` (ADRs), `insights/` (gotchas), `notes/` (domain knowledge), and
+   `handoffs/` (dated session state), all indexed by `agent-memory/MEMORY.md`.
+   Update it as work happens, not after — and update the index in the same
+   change. See `agent-memory/README.md` for the format.
 4. **Keep the core `no_std`-clean.** `drone-dsp` (and `drone-detect`) must build
    with `--no-default-features` so they can lower onto esp32 (xtensa) / riscv.
    All float math goes through `libm`, never `std` float methods.
@@ -78,5 +80,5 @@ deps. If a workspace is added later, update this section and
 
 ## When unsure
 
-Read `agent-memory/handoff.md` first — it's the latest state and next steps.
-Then `agent-memory/decisions.md` for the why behind the structure.
+Read `agent-memory/MEMORY.md` first — it indexes everything and links the latest
+handoff (current state + next steps), the decisions, and the insights.

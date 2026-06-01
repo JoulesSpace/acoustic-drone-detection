@@ -70,7 +70,8 @@ docker compose run --rm dev
 > On Git Bash (Windows) prefix docker commands with `MSYS_NO_PATHCONV=1`, or use
 > PowerShell — otherwise `/data/...` args get rewritten. See `CLAUDE.md`.
 
-Agent working notes, decisions, and handoffs are tracked in `agent-memory/`.
+Agent working memory — decisions, insights, domain notes, and session handoffs —
+is tracked in [`agent-memory/`](agent-memory/MEMORY.md).
 
 ## Contributing
 
