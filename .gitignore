@@ -5,8 +5,25 @@
 # Docker dev-service target volume mount point (if it ever materializes on host)
 /.docker-target/
 
+# Datasets: ignore all contents, keep the folder markers tracked
+/data/*
+!/data/.gitkeep
+!/data/.folderinfo
+
+# Benchmark results (JSON, possibly large): ignore, keep the folder marker
+/benchmarks/results/*
+!/benchmarks/results/.folderinfo
+
+# Scratch for cloning/inspecting upstream repos — fully ignored
+/workspace/
+
 # Generated / sample audio — keep binaries out of git
 *.wav
+
+# Python
+__pycache__/
+*.pyc
+.venv/
 
 # OS / editor noise
 .DS_Store
