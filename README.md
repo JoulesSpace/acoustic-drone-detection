@@ -2,6 +2,8 @@
 
 Detecting drones accoustically.
 
+Notable mention worth checking out: [batear-io/batear](https://github.com/batear-io/batear) for simple drone detection on esp32-S3+mic.
+
 ## TOC
 
 1. [Scope](#1-scope)
