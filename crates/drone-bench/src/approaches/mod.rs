@@ -13,6 +13,7 @@ mod gtcc_lr;
 mod hps;
 mod mfcc_lr;
 mod mfcc_mlp;
+mod physics_fused;
 mod spectral_gate;
 mod spectrogram_template;
 mod template;
@@ -41,6 +42,7 @@ pub fn all() -> Vec<Box<dyn Approach>> {
     v.push(Box::new(feature_fusion::FeatureFusion::new()));
     v.push(Box::new(spectrogram_template::SpectrogramTemplate::new()));
     v.push(Box::new(envelope_periodicity::EnvelopePeriodicity::new()));
+    v.push(Box::new(physics_fused::PhysicsFused::new()));
     v.push(Box::new(fusion::Fusion::new()));
     v
 }

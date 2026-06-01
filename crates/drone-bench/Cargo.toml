@@ -5,6 +5,10 @@ edition = "2021"
 license = "AGPL-3.0-or-later"
 description = "Benchmark harness for acoustic drone-detection approaches: pluggable Approach trait, dataset loader, metrics, JSON results."
 repository = "https://github.com/JoulesSpace/acoustic-drone-detection"
+# Several analysis bins live in src/bin/ (xeval, pareto, ratesweep, robust);
+# `default-run` keeps a bare `cargo run` (and the compose `bench` service) on the
+# main harness.
+default-run = "drone-bench"
 
 # Host-side (std) crate. Approaches here are for benchmarking; the deployable
 # subset can later be ported into the no_std crates. Each approach lives in its
