@@ -14,11 +14,12 @@ Detecting drones accoustically.
 
 1. [Scope](#1-scope)
 2. [On Audio and Sound](#2-on-audio-and-sound-human-reasoning) (human reasoning)
-3. [Possible Approaches](#3-possible-approaches-human-reasoning) (human reasoning)
-4. [Constraints of v0.1.0](#4-constraints-of-this-projects-first-iteration-v010) (human reasoning)
-5. [Implementation](#5-implementation-v010) (ai summary)
-6. [Contributing](#6-contributing)
-7. [License](#7-license)
+3. [Problem Layers](#3-problem-layers-human-reasoning) (human reasoning)
+4. [Possible Approaches](#4-possible-approaches-human-reasoning) (human reasoning)
+5. [Constraints of v0.1.0](#5-constraints-of-this-projects-first-iteration-v010) (human reasoning)
+6. [Implementation](#6-implementation-v010) (ai summary)
+7. [Contributing](#7-contributing)
+8. [License](#8-license)
 
 ## 1. Scope
 
@@ -51,30 +52,106 @@ Questions we answer with this porject:
   + audio is usually stored compressedly, as storing it as a raw `.wav` file / pickled numpy array takes too much storage.
   + audio compression is lossy, as humans dont need to head all the spectrum to detect voice for example. different audio codecs exist, for example implemented in the `ffmpeg project` (c++). modern codecs include `.mp3`, `.m4a`, `.opus` (whatsapp). it is important to consider these differences for data quality also, as a lossy codec might ruin predictions of more precise properties of a drone or situation.
 
-## 3. Possible Approaches (Human reasoning)
+## 3. Problem Layers (Human reasoning)
 
-- Detection:
-  + Audio is sampled at a rate `f`, keep in mind [Nyquist–Shannon sampling theorem](https://en.wikipedia.org/wiki/Nyquist%E2%80%93Shannon_sampling_theorem) -> fft / short time fourrier transform -> frequencies histogram which should be characteristic (like for guitars / pianos / fridges) ; drone audio may also be assumed sort of periodic
-  + Drone Audio Dataset -> kaggle, gh, huggingfacce (saraalemadi/DroneAudioDataset, GitHub https://share.google/3r4LoZTEbmyATlB56 ; Audio | Drone Sound Detection https://share.google/rMNhLehvEraoAqpfG)
-  + Multi-Dataset found on Kaggle that combines multiple drone datasets
-  + Broader audio classifier by Google YAMNet (Open-Source)
-  + Drone params possibly estimatable (some of which correlated): `drone.type`, `drone.rotor_size`, `drone.distance`, `drone.height`, `drone.speed`,`drone.accelleration`, `drone.type`, `drone.rotor_damage`, `drone.direction`, `drone.elevation_angle`, `drone.motor_health`, `drone.obstacles_inbetween`
-- Direction of Arrival
-  + Multiple Microphones, at best high sample rate and some distance between them 
-  + Triangulation possible
-  + Audio Interferometry / Interference of the audio signal
-- Robustness
-  + ask people from own network who detect unique events in noisy real time data, possibly https://hydrop-systems.com/ or https://kinemic.com/de/
-  + detect other events and do software based "noise canceling" in the data, as most noise is cancelable if periodic or just plain white noise or so "rausrrechnen"
-  + possibly have a directional mic / laser mic that is more precise and unidirectional and based on the "noisy" mics the rough direction could be estimated
-  + speed of sound may vary a bit depending on conditions
-- System Design
-  + important params are: environmental noise in deployment, other counter-engineering in-field ; as well as the specific dimensions of the hardware, and limitations like `microphone_count`, `microphone_count`, `sample_freq`, `microphone_positions` relative to each other, ...
-  + enclosure for durability needed against weather, depending on where its used also against emp, laser or similar
-  + edge hardware / is it an `avr8` or `xtensa` esp32 or something like an intel edge ai thing?
-  + for maxium performance of audio processing, a fpga or asic chip might be needed to handle the full bit-width and high sample rates at once (we got one at home to test possibly later, has 45k look up tables)
+Acoustic drone detection is not one algorithm; it is a stack of engineering
+problems, each constraining the ones around it. **Detection, localization,
+tracking, and type-ID are not separate layers** - they are different *outputs*
+of one inference layer asked of the same signal.
 
-## 4. Constraints of this projects first iteration (v0.1.0)
+1. **Requirements & metrics** - defines what "good" means: required outputs,
+   detection range, environments, threat model, and the error-cost asymmetry. A
+   missed drone usually costs more than a false alarm, so detection leans toward
+   recall - but the operational metric is *false-alarms-per-hour at a required
+   recall*, not raw false-positive rate (drones are rare, so base rate makes a
+   flat FPR misleading).
+2. **Sensors** - mic technology (MEMS, condenser, piezoelectric, fiber-optic),
+   count, geometry, directionality, frequency/dynamic range, weatherproofing.
+   Sets what is physically observable.
+3. **Signal acquisition (front-end)** - what the hardware already did to the
+   signal before you see it: ADC characteristics, automatic gain control,
+   on-device denoise, beamforming, codec, sample rate / bit depth. Commercial
+   mics and phones alter the signal in ways that can erase drone cues.
+4. **Compute** - where inference runs (MCU, edge node, server, cloud), with its
+   latency, power, and memory budgets. Directly limits algorithm complexity.
+5. **Data** - datasets and their diversity (drones, distances, weather,
+   terrain), labeling, augmentation, synthetic data, and field/continual
+   collection. Usually the dominant uncertainty; cross-environment
+   generalization is the hard part.
+6. **Signal processing / representation** - denoise, framing/windowing, and the
+   representation itself: FFT/STFT, mel, MFCC, cepstral, harmonic features.
+   Blind source separation (ICA/IVA) lives here when several drones or strong
+   interferers must be separated.
+7. **Inference** - one chain, several outputs: detection, type, direction-of-
+   arrival, tracking, RPM / distance / health. The design choice is which
+   outputs are realistically achievable from the available signal.
+8. **System architecture** - beyond a single node: multi-node ("swarm")
+   cooperation and synchronization, plus cross-modal fusion (RF, radar, EO/IR,
+   lidar). Acoustic often serves as the cheap, non-line-of-sight gate that
+   *cues* heavier sensors.
+9. **Validation & robustness** - performance vs SNR, weather, unseen drones, and
+   hard negatives; the dominant failure modes; and honest cross-dataset
+   evaluation.
+10. **Deployment & operations** - power, enclosure, networking/outages,
+    monitoring, and lifecycle (drift detection, field-data pipeline,
+    retraining), plus security (evasion, spoofing, jamming, decoys) and
+    cost/scalability per node.
+
+This repo currently lives mostly in layers 6-9 (signal processing through
+validation), with `drone-edge` / `drone-live` reaching into 3-4 (acquisition
+and edge compute). Real sensor front-ends and full deployment/operations are the
+open ends.
+
+## 4. Possible Approaches (Human reasoning)
+
+There is no single "drone-detection algorithm". We benchmark several methods
+against the same data and compare accuracy, robustness, compute, and
+deployability - the goal is the *simplest approach that stays reliable under
+realistic conditions*, not the most complex model.
+
+- **Detection from frequency structure** - propellers produce harmonic peaks.
+  `audio -> FFT/STFT -> representation -> detector`. Detectors range from band
+  energy, harmonic-product-spectrum, cepstrum, and spectrogram templates to
+  MFCC + classifier (logistic / random forest / SVM), CNNs on spectrograms, and
+  audio foundation models (e.g. YAMNet). Open question: do cheap DSP methods
+  suffice before reaching for ML? (`drone-bench` benchmarks 12 such approaches.)
+- **Detection from periodicity** - rotor rotation makes drone audio strongly
+  periodic, so autocorrelation, cepstrum, amplitude-modulation, and blade-pass
+  estimation can detect even when individual frequency peaks are buried in
+  noise. (`drone-freq`, `envelope_periodicity`.)
+- **Drone attribute estimation** - beyond yes/no: `type`, `rotor_count`, `rpm`,
+  `direction`, `elevation_angle`, `distance`, `speed`, `motor_health`,
+  `rotor_damage`. Some are correlated and estimable jointly; distance-range
+  classification is shown feasible in the literature. (`drone-id`, `drone-freq`.)
+- **Direction of arrival & localization** - multiple synchronized mics enable
+  TDOA (GCC-PHAT), beamforming, and super-resolution (MUSIC / ESPRIT) plus
+  triangulation. Questions: mic count, spacing (`d < c / 2*f_max` to avoid
+  spatial aliasing), achievable angular accuracy, and degradation with noise.
+  (`drone-doa`, simulated; real-world DoA is ~6-42 deg, not sub-degree.)
+- **Robustness** - wind, rain, traffic, construction, aircraft, birds, multiple
+  drones, unseen models. `drone + background + synthetic noise = test scenario`,
+  scored as a function of SNR. The real confusers are other rotary/harmonic
+  machines (chainsaw, engine, helicopter). (`drone-bench --snr`, `xeval`, plus a
+  hard-negative suite.)
+- **Sensor design** - single mic (cheap, detection only) vs array (direction,
+  beamforming, better SNR) vs directional / fiber-optic / laser mics (higher
+  SNR, smaller search space). Mixed setups are future work.
+- **Hardware exploration** - ESP32-S3 / -P4, Arduino-class, embedded Linux,
+  Jetson, and FPGA (we have one, ~45k LUTs). Map the accuracy / latency / power /
+  cost tradeoff. (`drone-edge` is a `no_std` cross-build proof.)
+- **Data strategy** - public sets (DADS, Al-Emadi, Kaggle, HuggingFace),
+  self-recorded flights, and augmentation (added noise, SNR levels, codec
+  degradation, sample-rate reduction, reverberation). The key uncertainty is how
+  well a model trained on one dataset transfers to entirely different
+  environments and drones.
+- **Multi-sensor fusion** - acoustic + RF + radar + EO/IR + thermal. Acoustic is
+  the low-power, non-line-of-sight modality that cues the others (fielded by
+  Fraunhofer IDMT; RF-assisted variants by Toma et al.).
+- **Validation** - the same metrics for every approach: precision, recall, F1,
+  ROC-AUC, PR-AUC, false-alarm rate (detection); angular and position error
+  (localization); latency, power, memory, range (deployment).
+
+## 5. Constraints of this projects first iteration (v0.1.0)
 
 - Only one real drone for testing
 - Limited hardware: esp32 s3, c6, p4 modules, and a ffew arduino boards notably the Q 4gb ram one
@@ -82,7 +159,7 @@ Questions we answer with this porject:
 - Limited AI Budget of 50€ (claude weekly limit)
 - Limited dev time, only one afternoon time for v0.1.0
 
-## 5. Implementation (v0.1.0)
+## 6. Implementation (v0.1.0)
 
 Built in Rust for fast, typed iteration on real DSP - and so the core can later
 be lowered onto edge hardware (esp32 xtensa / riscv). It's structured as a
@@ -199,11 +276,11 @@ docker compose run --rm dev
 Agent working memory - decisions, insights, domain notes, and session handoffs -
 is tracked in [`agent-memory/`](agent-memory/MEMORY.md).
 
-## 6. Contributing
+## 7. Contributing
 
 Welcome! fork -> branch `[name]/feat|fix-[feat/fix-name]` -> pr -> fix feedback -> get merged
 
-## 7. License
+## 8. License
 
 Use in the open only.
 
