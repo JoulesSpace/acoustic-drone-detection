@@ -67,40 +67,67 @@ Questions we answer with this porject:
 ## Implementation (v0.1.0)
 
 Built in Rust for fast, typed iteration on real DSP — and so the core can later
-be lowered onto edge hardware (esp32 xtensa / riscv). Crates live under
-`crates/` (no workspace yet, by design):
+be lowered onto edge hardware (esp32 xtensa / riscv). It's structured as a
+multi-task suite (insightface-style: one shared DSP backbone + a common eval
+harness + many task "heads"). Crates live under `crates/` (no workspace yet, by
+design):
 
-- **`drone-dsp`** — `no_std`-friendly DSP core: Hann windowing, real FFT
-  (`microfft`), magnitude spectrum, and spectral features. All math via `libm`,
+- **`drone-dsp`** — `no_std` DSP backbone reused by every head: Hann windowing,
+  real FFT (`microfft`), magnitude spectrum, spectral features. Math via `libm`,
   so it builds bare-metal.
-- **`drone-detect`** — `no_std`-friendly heuristic detector: energy-in-band
-  ratio plus a dominant-tone-in-band test. A transparent baseline to beat.
-- **`drone-cli`** — host binary `drone` that can `synth` a test signal and
-  `analyze` WAV files frame-by-frame.
-- **`drone-bench`** — benchmark harness: a pluggable `Approach` trait, dataset
-  loader, metrics (F1 / ROC-AUC / PR-AUC / Brier), and JSON output for plotting.
+- **`drone-detect`** — `no_std` heuristic detector (energy-in-band + dominant
+  tone). The transparent baseline.
+- **`drone-cli`** — host binary `drone`: `synth` a test signal, `analyze` WAVs.
+- **`drone-bench`** — shared eval harness: pluggable `Approach` trait, dataset
+  loader (CSV/synth, stratified split, k-fold, SNR augmentation), metrics
+  (F1, calibrated-F1, ROC-AUC, PR-AUC, Brier, real-time factor), JSON output.
+  Hosts **12** detection approaches.
+- **`drone-doa`** — direction-of-arrival: GCC-PHAT TDOA + ULA geometry → azimuth,
+  with a propagation simulator and an angular-error benchmark (`no_std` core).
+- **`drone-id`** — multiclass drone-**type** recognition (MFCC + multinomial
+  logistic) with per-class F1 + confusion matrix.
+- **`drone-freq`** — blade-pass-frequency / RPM estimation (HPS + cepstrum +
+  autocorrelation fusion) — an inferrable drone property.
+
+### Capabilities at a glance (real-data results)
+
+| task | crate | headline result | notes |
+|---|---|---|---|
+| **Detection** (drone vs not) | `drone-bench` | best **F1 1.000 / ROC-AUC 1.000** (`feature_fusion`); 8/12 beat CNN baselines | all run 90–2400× real-time |
+| **Direction of arrival** | `drone-doa` | **RMSE 0.88°** @20 dB (±60°), 2.8° @10 dB | 4-mic ULA, simulated |
+| **Type ID** (bebop/membo/unknown) | `drone-id` | **macro-F1 0.86** on Al-Emadi multiclass | linear softmax; honest |
+| **Blade-pass freq / RPM** | `drone-freq` | synth **f0 MAE ~1 Hz, 0% octave error** | real DADS drones cluster ~230 Hz |
+| **Robustness** | `drone-bench --snr` | learned methods hold ROC-AUC >0.95 to **−10 dB**; naive baselines collapse | see `benchmarks/plots/robustness_*.png` |
 
 ### Detection approaches & benchmark
 
-Six approaches are implemented and benchmarked head-to-head (each emits a
+Twelve approaches are implemented and benchmarked head-to-head (each emits a
 confidence in `[0,1]`, so they're comparable via ROC/PR). On a real
 [DADS](https://huggingface.co/datasets/geronimobasso/drone-audio-detection-samples)
-subset (300 + 300 clips, 50/50 split):
+subset (300 + 300 clips, 50/50 split); `F1*` = best-threshold (calibrated) F1,
+`×RT` = times faster than real time:
 
-| approach | F1 | ROC-AUC | ms/clip |
-|---|---|---|---|
-| `mfcc_lr` — MFCC + logistic regression | **0.997** | 1.000 | 2.1 |
-| `spectral_gate` — flatness/entropy/band-ratio + logistic | 0.977 | 0.998 | 2.7 |
-| `cepstrum` — cepstral / autocorrelation periodicity | 0.967 | 0.990 | 45 |
-| `hps` — harmonic-product-spectrum / comb | 0.949 | 0.987 | 2.1 |
-| `band_ratio` — baseline heuristic | 0.766 | 0.915 | 2.0 |
-| `template` — cosine vs. averaged drone spectrum | 0.706 | 0.995 | 2.0 |
+| approach | F1 | F1* | ROC-AUC | ×RT |
+|---|---|---|---|---|
+| `feature_fusion` — fused MFCC+spectral+harmonic+cepstral + logistic | **1.000** | 1.000 | 1.000 | 1300× |
+| `mfcc_lr` — MFCC + logistic regression | 0.997 | 0.997 | 1.000 | 2300× |
+| `fusion` — logistic stack (ensemble) over the classics | 0.997 | 1.000 | 1.000 | 90× |
+| `mfcc_mlp` — MFCC + small MLP | 0.987 | 0.993 | 1.000 | 2400× |
+| `gtcc_lr` — gammatone cepstral coeffs + logistic | 0.987 | 0.990 | 1.000 | 1900× |
+| `spectral_gate` — flatness/entropy/band-ratio + logistic | 0.977 | 0.986 | 0.998 | 1900× |
+| `cepstrum` — cepstral / autocorrelation periodicity | 0.967 | 0.977 | 0.990 | 110× |
+| `envelope_periodicity` — AM modulation spectrum | 0.966 | 0.987 | 0.991 | 95× |
+| `hps` — harmonic-product-spectrum / comb | 0.949 | 0.967 | 0.987 | 2150× |
+| `spectrogram_template` — 2D spectro-temporal template | 0.925 | 0.974 | 0.980 | 2300× |
+| `band_ratio` — baseline heuristic | 0.766 | 0.921 | 0.915 | 2450× |
+| `template` — cosine vs. averaged drone spectrum | 0.706 | 0.986 | 0.995 | 2370× |
 
-Four cheap classical/light methods **meet or beat** published CNN baselines
-(≈0.93–0.955 F1) on this binary task. Plots (ROC, PR, cost-vs-quality) live in
-[`benchmarks/plots/`](benchmarks/); methodology and caveats (leakage, threshold
-calibration) in [`benchmarks/README.md`](benchmarks/README.md). These are
-in-distribution subset numbers — see the caveats before quoting them.
+Cheap classical/light methods **meet or beat** published CNN baselines
+(≈0.93–0.955 F1) on this binary task — no GPU, all real-time on a desktop. Plots
+(ROC, PR, cost-vs-quality, robustness) live in [`benchmarks/plots/`](benchmarks/);
+methodology and caveats (leakage, threshold calibration) in
+[`benchmarks/README.md`](benchmarks/README.md). These are in-distribution subset
+numbers — see the caveats before quoting them.
 
 ### Quick start (Docker-first)
 
@@ -109,12 +136,20 @@ in-distribution subset numbers — see the caveats before quoting them.
 docker compose run --rm detector synth   --out /data/test.wav --fundamental 120
 docker compose run --rm detector analyze --input /data/test.wav
 
-# Fetch a real dataset subset, benchmark all approaches, and plot
+# Fetch a real dataset subset, benchmark all 12 detectors, and plot
 docker compose run --rm data --per-class 300
-docker compose run --rm bench --data /work/data/dads
+docker compose run --rm bench --data /work/data/dads      # add --kfold 5 or --snr 0
 docker compose run --rm plot
 
-# Run the full check suite: folderinfo lint, fmt, clippy -D warnings, tests, no_std build
+# Other task heads (run inside the dev toolchain container)
+docker compose run --rm --entrypoint bash dev -c \
+  "cargo run -r --manifest-path crates/drone-doa/Cargo.toml --bin doa-bench"   # direction of arrival
+docker compose run --rm --entrypoint bash dev -c \
+  "cargo run -r --manifest-path crates/drone-id/Cargo.toml -- --synth"          # drone-type ID
+docker compose run --rm --entrypoint bash dev -c \
+  "cargo run -r --manifest-path crates/drone-freq/Cargo.toml -- --data /work/data/dads"  # blade-pass freq
+
+# Run the full check suite: folderinfo lint, fmt, clippy -D warnings, tests, no_std builds
 docker compose run --rm dev
 ```
 

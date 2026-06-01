@@ -7,8 +7,9 @@ work happens. Start here, then follow the links.
 How this store is organized and maintained: [README.md](README.md).
 
 ## 🔭 Start here
-- [Latest handoff — benchmark wave (goal met)](handoffs/2026-06-01-benchmark-wave.md) — current state & next steps
-- [Benchmark results](notes/benchmark-results.md) — the v0.1 numbers vs upstream
+- [Latest handoff — multi-task suite (v0.2)](handoffs/2026-06-01-multitask-suite.md) — current state & next steps
+- [Multi-task architecture](notes/architecture.md) — the big-picture map
+- [Suite results](notes/suite-results.md) — all heads' numbers
 
 ## 📐 Decisions (ADRs)
 - [0001 — Rust as the implementation language](decisions/0001-rust-implementation-language.md) — typed, fast DSP that can lower to edge
@@ -26,6 +27,7 @@ How this store is organized and maintained: [README.md](README.md).
 - [Synthetic signal discriminates cleanly](insights/synthetic-signal-discriminates.md) — verified pipeline result
 - [Synthetic scores lie; validate on real data](insights/synth-vs-real-generalization.md) — HPS 0.972 synth → 0.082 real
 - [Commit before dispatching tree-mutating agents](insights/commit-before-dispatching-tree-mutating-agents.md) — agent git-revert clobbered uncommitted work
+- [Integration gotchas for agent-built crates](insights/agent-crate-integration-gotchas.md) — stray benchmarks/, check.sh, clap negatives
 
 ## 📓 Notes (domain knowledge)
 - [Multi-task architecture](notes/architecture.md) — shared backbone + task heads (start here for the big picture)
@@ -35,7 +37,9 @@ How this store is organized and maintained: [README.md](README.md).
 - [Detection approaches survey](notes/approaches-survey.md) — ranked approaches + SOTA + eval conventions
 - [Project goal](notes/project-goal.md) — the parity-or-better-vs-upstream north star
 - [Benchmark results](notes/benchmark-results.md) — v0.1 numbers, caveats, vs upstream
+- [Suite results](notes/suite-results.md) — DoA / type-ID / freq / robustness numbers
 
 ## 🗂 Handoffs (session log, newest first)
+- [2026-06-01 — multi-task suite (detection + DoA + ID + freq + robustness)](handoffs/2026-06-01-multitask-suite.md)
 - [2026-06-01 — benchmark wave (six approaches, goal met)](handoffs/2026-06-01-benchmark-wave.md)
 - [2026-06-01 — v0.1.0 scaffold](handoffs/2026-06-01-v0.1.0-scaffold.md)
