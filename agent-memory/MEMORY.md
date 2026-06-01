@@ -7,7 +7,7 @@ work happens. Start here, then follow the links.
 How this store is organized and maintained: [README.md](README.md).
 
 ## 🔭 Start here
-- [Latest handoff — multi-task suite (v0.2)](handoffs/2026-06-01-multitask-suite.md) — current state & next steps
+- [Latest handoff — hardening wave (v0.3)](handoffs/2026-06-01-hardening-wave.md) — current state & next steps
 - [Multi-task architecture](notes/architecture.md) — the big-picture map
 - [Suite results](notes/suite-results.md) — all heads' numbers
 - [⚠ Honest limitations](notes/honest-limitations.md) — read before quoting numbers (leakage, untested confounders, no live/edge yet)
@@ -45,6 +45,7 @@ How this store is organized and maintained: [README.md](README.md).
 - [Suite results](notes/suite-results.md) — DoA / type-ID / freq / robustness numbers
 
 ## 🗂 Handoffs (session log, newest first)
+- [2026-06-01 — hardening wave (honesty/live/edge/tiers/limits)](handoffs/2026-06-01-hardening-wave.md)
 - [2026-06-01 — multi-task suite (detection + DoA + ID + freq + robustness)](handoffs/2026-06-01-multitask-suite.md)
 - [2026-06-01 — benchmark wave (six approaches, goal met)](handoffs/2026-06-01-benchmark-wave.md)
 - [2026-06-01 — v0.1.0 scaffold](handoffs/2026-06-01-v0.1.0-scaffold.md)
