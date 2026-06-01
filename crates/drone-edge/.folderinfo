@@ -1,0 +1,1 @@
+no_std, training-free edge drone detector; cross-builds for bare-metal MCUs (riscv32/thumb)

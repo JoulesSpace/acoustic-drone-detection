@@ -1,0 +1,21 @@
+[package]
+name = "drone-edge"
+version = "0.1.0"
+edition = "2021"
+license = "AGPL-3.0-or-later"
+description = "no_std, training-free drone detector over a single frame, built to lower onto esp32-class MCUs (riscv32 / Cortex-M)."
+repository = "https://github.com/JoulesSpace/acoustic-drone-detection"
+
+# This crate is the *edge proof*: a fully `no_std`, `alloc`-free drone detector
+# that depends on `drone-dsp` with std turned off, so it cross-compiles for
+# bare-metal MCU targets (riscv32imc, thumbv7em). It carries no learned weights:
+# the score is a fixed monotonic rule over cheap spectral features, ported from
+# `drone-bench`'s `spectral_gate` rule path.
+
+[dependencies]
+# no_std DSP core: Hann window + real FFT + magnitude spectrum + features.
+drone-dsp = { path = "../drone-dsp", default-features = false }
+# Float math (expf, logf, ...) without std, for bare-metal targets.
+libm = "0.2"
+
+[dev-dependencies]
