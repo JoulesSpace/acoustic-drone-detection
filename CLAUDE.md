@@ -28,6 +28,14 @@ of how and why things are built.
    All float math goes through `libm`, never `std` float methods.
 5. **Auto-commit `PROMPTS.md`/`INSIGHTS.md` changes** alongside the work they
    relate to, so the prompt log stays in sync with the code.
+6. **Every folder carries a `.folderinfo`.** Each tracked directory in this repo
+   has a `.folderinfo` file: a one-line plain-text description of what lives
+   there and what it's for (e.g. `agent memories for future sessions or
+   reference`). When you create a new folder, create its `.folderinfo` in the
+   same change. `scripts/folderinfo.sh` lints this and runs as part of the check
+   suite, so a missing one fails CI. (Gitignored scratch like `workspace/` is
+   exempt; `data/` keeps a tracked `.folderinfo` even though its contents are
+   ignored.)
 
 ## Docker-first workflow
 
@@ -59,16 +67,19 @@ crates/
   drone-dsp/      no_std DSP core: windowing, real FFT (microfft), spectral features
   drone-detect/   no_std heuristic detector built on drone-dsp
   drone-cli/      std host binary `drone`: synth test audio + analyze WAVs
+  drone-bench/    benchmark harness: Approach trait, dataset loader, metrics → JSON
 Dockerfile         multi-stage build of the `drone` host binary
-docker-compose.yml detector (runtime) + dev (fmt/clippy/test) services
-scripts/check.sh   the check suite run by the dev service
-data/              WAV scratch (git-ignored except .gitkeep)
-agent-memory/      tracked agent memory: decisions, notes, handoffs
+docker-compose.yml detector (runtime) + dev (checks) + bench/plot services
+scripts/           checks, dataset downloads, folderinfo lint
+benchmarks/        benchmark results (JSON) and matplotlib plotting (Python)
+data/              datasets — git-ignored contents (.gitkeep + .folderinfo tracked)
+workspace/         gitignored scratch for cloning/inspecting upstream repos
+agent-memory/      tracked agent memory; see agent-memory/MEMORY.md
 ```
 
 **No cargo workspace yet** (deliberate, per the project owner). Crates use path
 deps. If a workspace is added later, update this section and
-`agent-memory/decisions.md`.
+`agent-memory/decisions/0002-crates-no-workspace.md`.
 
 ## Conventions
 

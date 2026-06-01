@@ -3,6 +3,9 @@
 # (Linux + Rust toolchain). Treats clippy warnings as errors.
 set -euo pipefail
 
+echo "== folderinfo lint =="
+bash scripts/folderinfo.sh
+
 CRATES=(drone-dsp drone-detect drone-cli)
 
 for c in "${CRATES[@]}"; do
