@@ -44,6 +44,21 @@ a truly held-out set (DroneAudioset) is the next test and will likely be lower.
 - **Speed↔accuracy:** only a cost-vs-quality scatter; no Pareto frontier / model
   tiers / FLOP estimates / latency-budget analysis.
 
+## Why a clean held-out test is genuinely hard (and what to do)
+DADS **absorbed most of the public field**: its positives merge Al-Emadi, DREGON,
+DroneNoise, AUDROK, fault-data; its negatives merge UrbanSound8K, ESC-50, TUT.
+So almost every easily-downloadable drone/env-sound set is *already inside DADS*
+→ no clean held-out. Worse, **DroneAudioset is NOT drone-vs-not** — it's recorded
+*on* a drone (constant ego-noise) for detecting human sounds in SAR, so it can't
+serve as held-out drone positives/negatives. The best remaining held-out
+**positive** source is the **32-brand set** (arXiv 2509.04715, not in DADS);
+held-out **negatives** are the harder gap (most env-sound sets are in DADS).
+**Honest conclusion:** trustworthy generalization numbers ultimately need
+**freshly recorded field data** (the owner has a real drone) — public data alone
+can't fully prove it. State capability claims as *engineering* (only Rust
+multi-tier edge-proven honest-eval suite) until field data exists, not as
+absolute "beats all upstreams accuracy."
+
 ## Priorities to fix (in rough order)
 1. **Leakage-honest eval:** cross-dataset (DADS↔Al-Emadi), group-aware k-fold,
    and a **hard-negative** suite (ESC-50/UrbanSound8K aircraft/engine/wind). This
