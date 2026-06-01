@@ -137,3 +137,12 @@ Use in the open only.
 Google says AGPLv3.
 
 let license = "AGPLv3";
+
+```
+ACOUSTIC-DRONE-DETECTION
+
+Copyright (C) 2026 Julia Yukovich
+
+This project is licensed under the GNU Affero General Public License v3.0.
+See the LICENSE file for details.
+```
