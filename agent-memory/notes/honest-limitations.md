@@ -18,10 +18,14 @@ confirmed this**: in-distribution ROC-AUC ~1.0 collapses to **0.49–0.87**
 cross-dataset (best `envelope_periodicity` 0.872; `mfcc_lr` 0.685; `template`
 ~0.49; `band_ratio` 0.233 inverted). See [suite-results](suite-results.md#-cross-dataset-reality-check-the-honest-headline--xeval).
 
-**So:** the headline ~1.0 numbers are recording-fit, NOT generalization. Honest
-generalization is **0.925 ROC-AUC** with the purpose-built `physics_fused`
-detector (physics-only features, new best; the original physics methods reach
-~0.85).
+**So:** the headline ~1.0 numbers are recording-fit, NOT generalization. And even
+the xeval cross-dataset 0.925 (`physics_fused`) was still optimistic, because
+xeval's Al-Emadi positives are inside DADS. The **leakage-proof** test
+(`heldout32`: 32 UNSEEN drone models, not in DADS) gives the real number:
+**best recall on unseen drones ~0.65 (we miss ~35%); best ROC-AUC 0.855 (`hps`)**,
+and `physics_fused` drops to recall 0.10 / AUC 0.784. On truly-unseen drones,
+**`hps` is the most robust, not physics_fused.** That is the honest generalization
+ceiling today.
 Do NOT claim we "beat CNN baselines" - different datasets/splits, not
 apples-to-apples. And even 0.85 is optimistic: `xeval` tested on Al-Emadi/ESC-50
 which are *inside* the DADS merge ([dads-is-a-merge-superset](../insights/dads-is-a-merge-superset.md)) -

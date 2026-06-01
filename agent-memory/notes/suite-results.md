@@ -74,7 +74,32 @@ harmonics - envelope, hps, fusion, feature_fusion) generalize; learned spectral
 templates overfit to the training mic/recording. This is the differentiator: we
 **measure** generalization honestly, which almost no OSS/paper does.
 **Still optimistic** - Al-Emadi & ESC-50 are IN the DADS merge ([[dads-is-a-merge-superset]]),
-so a truly held-out set (DroneAudioset) would likely score lower. Follow-up open.
+so a truly held-out set would score lower. CONFIRMED below.
+
+## ⭐⭐ TRULY held-out: 32 UNSEEN drone models (`heldout32`) - the leakage-proof headline
+Train DADS, test on the **32-brand College-of-Charleston set (NOT in DADS)** =
+165 windows of 32 unseen drone makes/models (positives, genuinely held-out) vs
+ESC-50 negatives (caveat: ESC-50 IS in DADS, so AUC is indicative; **recall on
+unseen drones is the clean metric** - it needs no negatives).
+
+| approach | recall@0.5 | recall@calibrated | ROC-AUC |
+|---|---|---|---|
+| hps | 0.721 | 0.630 | **0.855** |
+| fusion | 0.339 | **0.648** | 0.821 |
+| mfcc_lr | 0.455 | 0.642 | 0.692 |
+| feature_fusion | 0.430 | 0.594 | 0.758 |
+| physics_fused | 0.103 | 0.103 | 0.784 |
+| envelope_periodicity | 0.024 | 0.370 | 0.812 |
+
+**The sobering truth:** on genuinely-unseen drone models the best detectors catch
+only **~65% (miss ~35%)**; best ranker is **`hps` (AUC 0.855)**. Key correction:
+**`physics_fused`'s xeval 0.925 was still optimistic** (xeval positives = Al-Emadi,
+which is in DADS); on truly-unseen drones it drops to recall 0.10 / AUC 0.784.
+**On truly-unseen drones, `hps` (not physics_fused) is the most robust.**
+Calibration matters hugely: `envelope_periodicity`/`physics_fused` are decent
+rankers but badly placed at thr 0.5; `template`/`band_ratio` fire on everything
+(AUC <= chance). This is the honest number to quote for generalization, and it is
+why field data + better invariances (not more DADS) are the real path forward.
 
 ### Augmentation did NOT help (honest negative - `robust`)
 Retraining `mfcc_lr`/`feature_fusion`/`gtcc_lr`/`mfcc_mlp` on DADS augmented with
