@@ -1,0 +1,35 @@
+[package]
+name = "drone-cnn"
+version = "0.1.0"
+edition = "2021"
+license = "AGPL-3.0-or-later"
+description = "Mel-spectrogram CNN: the published-SOTA upstream baseline (Al-Emadi / MDPI style), benchmarked head-to-head against our heuristic detectors on the leakage-proof unseen-drone test."
+repository = "https://github.com/JoulesSpace/acoustic-drone-detection"
+
+# Host-side (std) crate. This is a faithful re-implementation of the upstream
+# literature's representative model - a small mel-spectrogram CNN trained on
+# DADS - so that we can run it on genuinely UNSEEN drones (the 32-brand set the
+# `drone-bench::heldout32` binary uses) and answer honestly whether the
+# upstream SOTA beats our suite out-of-distribution or also collapses.
+#
+# Pure Rust, no Python: the CNN is built on `candle-core` + `candle-nn`. All
+# weight init is from our own seeded RNG (candle's CPU RNG is not seedable), so
+# training is deterministic for a fixed seed.
+
+[[bin]]
+name = "drone-cnn"
+path = "src/main.rs"
+
+[dependencies]
+# DSP front-end (magnitude spectra, bin<->Hz) shared with the rest of the repo.
+drone-dsp = { path = "../drone-dsp" }
+# Reuse the harness contract verbatim: dataset loader, metrics, spectra util.
+drone-bench = { path = "../drone-bench" }
+# Pure-Rust tensor + autograd + NN layers. No Python, no native BLAS required.
+candle-core = "0.8"
+candle-nn = "0.8"
+# WAV decode for the unseen-drone / ESC-50 corpora (same crate the harness uses).
+hound = "3.5"
+clap = { version = "4", features = ["derive"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"

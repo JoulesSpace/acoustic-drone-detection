@@ -1,0 +1,1 @@
+drone-cnn crate sources: mel features, candle CNN model, train/eval pipeline, main binary
