@@ -50,7 +50,8 @@ largely recording-fit (leakage), not drone recognition:
 
 | approach | cross-dataset ROC-AUC | in-dist ROC-AUC |
 |---|---|---|
-| envelope_periodicity | **0.872** | 0.984 |
+| **physics_fused** (NEW best) | **0.925** | 0.999 |
+| envelope_periodicity | 0.872 | 0.984 |
 | hps | 0.852 | 0.992 |
 | fusion | 0.848 | 0.999 |
 | feature_fusion | 0.813 | 1.000 |

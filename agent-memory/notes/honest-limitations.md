@@ -19,7 +19,9 @@ cross-dataset (best `envelope_periodicity` 0.872; `mfcc_lr` 0.685; `template`
 ~0.49; `band_ratio` 0.233 inverted). See [suite-results](suite-results.md#-cross-dataset-reality-check-the-honest-headline--xeval).
 
 **So:** the headline ~1.0 numbers are recording-fit, NOT generalization. Honest
-generalization is **~0.85 ROC-AUC at best** (the physics/periodicity methods).
+generalization is **0.925 ROC-AUC** with the purpose-built `physics_fused`
+detector (physics-only features, new best; the original physics methods reach
+~0.85).
 Do NOT claim we "beat CNN baselines" - different datasets/splits, not
 apples-to-apples. And even 0.85 is optimistic: `xeval` tested on Al-Emadi/ESC-50
 which are *inside* the DADS merge ([dads-is-a-merge-superset](../insights/dads-is-a-merge-superset.md)) -
