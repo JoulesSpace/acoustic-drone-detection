@@ -321,6 +321,7 @@ dependencies = [
  "cpal",
  "drone-bench",
  "drone-dsp",
+ "hound",
 ]
 
 [[package]]

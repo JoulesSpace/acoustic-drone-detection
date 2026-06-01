@@ -26,3 +26,6 @@ drone-dsp = { path = "../drone-dsp" }
 cpal = "0.15"
 # CLI parsing (derive API), same major version as the rest of the workspace.
 clap = { version = "4", features = ["derive"] }
+# WAV encoding for the `record` subcommand. Same version drone-bench decodes
+# with, so recorded clips round-trip cleanly through `dataset::read_mono_wav`.
+hound = "3.5"
