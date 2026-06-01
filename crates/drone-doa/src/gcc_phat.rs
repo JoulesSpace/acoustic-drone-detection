@@ -53,9 +53,9 @@ impl Default for GccConfig {
 
 /// Estimate the TDOA (in **samples**, fractional) of `x` relative to `y`.
 ///
-/// A positive return value means `x` lags `y` (the feature in `x` appears later)
-/// - equivalently `x[n] ≈ y[n - tdoa]`. Both inputs are zero-padded/truncated to
-/// [`GCC_FFT_SIZE`]. Returns `0.0` for empty or silent input.
+/// A positive return value means `x` lags `y` (the feature in `x` appears
+/// later), equivalently `x[n] ≈ y[n - tdoa]`. Both inputs are zero-padded or
+/// truncated to [`GCC_FFT_SIZE`]. Returns `0.0` for empty or silent input.
 pub fn gcc_phat_tdoa(x: &[f32], y: &[f32], cfg: &GccConfig) -> f32 {
     let n = GCC_FFT_SIZE;
 

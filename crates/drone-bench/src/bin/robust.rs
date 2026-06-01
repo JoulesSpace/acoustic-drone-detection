@@ -27,9 +27,9 @@
 //!   deterministic, seeded perturbations (below). Same model, same eval; only
 //!   the training data differs.
 //!
-//! The thesis being tested: augmentation should NARROW the generalization gap -
-//! lift cross-dataset ROC-AUC / calibrated-F1 toward the in-distribution number
-//! - without wrecking the in-distribution score. We quantify the lift per
+//! The thesis being tested: augmentation should NARROW the generalization gap,
+//! lifting cross-dataset ROC-AUC / calibrated-F1 toward the in-distribution
+//! number without wrecking the in-distribution score. We quantify the lift per
 //! detector and report it honestly, including when augmentation *fails* to help.
 //!
 //! ## The augmentation pipeline (deterministic, seeded)
