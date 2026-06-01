@@ -6,15 +6,23 @@
 
 mod band_ratio;
 mod cepstrum;
+mod envelope_periodicity;
+mod feature_fusion;
+mod fusion;
+mod gtcc_lr;
 mod hps;
 mod mfcc_lr;
+mod mfcc_mlp;
 mod spectral_gate;
+mod spectrogram_template;
 mod template;
 
 use crate::Approach;
 
-/// Every approach the benchmark runs, in display order.
-pub fn all() -> Vec<Box<dyn Approach>> {
+/// The "classic" base approaches that the meta/ensemble approach (`fusion`)
+/// stacks over. Kept separate from [`all`] so `fusion` can instantiate them
+/// without recursing on itself.
+pub fn stackable() -> Vec<Box<dyn Approach>> {
     vec![
         Box::new(band_ratio::BandRatio::new()),
         Box::new(template::Template::new()),
@@ -23,4 +31,16 @@ pub fn all() -> Vec<Box<dyn Approach>> {
         Box::new(cepstrum::Cepstrum::new()),
         Box::new(mfcc_lr::MfccLr::new()),
     ]
+}
+
+/// Every approach the benchmark runs, in display order.
+pub fn all() -> Vec<Box<dyn Approach>> {
+    let mut v = stackable();
+    v.push(Box::new(mfcc_mlp::MfccMlp::new()));
+    v.push(Box::new(gtcc_lr::GtccLr::new()));
+    v.push(Box::new(feature_fusion::FeatureFusion::new()));
+    v.push(Box::new(spectrogram_template::SpectrogramTemplate::new()));
+    v.push(Box::new(envelope_periodicity::EnvelopePeriodicity::new()));
+    v.push(Box::new(fusion::Fusion::new()));
+    v
 }
