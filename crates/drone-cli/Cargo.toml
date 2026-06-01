@@ -1,0 +1,17 @@
+[package]
+name = "drone-cli"
+version = "0.1.0"
+edition = "2021"
+license = "AGPL-3.0-or-later"
+description = "Host-side CLI for the acoustic drone detector: synthesize test audio, run STFT analysis and detection over WAV files."
+repository = "https://github.com/JoulesSpace/acoustic-drone-detection"
+
+[[bin]]
+name = "drone"
+path = "src/main.rs"
+
+[dependencies]
+drone-dsp = { path = "../drone-dsp" }
+drone-detect = { path = "../drone-detect" }
+hound = "3.5"
+clap = { version = "4", features = ["derive"] }
