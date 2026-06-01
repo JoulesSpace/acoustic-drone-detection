@@ -17,6 +17,7 @@ How this store is organized and maintained: [README.md](README.md).
 - [0004 — microfft + libm for FFT/math](decisions/0004-microfft-and-libm.md) — one no_std code path, host + bare-metal
 - [0005 — Docker-first, two compose services](decisions/0005-docker-first-two-services.md) — detector + dev oracle
 - [0006 — Heuristic detector for v0.1.0](decisions/0006-heuristic-detector-v0.1.0.md) — transparent baseline, no ML
+- [0007 — Multi-task suite over shared infra](decisions/0007-multi-task-suite.md) — insightface-style heads + backbone
 
 ## 💡 Insights (gotchas & learnings)
 - [Git Bash mangles `/data` docker args](insights/msys-path-mangling.md) — use PowerShell or `MSYS_NO_PATHCONV=1`
@@ -27,6 +28,7 @@ How this store is organized and maintained: [README.md](README.md).
 - [Commit before dispatching tree-mutating agents](insights/commit-before-dispatching-tree-mutating-agents.md) — agent git-revert clobbered uncommitted work
 
 ## 📓 Notes (domain knowledge)
+- [Multi-task architecture](notes/architecture.md) — shared backbone + task heads (start here for the big picture)
 - [DSP conventions](notes/dsp-conventions.md) — frame size, FFT, windowing, frequency math
 - [Detection thesis](notes/detection-thesis.md) — why a drone is acoustically distinguishable
 - [Drone audio datasets](notes/datasets.md) — DADS (HF, primary), negatives, download methods
