@@ -5,10 +5,10 @@ Detecting drones accoustically.
 ## TOC
 
 1. [Scope](#1-scope)
-2. [On Audio and Sound](#2-on-audio-and-sound-human-reasoning)
-3. [Possible Approaches](#3-possible-approaches-human-reasoning)
-4. [Constraints of v0.1.0](#4-constraints-of-this-projects-first-iteration-v010)
-5. [Implementation](#5-implementation-v010)
+2. [On Audio and Sound](#2-on-audio-and-sound-human-reasoning) (human reasoning)
+3. [Possible Approaches](#3-possible-approaches-human-reasoning) (human reasoning)
+4. [Constraints of v0.1.0](#4-constraints-of-this-projects-first-iteration-v010) (human reasoning)
+5. [Implementation](#5-implementation-v010) (ai summary)
 6. [Contributing](#6-contributing)
 7. [License](#7-license)
 
