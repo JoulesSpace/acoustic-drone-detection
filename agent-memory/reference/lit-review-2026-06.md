@@ -61,6 +61,22 @@ measurement).
   CNN head-to-head (we beat upstream CNN 5x on unseen drones) remains the
   differentiator the field literature does NOT claim.
 
+## Kim et al. ICAART 2023 - "How Far Can a Drone be Detected?" (distance data point)
+Drone-to-drone (mic on the FLYING detector -> ego-noise), distances 20/40/60 m,
+DJI Matrice200 target. Dataset NOT public, one target type, pitch-shift aug.
+- **Audio-only distance (CNN-MFCC-SGD): 78% @20 m, 70.5% @40 m, 61% @60 m** -
+  degrades with range. SVM-MFCC 65.5%, SVM-LogMel 34.5%.
+- Reaches 80-88% only by **vision (YOLOv5) + audio fusion** (audio reclassifies
+  the camera's FP/FN). Audio alone did not carry it.
+- Takeaways: confirms MFCC>LogMel, CNN>SVM, fusion>single (cueing pattern again);
+  audio-only distance is MODEST and range-dependent. Honest distance band for
+  audio-only: **~94-98% (Kang, ground-based clean, 5-50 m) down to ~61-78%
+  (drone-mounted ego-noise)**. Same in-dist/single-drone caveat (won't survive an
+  unseen-drone test). Mic-on-detector = ego-noise -> extra motivation for the
+  **BSS layer** (`drone-bss`).
+- NOT a usable public distance dataset; public distance options remain
+  UaVirBASE / Svanstrom (<=200 m) / DREGON (az/el/distance).
+
 ## Actionable for us
 1. **BSS layer** (FastICA/IVA) for multi-UAV / heavy noise -> new `drone-bss`
    capability + multi-UAV-mixture benchmark (ties to the "multiple drones"
