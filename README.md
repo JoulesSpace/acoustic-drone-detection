@@ -132,14 +132,21 @@ realistic conditions*, not the most complex model.
   drones, unseen models. `drone + background + synthetic noise = test scenario`,
   scored as a function of SNR. The real confusers are other rotary/harmonic
   machines (chainsaw, engine, helicopter). (`drone-bench --snr`, `xeval`, plus a
-  hard-negative suite.)
+  hard-negative suite.) Software noise-cancellation can help where the noise is
+  periodic or white (subtract the predictable part, "rausrechnen"); and it is
+  worth talking to people who detect unique events in noisy real-time data (e.g.
+  [hydrop-systems](https://hydrop-systems.com/), [kinemic](https://kinemic.com/de/)).
 - **Sensor design** - single mic (cheap, detection only) vs array (direction,
   beamforming, better SNR) vs directional / fiber-optic / laser mics (higher
   SNR, smaller search space). Mixed setups are future work.
-- **Hardware exploration** - ESP32-S3 / -P4, Arduino-class, embedded Linux,
-  Jetson, and FPGA (we have one, ~45k LUTs). Map the accuracy / latency / power /
-  cost tradeoff. (`drone-edge` is a `no_std` cross-build proof.)
-- **Data strategy** - public sets (DADS, Al-Emadi, Kaggle, HuggingFace),
+- **Hardware exploration** - ESP32-S3 / -P4, Arduino / AVR8-class, embedded
+  Linux, Jetson, and FPGA (we have one, ~45k LUTs). Map the accuracy / latency /
+  power / cost tradeoff, and the field enclosure (weatherproofing, and depending
+  on the threat, EMP/laser hardening). (`drone-edge` is a `no_std` cross-build
+  proof.)
+- **Data strategy** - public sets (DADS, Al-Emadi, Kaggle, HuggingFace; e.g.
+  [saraalemadi/DroneAudioDataset](https://share.google/3r4LoZTEbmyATlB56) and the
+  [Drone Sound Detection set](https://share.google/rMNhLehvEraoAqpfG)),
   self-recorded flights, and augmentation (added noise, SNR levels, codec
   degradation, sample-rate reduction, reverberation). The key uncertainty is how
   well a model trained on one dataset transfers to entirely different
