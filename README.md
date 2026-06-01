@@ -13,6 +13,26 @@ Questions we answer with this porject:
 - Robustness. Real deployments are noisy — literally. Wind, rain, overlapping sources, varying drone types. How would you stress-test your approach? This is where simulation earns its keep: you control what you throw at it.
 - System Design. What would a real deployment look like? How many microphones, in what configuration, at what sample rate? What detection range would you expect and why? What are the fundamental physical limits?
 
+## On Audio and Sound (Human reasoning)
+
+**Sound** is the pressure of a material (mostly air) fluctuating over time. Sound has a speed of `355 m/s` m air at 40 degrees celsius and a speed of `343m/s` in air at 20 degrees celsius. So environmental conditions are relevant to detection.
+
+**Microphones** exist in different types, based on different physical quantities that changes with pressure:
+  + magnetic microphones measure the vibration of air by it moving the microphone head up and down, they are omnidirectional
+  + laser microphones measure the vibration (pressure) of an object that the laser points at, interferometrically, they are unidirectional
+  + other types of microphone exist, for example gyroscopes of phones can sample audio at a low amount. also smart materials like piezzo-crystals can be used to turn pressure on a surface to electrical impulses
+
+**Sample frequency** is how many times per second microphones measure this pressure in one point.
+  + old phones like a nokia have around 8k measurements per second
+  + common sampling rate is `44.1kHZ` which most microphones and hardwares can do today
+  + there exist better sampling rates for studio or specialised hardware equipment
+
+**Audio** is how the sound is stored by digital devices:
+  + an ADC (Analog-Digital-Converter) converts electrical pulses from a microphone to a binary signal / value
+  + the qualitative resolution off this conversion depends on the adc, older ones got `8 bit`, newer ones `24 bit`, `32 bit` or even better quality
+  + audio is usually stored compressedly, as storing it as a raw `.wav` file / pickled numpy array takes too much storage.
+  + audio compression is lossy, as humans dont need to head all the spectrum to detect voice for example. different audio codecs exist, for example implemented in the `ffmpeg project` (c++). modern codecs include `.mp3`, `.m4a`, `.opus` (whatsapp). it is important to consider these differences for data quality also, as a lossy codec might ruin predictions of more precise properties of a drone or situation.
+
 ## Possible Approaches (Human reasoning)
 
 - Detection:
@@ -34,6 +54,7 @@ Questions we answer with this porject:
   + important params are: environmental noise in deployment, other counter-engineering in-field ; as well as the specific dimensions of the hardware, and limitations like `microphone_count`, `microphone_count`, `sample_freq`, `microphone_positions` relative to each other, ...
   + enclosure for durability needed against weather, depending on where its used also against emp, laser or similar
   + edge hardware / is it an `avr8` or `xtensa` esp32 or something like an intel edge ai thing?
+  + for maxium performance of audio processing, a fpga or asic chip might be needed to handle the full bit-width and high sample rates at once (we got one at home to test possibly later, has 45k look up tables)
 
 ## Constraints of this projects first iteration (v0.1.0)
 
@@ -56,6 +77,30 @@ be lowered onto edge hardware (esp32 xtensa / riscv). Crates live under
   ratio plus a dominant-tone-in-band test. A transparent baseline to beat.
 - **`drone-cli`** — host binary `drone` that can `synth` a test signal and
   `analyze` WAV files frame-by-frame.
+- **`drone-bench`** — benchmark harness: a pluggable `Approach` trait, dataset
+  loader, metrics (F1 / ROC-AUC / PR-AUC / Brier), and JSON output for plotting.
+
+### Detection approaches & benchmark
+
+Six approaches are implemented and benchmarked head-to-head (each emits a
+confidence in `[0,1]`, so they're comparable via ROC/PR). On a real
+[DADS](https://huggingface.co/datasets/geronimobasso/drone-audio-detection-samples)
+subset (300 + 300 clips, 50/50 split):
+
+| approach | F1 | ROC-AUC | ms/clip |
+|---|---|---|---|
+| `mfcc_lr` — MFCC + logistic regression | **0.997** | 1.000 | 2.1 |
+| `spectral_gate` — flatness/entropy/band-ratio + logistic | 0.977 | 0.998 | 2.7 |
+| `cepstrum` — cepstral / autocorrelation periodicity | 0.967 | 0.990 | 45 |
+| `hps` — harmonic-product-spectrum / comb | 0.949 | 0.987 | 2.1 |
+| `band_ratio` — baseline heuristic | 0.766 | 0.915 | 2.0 |
+| `template` — cosine vs. averaged drone spectrum | 0.706 | 0.995 | 2.0 |
+
+Four cheap classical/light methods **meet or beat** published CNN baselines
+(≈0.93–0.955 F1) on this binary task. Plots (ROC, PR, cost-vs-quality) live in
+[`benchmarks/plots/`](benchmarks/); methodology and caveats (leakage, threshold
+calibration) in [`benchmarks/README.md`](benchmarks/README.md). These are
+in-distribution subset numbers — see the caveats before quoting them.
 
 ### Quick start (Docker-first)
 
@@ -64,7 +109,12 @@ be lowered onto edge hardware (esp32 xtensa / riscv). Crates live under
 docker compose run --rm detector synth   --out /data/test.wav --fundamental 120
 docker compose run --rm detector analyze --input /data/test.wav
 
-# Run the full check suite: fmt, clippy -D warnings, tests, no_std build
+# Fetch a real dataset subset, benchmark all approaches, and plot
+docker compose run --rm data --per-class 300
+docker compose run --rm bench --data /work/data/dads
+docker compose run --rm plot
+
+# Run the full check suite: folderinfo lint, fmt, clippy -D warnings, tests, no_std build
 docker compose run --rm dev
 ```
 
