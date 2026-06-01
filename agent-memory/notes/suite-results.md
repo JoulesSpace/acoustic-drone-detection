@@ -67,6 +67,17 @@ templates overfit to the training mic/recording. This is the differentiator: we
 **Still optimistic** — Al-Emadi & ESC-50 are IN the DADS merge ([[dads-is-a-merge-superset]]),
 so a truly held-out set (DroneAudioset) would likely score lower. Follow-up open.
 
+### Augmentation did NOT help (honest negative — `robust`)
+Retraining `mfcc_lr`/`feature_fusion`/`gtcc_lr`/`mfcc_mlp` on DADS augmented with
+noise/SNR/gain/time-shift + ESC-50 hard-negative mix-in **widened** the
+cross-dataset gap (mean ΔAUC **−0.28**; helped 0/4), while in-dist stayed ~0.99.
+Coherent explanation: because Al-Emadi/ESC-50 are *inside* DADS, the "plain"
+cross-dataset AUC is itself inflated by shared lineage — perturbing training away
+from those exact recordings erodes the *leaked* advantage faster than it builds
+real invariance. Reinforces: physics methods generalize, learned-template data
+volume of this kind does not manufacture recognition. **The real fix is a truly
+held-out set + features with built-in invariance, not more of this augmentation.**
+
 ### Hard-negative false-positive rate (threshold 0.5, top generalizers)
 - `fusion`: 2% overall FPR (most robust); slight chainsaw bleed.
 - `hps`: **chainsaw 0.82** (strong harmonic stack fools the comb).
