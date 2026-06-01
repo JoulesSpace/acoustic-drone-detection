@@ -1,0 +1,1 @@
+multi-vendor drone brand/model recognition: MFCC+spectral features -> softmax classifier; real (College of Charleston 32-brand) or synthetic multi-brand data

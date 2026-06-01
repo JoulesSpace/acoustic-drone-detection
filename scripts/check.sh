@@ -6,7 +6,7 @@ set -euo pipefail
 echo "== folderinfo lint =="
 bash scripts/folderinfo.sh
 
-CRATES=(drone-dsp drone-detect drone-cli drone-bench drone-freq drone-id drone-doa drone-live drone-edge)
+CRATES=(drone-dsp drone-detect drone-cli drone-bench drone-freq drone-id drone-doa drone-live drone-edge drone-vendor)
 
 for c in "${CRATES[@]}"; do
   echo "== $c: fmt =="

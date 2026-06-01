@@ -1,0 +1,25 @@
+[package]
+name = "drone-vendor"
+version = "0.1.0"
+edition = "2021"
+license = "AGPL-3.0-or-later"
+description = "Multi-vendor drone brand/model recognition: MFCC + spectral/harmonic features into a deterministic softmax classifier, reporting accuracy, macro-F1, per-class metrics and a confusion matrix."
+repository = "https://github.com/JoulesSpace/acoustic-drone-detection"
+
+# Host-side (std) crate. This is the "recognition" head scaled toward many
+# vendors/models - broader than the 3-class drone-id. It reuses the shared
+# benchmark front-end (drone_bench::util::spectra) and clip type
+# (drone_bench::dataset::Sample) so its notion of "MFCC" matches the rest of the
+# repo, and adds richer spectral/harmonic features plus a CLI-selectable
+# real-vs-synthetic data source.
+
+[[bin]]
+name = "drone-vendor"
+path = "src/main.rs"
+
+[dependencies]
+drone-dsp = { path = "../drone-dsp" }
+drone-bench = { path = "../drone-bench" }
+clap = { version = "4", features = ["derive"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
