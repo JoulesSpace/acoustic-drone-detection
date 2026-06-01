@@ -33,6 +33,7 @@ How this store is organized and maintained: [README.md](README.md).
 
 ## 📚 Reference (external research)
 - [Prior-art landscape](reference/prior-art.md) - OSS projects, SOTA, products, datasets, edge, our positioning
+- [Literature corroboration (4-paper read)](reference/lit-review-2026-06.md) - Kang review validates our layering + honest-eval thesis; BSS layer; calibration band
 
 ## 📓 Notes (domain knowledge)
 - [Multi-task architecture](notes/architecture.md) - shared backbone + task heads (start here for the big picture)
