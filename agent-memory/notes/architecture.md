@@ -34,6 +34,17 @@ many task "heads", a common benchmark/eval harness), not a single model.
   (HPS + cepstrum + autocorrelation fusion), benchmarked for f0 accuracy.
 - **Robustness** - SNR-sweep degradation curves over all detectors
   (`benchmarks/robustness.py` + `--snr`), the "stress test earns its keep" axis.
+- **Vendor/brand ID** - `drone-vendor`: MFCC + softmax over many brands (real
+  32-brand macro-F1 0.93, synthetic 12-brand).
+
+## Deployment spectrum (same detector, four tiers)
+- **MCU** - `drone-edge` (no_std lib) + `drone-firmware` (real esp32-C6 esp-hal,
+  links riscv32imac, ~66 KB).
+- **Phone** - `drone-mobile` (C ABI / JNI cdylib, Android/iOS via cargo-ndk).
+- **Desktop** - `drone-live` (cpal mic capture + hardware probe + alert).
+- **Server** - `drone-bench` harness + all the analysis bins.
+- **Field data loop** - `drone-live record` -> `fieldeval` -> the honest held-out
+  number (see `FIELD_PROTOCOL.md`).
 
 ## Conventions that make it cohere
 - Every head emits **machine-readable JSON** into `benchmarks/results/`, consumed
