@@ -1,0 +1,18 @@
+[package]
+name = "drone-mobile"
+version = "0.1.0"
+edition = "2021"
+license = "AGPL-3.0-or-later"
+description = "C ABI / JNI-friendly FFI wrapper around the drone-edge detector, for Android/iOS (cargo-ndk) integration."
+repository = "https://github.com/JoulesSpace/acoustic-drone-detection"
+
+# Builds as a shared library loadable from Android (JNI) / iOS, a static library
+# for linking, and an rlib for tests. The detector itself is the no_std-friendly
+# `drone-edge`; this crate only adds the thin `extern "C"` boundary (the one
+# place `unsafe` is legitimate - it dereferences caller-provided pointers).
+[lib]
+crate-type = ["cdylib", "staticlib", "rlib"]
+
+[dependencies]
+drone-edge = { path = "../drone-edge" }
+drone-dsp = { path = "../drone-dsp" }
