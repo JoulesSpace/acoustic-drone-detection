@@ -29,6 +29,10 @@ How this store is organized and maintained: [README.md](README.md).
 - [Synthetic scores lie; validate on real data](insights/synth-vs-real-generalization.md) — HPS 0.972 synth → 0.082 real
 - [Commit before dispatching tree-mutating agents](insights/commit-before-dispatching-tree-mutating-agents.md) — agent git-revert clobbered uncommitted work
 - [Integration gotchas for agent-built crates](insights/agent-crate-integration-gotchas.md) — stray benchmarks/, check.sh, clap negatives
+- [DADS is a merge superset](insights/dads-is-a-merge-superset.md) — held-out tests must avoid its members (Al-Emadi/ESC-50/DREGON)
+
+## 📚 Reference (external research)
+- [Prior-art landscape](reference/prior-art.md) — OSS projects, SOTA, products, datasets, edge, our positioning
 
 ## 📓 Notes (domain knowledge)
 - [Multi-task architecture](notes/architecture.md) — shared backbone + task heads (start here for the big picture)
