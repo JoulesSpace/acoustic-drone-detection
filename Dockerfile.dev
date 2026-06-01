@@ -6,4 +6,9 @@
 
 FROM rust:1.92-slim-bookworm
 RUN rustup component add rustfmt clippy
+# libasound2-dev: `drone-live` depends on cpal, which needs ALSA headers to
+# build on Linux (the live audio backend). pkg-config locates it.
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends libasound2-dev pkg-config \
+    && rm -rf /var/lib/apt/lists/*
 WORKDIR /work
