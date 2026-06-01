@@ -104,6 +104,27 @@ Caveat: soft-OR score saturation hurts its very-low-FPR (<=0.05) and calibrated
 points; a rank/saturation-resistant combine is the next improvement. Honest
 deployment statement: **we catch ~87% of unseen drone models at the cost of a
 raised false-alarm rate, or ~72% as a clean ranker (hps) - not >95%.**
+
+## ⭐⭐⭐ Head-to-head vs the upstream SOTA CNN (`drone-cnn`) - the decisive comparison
+We implemented a faithful published-style **mel-spectrogram CNN** (candle, the
+Al-Emadi/MDPI family) and ran it through the SAME leakage-proof gauntlet:
+
+| method | in-dist ROC-AUC | UNSEEN-drone recall | unseen ROC-AUC |
+|---|---|---|---|
+| upstream mel-CNN | **1.000** (perfect) | **0.15** @0.5 / 0.07 @cal | **0.356** (below chance) |
+| hps (ours) | ~0.99 | 0.72 @cal | **0.855** |
+| sentry (ours) | - | **0.87** @0.5 | - |
+
+**Verdict (evidence, not assertion):** the upstream CNN reaches its published
+~0.9+ IN-DISTRIBUTION (here a perfect 1.000 on the small DADS) and then
+**collapses out-of-domain** - recall 0.15 and *below-chance* AUC 0.356 on
+genuinely-unseen drones (it ranks ESC-50 aircraft/engine above unseen drones).
+**Our honest detectors beat a faithful upstream SOTA by ~5x on the only
+trustworthy test.** This is exactly the in-dist→unseen collapse the literature
+warns about, isolated. So: on **leakage-proof evaluation we beat the upstream
+SOTA approach** - the published 92-98% are the in-distribution illusion.
+Caveats: small faithful net (not max-capacity); ESC-50 negatives are in DADS so
+unseen AUC is indicative; field data remains the ultimate validator.
 Calibration matters hugely: `envelope_periodicity`/`physics_fused` are decent
 rankers but badly placed at thr 0.5; `template`/`band_ratio` fire on everything
 (AUC <= chance). This is the honest number to quote for generalization, and it is

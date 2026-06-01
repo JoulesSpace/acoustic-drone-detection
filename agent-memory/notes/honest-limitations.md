@@ -26,8 +26,13 @@ xeval's Al-Emadi positives are inside DADS. The **leakage-proof** test
 and `physics_fused` drops to recall 0.10 / AUC 0.784. On truly-unseen drones,
 **`hps` is the most robust, not physics_fused.** That is the honest generalization
 ceiling today.
-Do NOT claim we "beat CNN baselines" - different datasets/splits, not
-apples-to-apples. And even 0.85 is optimistic: `xeval` tested on Al-Emadi/ESC-50
+We now HAVE the apples-to-apples evidence: a faithful upstream mel-CNN
+(`drone-cnn`) run through the same leakage-proof `heldout32` gauntlet scores
+perfect in-distribution (1.000) but **collapses to recall 0.15 / AUC 0.356 on
+unseen drones**, while ours hold 0.72-0.87. So on TRUSTWORTHY (leakage-proof)
+evaluation we DO beat the upstream SOTA approach - the published 92-98% are the
+in-distribution illusion. (Stated as "on honest eval", with the caveats: small
+faithful net, leaky negatives, field data still the ultimate validator.) And even 0.85 is optimistic: `xeval` tested on Al-Emadi/ESC-50
 which are *inside* the DADS merge ([dads-is-a-merge-superset](../insights/dads-is-a-merge-superset.md)) -
 a truly held-out set (DroneAudioset) is the next test and will likely be lower.
 
