@@ -1,1 +1,1 @@
-benchmark binaries for the harness: xeval (cross-dataset+hard-neg), ratesweep (rate+bit-depth), pareto (speed-accuracy frontier + tiers)
+benchmark binaries: xeval (cross-dataset+hard-neg), ratesweep (rate+bit-depth), pareto (speed-accuracy+tiers), robust (augmentation generalization study)
