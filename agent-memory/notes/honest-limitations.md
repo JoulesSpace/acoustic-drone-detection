@@ -10,15 +10,20 @@ tags: [limitations, honesty, review, critical]
 Read this BEFORE quoting any headline number. The infra is solid; the
 *evaluation* is not yet trustworthy.
 
-## The big one: probable dataset leakage → inflated numbers
-DADS clips are short (0.5–7 s) fragments very likely cut from shared source
-recordings. Our random clip-level 50/50 split almost certainly places
-near-duplicate clips in train AND test, so models partly learn "which recording"
-rather than "droneness." That is why detection F1/ROC-AUC sit at ~1.0 — **treat
-those as optimistic in-distribution numbers, not generalization.** The honest
-test is **cross-dataset** (train on one source, test on a different one) and
-**group-aware** splits. Until that's run, do not claim we "beat CNN baselines"
-(different datasets/splits — not apples-to-apples).
+## The big one: dataset leakage → inflated numbers — NOW CONFIRMED
+DADS clips are short (0.5–7 s) fragments cut from shared source recordings. Our
+random clip-level split places near-duplicates in train AND test, so models learn
+"which recording" more than "droneness." **The `xeval` cross-dataset test
+confirmed this**: in-distribution ROC-AUC ~1.0 collapses to **0.49–0.87**
+cross-dataset (best `envelope_periodicity` 0.872; `mfcc_lr` 0.685; `template`
+~0.49; `band_ratio` 0.233 inverted). See [suite-results](suite-results.md#-cross-dataset-reality-check-the-honest-headline--xeval).
+
+**So:** the headline ~1.0 numbers are recording-fit, NOT generalization. Honest
+generalization is **~0.85 ROC-AUC at best** (the physics/periodicity methods).
+Do NOT claim we "beat CNN baselines" — different datasets/splits, not
+apples-to-apples. And even 0.85 is optimistic: `xeval` tested on Al-Emadi/ESC-50
+which are *inside* the DADS merge ([dads-is-a-merge-superset](../insights/dads-is-a-merge-superset.md)) —
+a truly held-out set (DroneAudioset) is the next test and will likely be lower.
 
 ## What is and isn't true (as of first pass)
 - **Datasets:** used ~1.x real (DADS for detection, Al-Emadi for type-ID).
