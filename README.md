@@ -2,6 +2,10 @@
 
 Detecting drones accoustically.
 
+![Acoustic drone detection — signal chain & physics](assets/signal_chain.png)
+
+<sub>The full signal chain, with this project's real parameters: rotor acoustics → pressure wave → sampling (Nyquist) → ADC quantization → STFT blade-pass comb → detection pipeline → hardware tiers. Regenerate with `docker compose run --rm --entrypoint python plot scripts/infographic.py` ([`scripts/infographic.py`](scripts/infographic.py)).</sub>
+
 **State of project:** We can detect drones qualitatively. We benchmarked the performance of different algorithms and models for detection on different hardwares, and bundle everything into an extensible rust crate toolbox, that can be controlled via CLI and also be lowered to esp32-s3 or other edge hardware. Approaches for detecting drone situational attributes (`distance`, `elevation`, `speed`) and hardware attributes (`type`, `vendor`, `rotor_count`, `drone_health`, `drone_weight`) are wired in and ready to be perf-optimized and extended.
 
 **Notable mention** worth checking out: [batear-io/batear](https://github.com/batear-io/batear) for simple drone detection on esp32-S3+mic.
