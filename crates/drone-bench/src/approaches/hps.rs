@@ -16,7 +16,7 @@
 //!     `f0, 2f0, 3f0, ...` is compared against its *local* off-comb background
 //!     (the inter-harmonic valleys), and we reward many teeth each standing well
 //!     above their local floor. This keys on the regular spacing itself and is
-//!     invariant to absolute level and to broadband off-comb energy — unlike a
+//!     invariant to absolute level and to broadband off-comb energy - unlike a
 //!     fraction-of-total measure, which on real recordings is *inverted* by the
 //!     motor's broadband hiss (see the bug note in `comb_contrast`).
 //!
@@ -243,7 +243,7 @@ fn comb_contrast(spec: &[f32; NUM_BINS], f0_bin: usize, sample_rate: u32) -> f32
 
 /// Local off-comb background magnitude around bin `center`: the minimum of the
 /// two trough regions sitting `offset` bins below and above the harmonic. Using
-/// the min (the quieter shoulder) makes the contrast demanding — both shoulders
+/// the min (the quieter shoulder) makes the contrast demanding - both shoulders
 /// must be low for a tooth to count, which is exactly the inter-harmonic valley
 /// signature of a real comb.
 fn background_at(spec: &[f32; NUM_BINS], center: usize, offset: usize) -> f32 {

@@ -5,7 +5,7 @@ date: 2026-06-01
 tags: [benchmark, results]
 ---
 
-# Benchmark results — v0.1
+# Benchmark results - v0.1
 
 Dataset: balanced **DADS** subset, 300 drone + 300 non-drone real 16 kHz clips
 (`data/dads`), 50/50 stratified train/test, seed 7. Threshold 0.5 for F1/acc;
@@ -23,7 +23,7 @@ AUCs are threshold-free. Run: `docker compose run --rm bench --data /work/data/d
 ## Verdict vs upstream (goal: parity-or-better)
 Published binary-detection baselines: Al-Emadi CNN ≈0.93, general mel-CNN F1 ≈0.955
 (see [approaches-survey.md](approaches-survey.md)). **Four approaches
-(mfcc_lr, spectral_gate, cepstrum, hps) meet or beat that** — and all are cheap
+(mfcc_lr, spectral_gate, cepstrum, hps) meet or beat that** - and all are cheap
 classical/light methods, not a heavy CNN. **Goal met.**
 
 ## Caveats (don't oversell)
@@ -39,4 +39,4 @@ classical/light methods, not a heavy CNN. **Goal met.**
 
 ## How the spread compares to synthetic
 On `--synth` most approaches score ~1.0 (trivially separable). Real DADS is what
-produced the spread above — see [synth-vs-real-generalization](../insights/synth-vs-real-generalization.md).
+produced the spread above - see [synth-vs-real-generalization](../insights/synth-vs-real-generalization.md).

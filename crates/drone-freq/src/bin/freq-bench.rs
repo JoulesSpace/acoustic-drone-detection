@@ -1,4 +1,4 @@
-//! `freq-bench` — benchmark the blade-pass f0 estimator.
+//! `freq-bench` - benchmark the blade-pass f0 estimator.
 //!
 //! Two parts:
 //!
@@ -8,7 +8,7 @@
 //!    rate (estimates near 0.5× or 2× the truth) per SNR.
 //!
 //! 2. **Real report**: load DADS drone clips (label 1) and characterize the
-//!    distribution of estimated f0 — median, IQR, histogram — with no ground
+//!    distribution of estimated f0 - median, IQR, histogram - with no ground
 //!    truth.
 //!
 //! Results are written to `benchmarks/results/freq.json` and summarized to

@@ -5,9 +5,9 @@ The Rust ``pareto`` binary (``crates/drone-bench/src/bin/pareto.rs``) emits one
 row per approach with its measured latency, ROC-AUC, hardware tier, and a
 ``pareto_frontier`` flag. This script renders the classic trade-off view:
 
-  * x — inference latency (microseconds per 1024-sample frame), **log scale**
+  * x - inference latency (microseconds per 1024-sample frame), **log scale**
         (lower / left is faster);
-  * y — ROC-AUC (higher / up is more accurate);
+  * y - ROC-AUC (higher / up is more accurate);
   * points coloured and legended by hardware tier, each annotated with its name;
   * the **Pareto frontier** drawn as a connecting line through the non-dominated
     points (no other approach is both faster AND more accurate).
@@ -48,7 +48,7 @@ def _num(x, default=float("nan")):
 def load_rows() -> list[dict]:
     if not PARETO_JSON.exists():
         print(
-            f"no {PARETO_JSON} — run the `pareto` binary first "
+            f"no {PARETO_JSON} - run the `pareto` binary first "
             "(cargo run --release --bin pareto)",
             file=sys.stderr,
         )
@@ -122,7 +122,7 @@ def plot_pareto(rows: list[dict]) -> None:
         )
 
     ax.set_xscale("log")
-    ax.set_xlabel("inference latency — microseconds per 1024-sample frame (log scale)")
+    ax.set_xlabel("inference latency - microseconds per 1024-sample frame (log scale)")
     ax.set_ylabel("ROC-AUC")
     ax.set_title("Speed vs accuracy by hardware tier (upper-left is better)")
     ax.grid(alpha=0.3, which="both")

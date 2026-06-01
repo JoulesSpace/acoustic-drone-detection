@@ -19,7 +19,7 @@ the v0.1.0 heuristic separates the harmonic-band case from an out-of-band tone.
 
 **Caveat:** this is *synthetic* audio (controllable stand-in, not a recording).
 It validates the plumbing, **not** real-world robustness. The 60 Hz negative
-control only proves out-of-band rejection — it is not a hard case. Real noisy
+control only proves out-of-band rejection - it is not a hard case. Real noisy
 audio is the actual test; see the handoff's next steps.
 
 Generator details: [notes/detection-thesis.md](../notes/detection-thesis.md).

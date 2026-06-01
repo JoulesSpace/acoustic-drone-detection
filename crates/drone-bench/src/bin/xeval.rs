@@ -1,4 +1,4 @@
-//! `xeval` — leakage-honest CROSS-DATASET + HARD-NEGATIVE evaluation.
+//! `xeval` - leakage-honest CROSS-DATASET + HARD-NEGATIVE evaluation.
 //!
 //! Our in-distribution DADS numbers (~F1 1.0) are almost certainly inflated by
 //! recording-level leakage: clips cut from the same recording land in both the
@@ -6,15 +6,15 @@
 //! "recognizing a drone". This binary measures the two things that leakage can't
 //! fake:
 //!
-//! * **Experiment A — cross-dataset detection.** FIT every approach on the DADS
+//! * **Experiment A - cross-dataset detection.** FIT every approach on the DADS
 //!   *train* split, then TEST on a disjoint corpus: Al-Emadi drone clips as the
 //!   positives and ESC-50 confusable classes as the negatives. Different
-//!   microphones, rooms, drones, and noise — so a high score here is real
+//!   microphones, rooms, drones, and noise - so a high score here is real
 //!   generalization, not memorized recordings. We report ROC-AUC, fixed-threshold
 //!   F1, and calibrated (best-threshold) F1, and compare against the
 //!   in-distribution DADS split so the drop is visible and honest.
 //!
-//! * **Experiment B — hard-negative confusion.** At one fixed operating
+//! * **Experiment B - hard-negative confusion.** At one fixed operating
 //!   threshold, for the top detectors, report the false-positive rate (fraction
 //!   of clips called "drone") per ESC-50 class. This exposes *which* sounds fool
 //!   *which* methods: harmonic/rotor confounders (helicopter, airplane, engine,
@@ -35,7 +35,7 @@
 //! while staying dependency-free and fully deterministic. We deliberately avoid a
 //! sharp windowed-sinc FIR: it is more correct but heavier, and the drone cues
 //! are low-frequency, so the cheaper filter does not change the conclusions. This
-//! is a benchmark front-end, not a production decimator — the trade is noted on
+//! is a benchmark front-end, not a production decimator - the trade is noted on
 //! purpose.
 
 use std::collections::BTreeMap;
@@ -298,7 +298,7 @@ struct ApproachXEval {
     cross_recall: f32,
     cross_accuracy: f32,
     cross_brier: f32,
-    /// In-distribution DADS held-out split, same fitted model — the inflated
+    /// In-distribution DADS held-out split, same fitted model - the inflated
     /// baseline we are being honest about.
     indist_roc_auc: f32,
     indist_f1: f32,

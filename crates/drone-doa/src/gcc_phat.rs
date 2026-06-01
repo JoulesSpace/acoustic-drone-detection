@@ -31,7 +31,7 @@ pub struct GccConfig {
     ///
     /// Pure PHAT divides *every* bin by its magnitude, which for a narrowband
     /// source (like a drone's harmonics) blows up the empty noise bins to the
-    /// same unit weight as the few signal bins — and they then dominate the
+    /// same unit weight as the few signal bins - and they then dominate the
     /// correlation, flattening the peak. We instead only whiten bins whose
     /// magnitude is at least `gate · max_magnitude` and zero the rest. With
     /// `gate = 0` this reduces to classical PHAT.
@@ -54,7 +54,7 @@ impl Default for GccConfig {
 /// Estimate the TDOA (in **samples**, fractional) of `x` relative to `y`.
 ///
 /// A positive return value means `x` lags `y` (the feature in `x` appears later)
-/// — equivalently `x[n] ≈ y[n - tdoa]`. Both inputs are zero-padded/truncated to
+/// - equivalently `x[n] ≈ y[n - tdoa]`. Both inputs are zero-padded/truncated to
 /// [`GCC_FFT_SIZE`]. Returns `0.0` for empty or silent input.
 pub fn gcc_phat_tdoa(x: &[f32], y: &[f32], cfg: &GccConfig) -> f32 {
     let n = GCC_FFT_SIZE;

@@ -1,13 +1,13 @@
-//! `drone-live` — real-time acoustic drone detection from a live microphone,
+//! `drone-live` - real-time acoustic drone detection from a live microphone,
 //! plus a hardware/mic probe.
 //!
 //! Two subcommands:
 //!
-//! * **`devices`** — the hardware probe. Enumerate every audio input device and
+//! * **`devices`** - the hardware probe. Enumerate every audio input device and
 //!   its supported configs (channels, sample-rate range, sample format), marking
 //!   the default. Answers "what mics do we have and what can they do?".
 //!
-//! * **`listen`** — open an input device, downmix + resample to 16 kHz, frame the
+//! * **`listen`** - open an input device, downmix + resample to 16 kHz, frame the
 //!   stream, score each window with a [`drone_bench`] detection approach, smooth
 //!   the confidence with an EMA, and alert when it holds above a threshold.
 //!

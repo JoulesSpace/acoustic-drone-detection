@@ -1,7 +1,7 @@
-//! Multiclass drone-TYPE identification — the "recognition" head.
+//! Multiclass drone-TYPE identification - the "recognition" head.
 //!
 //! Where `drone-detect` / `drone-bench` answer the binary question *"is a drone
-//! present?"*, this crate answers *"which TYPE of drone is it?"* — the
+//! present?"*, this crate answers *"which TYPE of drone is it?"* - the
 //! recognition head sitting alongside the detection head, insightface-style. It
 //! deliberately reuses the shared infrastructure: clips are
 //! [`drone_bench::dataset::Sample`]s, the MFCC front-end mirrors `drone-bench`'s
@@ -9,13 +9,13 @@
 //! [`drone_dsp`] primitives.
 //!
 //! Pipeline:
-//! 1. [`data`] — build a `K`-class labelled set from real class folders or a
+//! 1. [`data`] - build a `K`-class labelled set from real class folders or a
 //!    deterministic synthetic generator, and split it K-class-stratified.
-//! 2. [`features`] — per-clip MFCC features (mel filterbank -> log -> DCT,
+//! 2. [`features`] - per-clip MFCC features (mel filterbank -> log -> DCT,
 //!    mean+std pooled).
-//! 3. [`model`] — multinomial logistic regression (softmax) trained by
+//! 3. [`model`] - multinomial logistic regression (softmax) trained by
 //!    deterministic gradient descent (no ML crate).
-//! 4. [`metrics`] — confusion matrix, per-class precision/recall/F1, accuracy
+//! 4. [`metrics`] - confusion matrix, per-class precision/recall/F1, accuracy
 //!    and macro-F1.
 
 #![forbid(unsafe_code)]

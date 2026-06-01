@@ -21,7 +21,7 @@ pub struct ClassMetrics {
 pub struct MulticlassReport {
     pub n_classes: usize,
     pub n_test: usize,
-    /// `class_names[id]` — the id <-> name map.
+    /// `class_names[id]` - the id <-> name map.
     pub class_names: Vec<String>,
     /// `confusion[true][pred]` counts.
     pub confusion: Vec<Vec<usize>>,

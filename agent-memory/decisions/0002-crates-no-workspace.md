@@ -6,7 +6,7 @@ status: accepted
 tags: [structure, cargo]
 ---
 
-# 0002 — Crates in `crates/`, no workspace (yet)
+# 0002 - Crates in `crates/`, no workspace (yet)
 
 **Decision:** Put each crate under `crates/` with its own `Cargo.toml` and use
 path dependencies. Do **not** create a root cargo workspace yet.

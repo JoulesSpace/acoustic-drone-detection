@@ -1,7 +1,7 @@
-# CLAUDE.md — operating guide for this repository
+# CLAUDE.md - operating guide for this repository
 
-This file is **mine to maintain**. Whenever something here goes stale — a path
-moves, a command changes, a decision is reversed — I update it in the same
+This file is **mine to maintain**. Whenever something here goes stale - a path
+moves, a command changes, a decision is reversed - I update it in the same
 change that caused the drift. A stale CLAUDE.md is a bug.
 
 ## What this project is
@@ -21,7 +21,7 @@ of how and why things are built.
 3. **Maintain `agent-memory/`.** It is the tracked, layered Claude memory:
    `decisions/` (ADRs), `insights/` (gotchas), `notes/` (domain knowledge), and
    `handoffs/` (dated session state), all indexed by `agent-memory/MEMORY.md`.
-   Update it as work happens, not after — and update the index in the same
+   Update it as work happens, not after - and update the index in the same
    change. See `agent-memory/README.md` for the format.
 4. **Keep the core `no_std`-clean.** `drone-dsp` (and `drone-detect`) must build
    with `--no-default-features` so they can lower onto esp32 (xtensa) / riscv.
@@ -36,6 +36,10 @@ of how and why things are built.
    suite, so a missing one fails CI. (Gitignored scratch like `workspace/` is
    exempt; `data/` keeps a tracked `.folderinfo` even though its contents are
    ignored.)
+7. **No em-dashes (`-`).** Never write the em-dash character anywhere: prose,
+   commit messages, code comments, doc strings, or generated figures. Use a
+   spaced hyphen `-` as a separator, or rewrite the sentence. (En-dashes in
+   numeric ranges like `90-2400x` are fine, but a plain hyphen is preferred.)
 
 ## Docker-first workflow
 
@@ -72,7 +76,7 @@ Dockerfile         multi-stage build of the `drone` host binary
 docker-compose.yml detector (runtime) + dev (checks) + bench/plot services
 scripts/           checks, dataset downloads, folderinfo lint
 benchmarks/        benchmark results (JSON) and matplotlib plotting (Python)
-data/              datasets — git-ignored contents (.gitkeep + .folderinfo tracked)
+data/              datasets - git-ignored contents (.gitkeep + .folderinfo tracked)
 workspace/         gitignored scratch for cloning/inspecting upstream repos
 agent-memory/      tracked agent memory; see agent-memory/MEMORY.md
 ```
@@ -87,9 +91,9 @@ deps. If a workspace is added later, update this section and
 - `#![forbid(unsafe_code)]` in library crates.
 - Frame size is fixed at 1024 (`drone_dsp::FRAME_SIZE`) and the FFT call is tied
   to it; change both together.
-- Tests are the cheapest oracle — keep the `analyze`/detector behavior covered.
+- Tests are the cheapest oracle - keep the `analyze`/detector behavior covered.
 
 ## When unsure
 
-Read `agent-memory/MEMORY.md` first — it indexes everything and links the latest
+Read `agent-memory/MEMORY.md` first - it indexes everything and links the latest
 handoff (current state + next steps), the decisions, and the insights.

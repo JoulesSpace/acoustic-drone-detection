@@ -4,7 +4,7 @@
 //! with GCC-PHAT, convert each to a per-pair `sin(θ)` observation, and combine
 //! them. Because every adjacent pair shares the same baseline `d`, the
 //! least-squares combination of independent `sin(θ)` estimates is just their
-//! mean — which also averages down the per-pair noise by `√(M-1)`.
+//! mean - which also averages down the per-pair noise by `√(M-1)`.
 //!
 //! We work in the `sin(θ)` domain rather than averaging angles directly: the
 //! TDOA is linear in `sin(θ)`, so noise is well-behaved there, and a single

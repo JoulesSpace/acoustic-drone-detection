@@ -14,10 +14,10 @@
 /benchmarks/results/*
 !/benchmarks/results/.folderinfo
 
-# Scratch for cloning/inspecting upstream repos — fully ignored
+# Scratch for cloning/inspecting upstream repos - fully ignored
 /workspace/
 
-# Generated / sample audio — keep binaries out of git
+# Generated / sample audio - keep binaries out of git
 *.wav
 
 # Python

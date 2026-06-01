@@ -1,11 +1,11 @@
 ---
-title: Benchmark wave — six approaches, goal met
+title: Benchmark wave - six approaches, goal met
 type: handoff
 date: 2026-06-01
 tags: [handoff, benchmark, v0.1]
 ---
 
-# Handoff — benchmark wave (six approaches, goal met)
+# Handoff - benchmark wave (six approaches, goal met)
 
 _Supersedes [the v0.1.0 scaffold handoff](2026-06-01-v0.1.0-scaffold.md)._
 
@@ -13,7 +13,7 @@ _Supersedes [the v0.1.0 scaffold handoff](2026-06-01-v0.1.0-scaffold.md)._
 
 Six detection approaches implemented against the `drone-bench` harness and
 benchmarked on a real **DADS** subset (300+300 clips). **Four beat/match the
-published upstream baseline** (CNN ≈0.93–0.955 F1) — goal met. Full table:
+published upstream baseline** (CNN ≈0.93–0.955 F1) - goal met. Full table:
 [benchmark-results](../notes/benchmark-results.md). Headline: `mfcc_lr` F1 1.00,
 `spectral_gate` 0.98, `cepstrum` 0.97, `hps` 0.95, all cheap classical/light
 methods.
@@ -27,9 +27,9 @@ methods.
 
 ## Lessons captured (read these)
 - [Synthetic scores lie; validate on real data](../insights/synth-vs-real-generalization.md)
-  — HPS was AUC 0.972 on synth but 0.082 (inverted) on real; fixed to 0.987.
+  - HPS was AUC 0.972 on synth but 0.082 (inverted) on real; fixed to 0.987.
 - [Commit integrations before dispatching tree-mutating agents](../insights/commit-before-dispatching-tree-mutating-agents.md)
-  — an agent's git revert clobbered uncommitted integrations.
+  - an agent's git revert clobbered uncommitted integrations.
 
 ## Next steps
 1. **Stronger evaluation.** Larger DADS subset; group-aware split (avoid

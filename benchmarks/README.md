@@ -27,10 +27,10 @@ Run any via the dev container, e.g.
 | bin | what it answers | plot |
 |---|---|---|
 | `drone-bench` (main) | per-approach metrics on one split | metrics_bar / roc / pr / cost_quality |
-| `xeval` | **honest cross-dataset** (train DADS → test Al-Emadi + ESC-50) + per-confounder false-positive rate | — (JSON) |
+| `xeval` | **honest cross-dataset** (train DADS → test Al-Emadi + ESC-50) + per-confounder false-positive rate | - (JSON) |
 | `pareto` | **speed↔accuracy frontier** + hardware-tier assignment | `pareto.py` → pareto.png |
 | `ratesweep` | accuracy vs **sample rate** {8k–44.1k} and **bit depth** {4–16} | `ratesweep.py` → ratesweep.png |
-| `robust` | does training-time **augmentation** narrow the cross-dataset gap | — (JSON) |
+| `robust` | does training-time **augmentation** narrow the cross-dataset gap | - (JSON) |
 
 Robustness SNR sweep: `bench --snr <dB> --out-dir results/snr_<dB>` for several
 levels, then `robustness.py` → robustness_{roc,f1}.png.
@@ -50,7 +50,7 @@ and [`suite-results.md`](../agent-memory/notes/suite-results.md).
 
 `pareto` assigns each detector to a tier; see
 [`MODEL_CARDS.md`](MODEL_CARDS.md):
-- **tiny-edge** (esp32-class MCU): `band_ratio`, `hps`, `spectral_gate` — and the
+- **tiny-edge** (esp32-class MCU): `band_ratio`, `hps`, `spectral_gate` - and the
   `drone-edge` crate cross-compiles the rule detector to riscv32imc (~17–27 KB).
 - **balanced** (phone / Pi): `mfcc_lr`, `gtcc_lr`, `mfcc_mlp`, `cepstrum`,
   `envelope_periodicity`, `template`, `spectrogram_template`.
@@ -73,6 +73,6 @@ and [`suite-results.md`](../agent-memory/notes/suite-results.md).
 | `feature_fusion` | fused MFCC+spectral+harmonic+cepstral + logistic | max-accuracy |
 | `fusion` | logistic stack (ensemble) over the classics | max-accuracy |
 
-> **Synthetic data lies:** `--synth` is trivially separable (~1.0 for everyone) —
+> **Synthetic data lies:** `--synth` is trivially separable (~1.0 for everyone) -
 > it validates plumbing only. Real spread shows on DADS, and real *generalization*
 > only shows cross-dataset (`xeval`).

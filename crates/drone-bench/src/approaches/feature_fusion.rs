@@ -8,19 +8,19 @@
 //!
 //! Families fused (all pooled across frames as clip means, plus MFCC std):
 //!
-//! * **MFCC** — `N_MFCC` mel-frequency cepstral coefficients (mel filterbank →
+//! * **MFCC** - `N_MFCC` mel-frequency cepstral coefficients (mel filterbank →
 //!   log → DCT-II), pooled as per-coefficient mean *and* std across frames. The
 //!   classic timbral fingerprint.
 //! * **Spectral descriptors** (clip means of frame-wise values): spectral
-//!   flatness (geo/arith mean of the magnitude spectrum — tonal vs. noisy),
+//!   flatness (geo/arith mean of the magnitude spectrum - tonal vs. noisy),
 //!   spectral entropy (normalized Shannon entropy of the power spectrum),
 //!   spectral centroid (Hz), spectral rolloff at 0.85, and the band-energy ratio
 //!   in 100..4000 Hz (where rotor harmonics live).
 //! * **Harmonic / comb strength**: the harmonic-product-spectrum (HPS) peak
 //!   value, and the fraction of total energy carried by the 100..330 Hz
-//!   fundamental/blade-pass band — drones stack strong low harmonics.
+//!   fundamental/blade-pass band - drones stack strong low harmonics.
 //! * **Cepstral / autocorrelation periodicity**: the normalized peak of the
-//!   frame autocorrelation in a plausible pitch-period lag range — periodic
+//!   frame autocorrelation in a plausible pitch-period lag range - periodic
 //!   rotor noise produces a sharp peak, broadband confounders do not.
 //!
 //! The literature consistently reports that fused features beat any single
@@ -268,7 +268,7 @@ fn clip_features(samples: &[f32], sample_rate: u32) -> [f32; N_FEAT] {
         out[N_MFCC + k] = v.sqrt();
     }
 
-    // Append the scalar descriptors (fixed order — must match N_EXTRA).
+    // Append the scalar descriptors (fixed order - must match N_EXTRA).
     let mut idx = N_MFCC2;
     out[idx] = sum_flatness / count;
     idx += 1;

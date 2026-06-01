@@ -1,9 +1,9 @@
-//! `drone` — host-side CLI for the acoustic drone detector.
+//! `drone` - host-side CLI for the acoustic drone detector.
 //!
 //! Two subcommands:
-//! - `synth` — generate a drone-like (or plain-tone) test WAV so the pipeline
+//! - `synth` - generate a drone-like (or plain-tone) test WAV so the pipeline
 //!   is exercisable without real recordings.
-//! - `analyze` — run a sliding-window STFT over a WAV, compute spectral
+//! - `analyze` - run a sliding-window STFT over a WAV, compute spectral
 //!   features per frame, run the detector, and summarise.
 //!
 //! The host crate owns all the std-only concerns (file IO, the over-the-whole-
@@ -119,8 +119,8 @@ fn synth(
         let sample = if plain {
             0.6 * (2.0 * PI * fundamental * t).sin()
         } else {
-            // Stack of harmonics with decaying amplitude — a crude but
-            // recognisable multirotor signature — plus broadband noise and a
+            // Stack of harmonics with decaying amplitude - a crude but
+            // recognisable multirotor signature - plus broadband noise and a
             // slow amplitude modulation (rotor wobble).
             let am = 1.0 + 0.2 * (2.0 * PI * 8.0 * t).sin();
             let mut s = 0.0_f32;

@@ -1,19 +1,19 @@
 //! Choosing and (optionally) fitting a detection approach for live use.
 //!
 //! Live detection reuses the exact [`drone_bench::Approach`] implementations the
-//! benchmark harness evaluates — there is no separate "live" scorer to drift out
+//! benchmark harness evaluates - there is no separate "live" scorer to drift out
 //! of sync. The wrinkle is that **most** approaches are supervised: their
 //! [`fit`](drone_bench::Approach::fit) trains a classifier (logistic regression,
 //! an MLP, template averaging, ...) and an *unfit* instance scores garbage. At
 //! runtime there is no labelled audio, so by default we restrict to approaches
 //! that are meaningful with **no training**:
 //!
-//! * **`hps`** — Harmonic Product Spectrum + harmonic-comb contrast. Fully
+//! * **`hps`** - Harmonic Product Spectrum + harmonic-comb contrast. Fully
 //!   unsupervised; `fit` only nudges a logistic centre, and the default prior is
 //!   sensible. This is the live default.
-//! * **`band_ratio`** — the `drone-detect` band-energy heuristic. A pure rule;
+//! * **`band_ratio`** - the `drone-detect` band-energy heuristic. A pure rule;
 //!   `fit` is a no-op.
-//! * **`spectral_gate`** — self-calibrating logistic gate that *falls back to a
+//! * **`spectral_gate`** - self-calibrating logistic gate that *falls back to a
 //!   hand-designed monotonic rule* when never fit, so it is usable unfit too.
 //!
 //! Any other approach (`mfcc_lr`, `mfcc_mlp`, `template`, `fusion`, ...) requires
@@ -107,7 +107,7 @@ pub fn build(
                 .into());
             }
             let note = format!(
-                "approach '{}' running UNFIT (unsupervised / rule fallback — no labelled data at runtime)",
+                "approach '{}' running UNFIT (unsupervised / rule fallback - no labelled data at runtime)",
                 approach.name()
             );
             Ok((approach, note))

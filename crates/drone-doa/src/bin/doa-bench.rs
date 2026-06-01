@@ -1,4 +1,4 @@
-//! `doa-bench` — sweep true azimuth × SNR × trials through the DoA pipeline and
+//! `doa-bench` - sweep true azimuth × SNR × trials through the DoA pipeline and
 //! report angular error.
 //!
 //! For each `(angle, snr, trial)` the simulator produces `M` noisy ULA channels;

@@ -2,16 +2,16 @@
 //!
 //! The pipeline is the classic small-array recipe:
 //!
-//! 1. [`geometry`] — a uniform linear array (ULA) of `M` microphones spaced `d`
+//! 1. [`geometry`] - a uniform linear array (ULA) of `M` microphones spaced `d`
 //!    metres apart. A far-field plane wave arriving from azimuth `θ` reaches
 //!    adjacent mics with a time difference of arrival (TDOA) of `d·sin(θ)/c`.
-//! 2. [`gcc_phat`] — estimate the TDOA between a mic pair via the
+//! 2. [`gcc_phat`] - estimate the TDOA between a mic pair via the
 //!    generalized cross-correlation with phase transform (GCC-PHAT), including
 //!    parabolic sub-sample peak interpolation.
-//! 3. [`azimuth`] — turn the pairwise TDOAs into a single azimuth estimate by a
+//! 3. [`azimuth`] - turn the pairwise TDOAs into a single azimuth estimate by a
 //!    least-squares fit over all adjacent ULA pairs, clamped to the
 //!    unambiguous range set by the spacing.
-//! 4. [`sim`] — a propagation simulator that produces `M` noisy channels with
+//! 4. [`sim`] - a propagation simulator that produces `M` noisy channels with
 //!    correct fractional inter-mic delays, so the whole thing can be benchmarked
 //!    without multi-mic recordings.
 //!

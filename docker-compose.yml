@@ -1,9 +1,9 @@
 # Docker Compose for the acoustic drone detector.
 #
 # Two services:
-#   detector — the built runtime image. Mounts ./data so synth/analyze can
+#   detector - the built runtime image. Mounts ./data so synth/analyze can
 #              read and write WAV files on the host.
-#   dev      — a Rust toolchain container with the source mounted, used to run
+#   dev      - a Rust toolchain container with the source mounted, used to run
 #              fmt / clippy / test (see scripts/check.sh). Build artifacts live
 #              in a named volume so they never collide with host-side builds or
 #              pollute the Windows working tree.

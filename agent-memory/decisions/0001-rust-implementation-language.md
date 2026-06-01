@@ -6,11 +6,11 @@ status: accepted
 tags: [language, edge]
 ---
 
-# 0001 — Rust as the implementation language
+# 0001 - Rust as the implementation language
 
 **Decision:** Implement the detection pipeline in Rust rather than Python.
 
-**Why:** Fast, typed iteration on real, performant DSP algorithms — and the same
+**Why:** Fast, typed iteration on real, performant DSP algorithms - and the same
 code can lower onto microcontrollers. Avoids the Python-stub-then-rewrite
 detour: we write the performant version once.
 

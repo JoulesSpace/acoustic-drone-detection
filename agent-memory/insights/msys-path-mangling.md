@@ -12,7 +12,7 @@ with `error: No such file or directory (os error 2)`, while `--entrypoint sh -c
 "drone synth --out /data/x.wav"` worked fine.
 
 **Cause:** MSYS (Git Bash on Windows) auto-converts bare Unix-looking arguments
-into Windows paths — `/data` became `C:/Program Files/Git/data`. Inside a quoted
+into Windows paths - `/data` became `C:/Program Files/Git/data`. Inside a quoted
 `sh -c "..."` string the conversion doesn't happen, which is why that path
 worked and masked the issue.
 

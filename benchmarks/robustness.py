@@ -4,7 +4,7 @@
 Reads `benchmarks/results/snr_<level>/<approach>.json` directories (produced by
 running `drone-bench --snr <level> --out-dir ...` at several SNRs, plus a
 `snr_clean` run with no added noise) and plots ROC-AUC and F1 as a function of
-SNR for every approach — the degradation curves that show which detectors hold
+SNR for every approach - the degradation curves that show which detectors hold
 up under stress.
 
 Outputs `benchmarks/plots/robustness_roc.png` and `robustness_f1.png`.
@@ -67,7 +67,7 @@ def plot_metric(series, key, ylabel, title, out):
         xs = [snr for snr, _ in items]
         ys = [_num(m.get(key), float("nan")) for _, m in items]
         ax.plot(xs, ys, marker="o", ms=4, lw=1.4, label=approach)
-    ax.set_xlabel("SNR (dB) — rightmost = clean")
+    ax.set_xlabel("SNR (dB) - rightmost = clean")
     ax.set_ylabel(ylabel)
     ax.set_title(title)
     ax.grid(alpha=0.3)

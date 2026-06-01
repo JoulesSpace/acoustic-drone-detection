@@ -1,19 +1,19 @@
-//! `pareto` — speed/accuracy trade-off benchmark and hardware-tier mapping.
+//! `pareto` - speed/accuracy trade-off benchmark and hardware-tier mapping.
 //!
 //! For every registered detection approach this binary measures:
 //!
-//!   * **inference latency** — `score()` timed over many clips, reported both
+//!   * **inference latency** - `score()` timed over many clips, reported both
 //!     per clip and normalised to microseconds per 1024-sample frame
 //!     ([`drone_dsp::FRAME_SIZE`]) and per second of audio;
-//!   * **real-time factor** — inference seconds per audio second (`< 1.0` runs
+//!   * **real-time factor** - inference seconds per audio second (`< 1.0` runs
 //!     faster than real time on this machine, one stream);
-//!   * **accuracy** — ROC-AUC and the calibrated best-F1, from a single
+//!   * **accuracy** - ROC-AUC and the calibrated best-F1, from a single
 //!     stratified split (default) or k-fold pooled out-of-fold predictions;
 //!   * a rough **feature dimension** / relative compute cost (a static design
 //!     property of each approach, not a measurement).
 //!
-//! Each approach is mapped to a **hardware tier** — `tiny-edge`, `balanced`, or
-//! `max-accuracy` — reflecting where it can plausibly run. The result set is
+//! Each approach is mapped to a **hardware tier** - `tiny-edge`, `balanced`, or
+//! `max-accuracy` - reflecting where it can plausibly run. The result set is
 //! written to `benchmarks/results/pareto.json` and printed as a table sorted by
 //! accuracy, flagging the **Pareto frontier**: an approach is on the frontier
 //! when no other approach is simultaneously faster *and* more accurate.
@@ -101,9 +101,9 @@ impl Tier {
 /// Static design properties of each approach: its hardware tier, a rough feature
 /// dimension, and a deterministic relative-cost rank.
 ///
-/// * `feature_dim` — dimensionality of the clip-level descriptor the model
+/// * `feature_dim` - dimensionality of the clip-level descriptor the model
 ///   scores over (a structural complexity proxy, reported as-is).
-/// * `cost_rank` — a small ordinal capturing *relative inference cost* (lower =
+/// * `cost_rank` - a small ordinal capturing *relative inference cost* (lower =
 ///   cheaper), assigned from each approach's algorithm, not from a stopwatch.
 ///   It is used as the **deterministic speed axis** for the Pareto frontier so
 ///   the frontier does not flap with measurement noise (see [`flag_pareto`]).
@@ -113,11 +113,11 @@ impl Tier {
 ///   and the stacked ensemble are most expensive.
 ///
 /// Tiers reflect structural cost, justified in `MODEL_CARDS.md`:
-///   * **tiny-edge** — single scalar statistics over a magnitude spectrum, no
+///   * **tiny-edge** - single scalar statistics over a magnitude spectrum, no
 ///     learned matrix, no per-frame ML. Runnable on an MCU with KB of RAM.
-///   * **balanced** — a learned linear/MLP head over a modest (tens of dims)
+///   * **balanced** - a learned linear/MLP head over a modest (tens of dims)
 ///     cepstral/spectral feature, or a single template/patch correlation.
-///   * **max-accuracy** — multi-feature fusion or an ensemble stacked over the
+///   * **max-accuracy** - multi-feature fusion or an ensemble stacked over the
 ///     base detectors; the heaviest, server-class.
 fn profile(name: &str) -> (Tier, u32, u32) {
     match name {
@@ -187,13 +187,13 @@ fn main() -> Result<(), Box<dyn Error>> {
     let kfold = cli.kfold.max(1);
     let repeats = cli.repeats.max(1);
     println!(
-        "dataset: {} samples ({} pos){} — latency timed {repeats}x per clip",
+        "dataset: {} samples ({} pos){} - latency timed {repeats}x per clip",
         dataset.len(),
         dataset.n_pos(),
         if kfold > 1 {
-            format!(" — {kfold}-fold CV")
+            format!(" - {kfold}-fold CV")
         } else {
-            format!(" — single split (train_frac {})", cli.train_frac)
+            format!(" - single split (train_frac {})", cli.train_frac)
         },
     );
 
@@ -363,7 +363,7 @@ fn measure_kfold(
 /// Mark each row on the speed/accuracy Pareto frontier: no other approach is
 /// *both* cheaper *and* more accurate. "Cheaper" is decided by the deterministic
 /// `cost_rank` (the static relative-cost proxy from [`profile`]), not by the
-/// measured latency — latency is a stopwatch reading that jitters run-to-run and
+/// measured latency - latency is a stopwatch reading that jitters run-to-run and
 /// would make the reported frontier non-deterministic for speed-tied approaches.
 /// `cost_rank` mirrors the measured speed ordering but is fixed, so the frontier
 /// is the same on every run for fixed accuracy. Equal cost ranks are broken by
@@ -420,7 +420,7 @@ fn print_table(rows: &[ParetoRow]) {
         .filter(|r| r.pareto_frontier)
         .map(|r| r.approach.as_str())
         .collect();
-    println!("\nPareto frontier (* — none is both faster and more accurate):");
+    println!("\nPareto frontier (* - none is both faster and more accurate):");
     println!("  {}", frontier.join(", "));
 }
 

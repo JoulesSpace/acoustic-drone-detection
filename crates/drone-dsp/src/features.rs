@@ -57,7 +57,7 @@ pub fn band_energy(spectrum: &Spectrum, lo_hz: f32, hi_hz: f32, sample_rate: u32
     acc
 }
 
-/// Spectral centroid in Hz — the energy-weighted mean frequency.
+/// Spectral centroid in Hz - the energy-weighted mean frequency.
 ///
 /// A higher centroid means brighter/higher-pitched content. Returns 0.0 for a
 /// silent frame.

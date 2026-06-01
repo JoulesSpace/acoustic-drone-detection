@@ -1,4 +1,4 @@
-//! `ratesweep` — sample-rate and bit-depth robustness sweep for the detector
+//! `ratesweep` - sample-rate and bit-depth robustness sweep for the detector
 //! pipeline, run over the real DADS dataset (16 kHz mono native).
 //!
 //! Answers two practical mic/ADC questions:
@@ -8,7 +8,7 @@
 //!    every clip from the 16 kHz native rate to the target, then run the
 //!    detector pipeline *at that rate* (the pipeline is rate-aware via
 //!    `sample_rate`). Honest caveat: DADS is 16 kHz native, so upsampling adds
-//!    no new spectral information above 8 kHz — this measures pipeline
+//!    no new spectral information above 8 kHz - this measures pipeline
 //!    behaviour and the fixed-1024-frame resolution effect (bin width = rate /
 //!    1024 grows with rate), not extra signal. Downsampling to 8 kHz *does*
 //!    discard real content above 4 kHz, so its result is physically meaningful.
@@ -17,7 +17,7 @@
 //!    {16, 12, 10, 8, 6, 4} we uniformly quantize the 16 kHz float clips, then
 //!    run detection. Models low-resolution capture (quantization noise floor).
 //!
-//! Resampler: a windowed-sinc (Lanczos, a = 8) fractional resampler — correct
+//! Resampler: a windowed-sinc (Lanczos, a = 8) fractional resampler - correct
 //! and band-limited. For the 16 kHz → 8 kHz downsample the sinc kernel's cutoff
 //! is set to the *output* Nyquist (4 kHz), so it doubles as the anti-alias
 //! low-pass; see `resample`.
@@ -120,7 +120,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     }
     let native_sr = ds.samples[0].sample_rate;
     println!(
-        "dataset: {} clips ({} drone) — native {} Hz mono\n",
+        "dataset: {} clips ({} drone) - native {} Hz mono\n",
         ds.len(),
         ds.n_pos(),
         native_sr
@@ -276,7 +276,7 @@ const LANCZOS_A: i64 = 8;
 /// Resample `x` from `from_hz` to `to_hz` with a windowed-sinc (Lanczos)
 /// kernel. When downsampling (`to_hz < from_hz`) the kernel is scaled by the
 /// ratio so its cutoff sits at the *output* Nyquist, which band-limits the
-/// input first — i.e. the anti-alias low-pass is built into the same kernel.
+/// input first - i.e. the anti-alias low-pass is built into the same kernel.
 /// When upsampling the cutoff stays at the input Nyquist (no new content is
 /// invented). Identity when the rates match.
 fn resample(x: &[f32], from_hz: u32, to_hz: u32) -> Vec<f32> {
@@ -333,7 +333,7 @@ fn lanczos(x: f64, a: i64) -> f64 {
 /// Uniformly quantize `x` (in [-1, 1]) to `bits`-bit resolution: a mid-tread
 /// quantizer with `2^(bits-1)` steps per sign, i.e. step = 1 / 2^(bits-1).
 /// With `dither`, add TPDF (triangular, sum of two independent uniforms) noise
-/// of ±1 LSB peak before rounding — the standard de-correlating dither — using
+/// of ±1 LSB peak before rounding - the standard de-correlating dither - using
 /// a deterministic per-clip RNG seed.
 fn quantize(x: &[f32], bits: u32, dither: bool, seed: u32) -> Vec<f32> {
     let levels = (1u32 << (bits - 1)) as f32; // steps per sign

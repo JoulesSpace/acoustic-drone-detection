@@ -10,7 +10,7 @@ tags: [limitations, honesty, review, critical]
 Read this BEFORE quoting any headline number. The infra is solid; the
 *evaluation* is not yet trustworthy.
 
-## The big one: dataset leakage → inflated numbers — NOW CONFIRMED
+## The big one: dataset leakage → inflated numbers - NOW CONFIRMED
 DADS clips are short (0.5–7 s) fragments cut from shared source recordings. Our
 random clip-level split places near-duplicates in train AND test, so models learn
 "which recording" more than "droneness." **The `xeval` cross-dataset test
@@ -20,9 +20,9 @@ cross-dataset (best `envelope_periodicity` 0.872; `mfcc_lr` 0.685; `template`
 
 **So:** the headline ~1.0 numbers are recording-fit, NOT generalization. Honest
 generalization is **~0.85 ROC-AUC at best** (the physics/periodicity methods).
-Do NOT claim we "beat CNN baselines" — different datasets/splits, not
+Do NOT claim we "beat CNN baselines" - different datasets/splits, not
 apples-to-apples. And even 0.85 is optimistic: `xeval` tested on Al-Emadi/ESC-50
-which are *inside* the DADS merge ([dads-is-a-merge-superset](../insights/dads-is-a-merge-superset.md)) —
+which are *inside* the DADS merge ([dads-is-a-merge-superset](../insights/dads-is-a-merge-superset.md)) -
 a truly held-out set (DroneAudioset) is the next test and will likely be lower.
 
 ## What is and isn't true (as of first pass)
@@ -34,7 +34,7 @@ a truly held-out set (DroneAudioset) is the next test and will likely be lower.
 - **Edge (esp32 / Android):** only `--no-default-features` *hygiene* builds. No
   cross-compile, no firmware, no Android. Strong detectors still std-only.
 - **Hard negatives (wind turbine / car / airplane / helicopter):** UNTESTED.
-  Likely our weakest point — aircraft/props share harmonic+broadband structure.
+  Likely our weakest point - aircraft/props share harmonic+broadband structure.
 - **Multichannel:** only `drone-doa`, and simulated. Detection/ID/freq are mono.
 - **Sample rate:** frame is hard-fixed at 1024, tuned for 16 kHz. Higher rates
   coarsen low-freq resolution (47 Hz/bin @48 kHz) → hurts blade-pass f0 unless
@@ -48,13 +48,13 @@ a truly held-out set (DroneAudioset) is the next test and will likely be lower.
 DADS **absorbed most of the public field**: its positives merge Al-Emadi, DREGON,
 DroneNoise, AUDROK, fault-data; its negatives merge UrbanSound8K, ESC-50, TUT.
 So almost every easily-downloadable drone/env-sound set is *already inside DADS*
-→ no clean held-out. Worse, **DroneAudioset is NOT drone-vs-not** — it's recorded
+→ no clean held-out. Worse, **DroneAudioset is NOT drone-vs-not** - it's recorded
 *on* a drone (constant ego-noise) for detecting human sounds in SAR, so it can't
 serve as held-out drone positives/negatives. The best remaining held-out
 **positive** source is the **32-brand set** (arXiv 2509.04715, not in DADS);
 held-out **negatives** are the harder gap (most env-sound sets are in DADS).
 **Honest conclusion:** trustworthy generalization numbers ultimately need
-**freshly recorded field data** (the owner has a real drone) — public data alone
+**freshly recorded field data** (the owner has a real drone) - public data alone
 can't fully prove it. State capability claims as *engineering* (only Rust
 multi-tier edge-proven honest-eval suite) until field data exists, not as
 absolute "beats all upstreams accuracy."
@@ -62,8 +62,8 @@ absolute "beats all upstreams accuracy."
 ## Priorities to fix (in rough order)
 1. **Leakage-honest eval:** cross-dataset (DADS↔Al-Emadi), group-aware k-fold,
    and a **hard-negative** suite (ESC-50/UrbanSound8K aircraft/engine/wind). This
-   reframes every headline number — do it first.
-2. **Live demo:** `drone-live` (cpal) — enumerate input devices + capabilities
+   reframes every headline number - do it first.
+2. **Live demo:** `drone-live` (cpal) - enumerate input devices + capabilities
    (the "what mic/hardware do we have" probe) and a real-time listen+alert loop.
 3. **Speed↔accuracy Pareto + model tiers** (tiny-edge / balanced / max-accuracy)
    with per-tier model cards (features, params, latency, FLOPs).

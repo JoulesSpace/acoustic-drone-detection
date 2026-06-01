@@ -6,7 +6,7 @@ status: accepted
 tags: [detection, dsp]
 ---
 
-# 0006 — Heuristic detector for v0.1.0 (not ML)
+# 0006 - Heuristic detector for v0.1.0 (not ML)
 
 **Decision:** Detection = band-energy ratio in ~100–4000 Hz **plus** a
 dominant-tone-in-band test, threshold 0.5.
@@ -16,7 +16,7 @@ baseline to beat. No labelled data needed (constraints: one real drone, an
 afternoon, 50€ budget). A synthetic harmonic-stack generator (`drone synth`)
 exercises the whole pipeline without recordings.
 
-**Verified:** discriminates synthetic drone from a plain tone — see
+**Verified:** discriminates synthetic drone from a plain tone - see
 [insight](../insights/synthetic-signal-discriminates.md). The reasoning behind
 the band/tonal approach is in [notes](../notes/detection-thesis.md).
 

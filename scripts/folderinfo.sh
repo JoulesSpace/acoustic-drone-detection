@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Lint: every tracked directory must contain a `.folderinfo` file — a one-line
+# Lint: every tracked directory must contain a `.folderinfo` file - a one-line
 # plain-text description of what lives there. Enforces CLAUDE.md hard-rule #6.
 # Gitignored scratch (workspace/) is exempt.
 set -euo pipefail
@@ -27,7 +27,7 @@ while IFS= read -r d; do
 done < <(all_dirs | sort -u)
 
 if [ "$missing" -ne 0 ]; then
-  echo "folderinfo lint FAILED — add a one-line .folderinfo to each dir listed above."
+  echo "folderinfo lint FAILED - add a one-line .folderinfo to each dir listed above."
   exit 1
 fi
 echo "folderinfo lint OK"

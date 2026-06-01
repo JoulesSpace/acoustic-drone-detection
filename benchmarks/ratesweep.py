@@ -4,10 +4,10 @@
 Reads `benchmarks/results/ratesweep.json` (produced by the `ratesweep` binary)
 and draws two panels:
 
-  * left  — ROC-AUC vs sample rate (one line per detector); the 16 kHz native
+  * left  - ROC-AUC vs sample rate (one line per detector); the 16 kHz native
              rate is marked, since rates above it can only test pipeline
              behaviour, not extra signal.
-  * right — ROC-AUC vs bit depth (one line per detector).
+  * right - ROC-AUC vs bit depth (one line per detector).
 
 Outputs `benchmarks/plots/ratesweep.png`.
 """
@@ -56,7 +56,7 @@ def main() -> int:
         axl.plot(xs, ys, marker="o", ms=4, lw=1.4, label=det)
     axl.axvline(native, color="k", ls="--", lw=1, alpha=0.5,
                 label=f"native {native} Hz")
-    axl.set_xlabel("sample rate (Hz) — above native = no new signal")
+    axl.set_xlabel("sample rate (Hz) - above native = no new signal")
     axl.set_ylabel("ROC-AUC")
     axl.set_title("Accuracy vs sample rate")
     axl.grid(alpha=0.3)

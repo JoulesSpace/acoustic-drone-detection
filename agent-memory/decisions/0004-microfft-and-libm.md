@@ -6,7 +6,7 @@ status: accepted
 tags: [dsp, fft, edge, dependencies]
 ---
 
-# 0004 — microfft + libm for the FFT/math
+# 0004 - microfft + libm for the FFT/math
 
 **Decision:** Use `microfft` (pure-Rust, `no_std`, fixed power-of-two real FFT)
 and route all float math through `libm`.
@@ -18,5 +18,5 @@ bare-metal**.
 
 **Trade-off:** FFT size is compile-time fixed (acceptable for v0.1.0).
 
-**Gotcha it created:** microfft packs the Nyquist term into bin 0 — see
+**Gotcha it created:** microfft packs the Nyquist term into bin 0 - see
 [insight](../insights/microfft-nyquist-packing.md).

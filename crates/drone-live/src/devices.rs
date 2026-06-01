@@ -1,7 +1,7 @@
 //! The hardware/mic probe: enumerate audio **input** devices and capabilities.
 //!
 //! This answers "what microphones / capture hardware does this machine have, and
-//! what can each one do?" — sample-rate ranges, channel counts, and sample
+//! what can each one do?" - sample-rate ranges, channel counts, and sample
 //! formats (i16 / f32 / ...). It runs headless and prints real devices from the
 //! platform's default `cpal` host (WASAPI on Windows, CoreAudio on macOS,
 //! ALSA/JACK on Linux, AAudio on Android).
@@ -16,7 +16,7 @@ use cpal::traits::{DeviceTrait, HostTrait};
 /// every *supported input config range* the backend reports: channel count,
 /// sample-rate range (min..max Hz), and sample format. Devices that error on
 /// enumeration are still listed, with the error noted, rather than aborting the
-/// whole probe — one flaky device should not hide the others.
+/// whole probe - one flaky device should not hide the others.
 pub fn run() -> Result<(), Box<dyn Error>> {
     let host = cpal::default_host();
     println!("audio host: {}", host.id().name());

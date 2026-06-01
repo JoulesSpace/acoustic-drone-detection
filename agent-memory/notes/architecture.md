@@ -11,28 +11,28 @@ The repo is structured like a task-suite (à la insightface: one shared core,
 many task "heads", a common benchmark/eval harness), not a single model.
 
 ## Shared infrastructure
-- **`drone-dsp`** — the `no_std` DSP core every head reuses: windowing, real FFT
+- **`drone-dsp`** - the `no_std` DSP core every head reuses: windowing, real FFT
   (microfft), magnitude spectrum, spectral features, `bin_to_hz`/`hz_to_bin`.
   This is the "shared backbone."
-- **`drone-bench`** — shared eval harness: the `Approach` trait, dataset loader
+- **`drone-bench`** - shared eval harness: the `Approach` trait, dataset loader
   (`Sample`, CSV manifest, synth generator, stratified split, k-fold, SNR
   augmentation), metrics (F1/calibrated-F1/ROC-AUC/PR-AUC/Brier + real-time
   factor), and JSON output. Other heads reuse `drone_bench::util::spectra` and
   `drone_bench::dataset`.
 
 ## Task heads
-- **Detection** (binary drone / no-drone) — `drone-detect` + the 12 approaches in
+- **Detection** (binary drone / no-drone) - `drone-detect` + the 12 approaches in
   `drone-bench/src/approaches/` (template, band_ratio, hps, spectral_gate,
   cepstrum, mfcc_lr, mfcc_mlp, gtcc_lr, feature_fusion, spectrogram_template,
   envelope_periodicity, fusion-ensemble). Beats published CNN baselines; see
   [benchmark-results](benchmark-results.md).
-- **Direction of Arrival** — `drone-doa`: GCC-PHAT TDOA + ULA geometry → azimuth,
+- **Direction of Arrival** - `drone-doa`: GCC-PHAT TDOA + ULA geometry → azimuth,
   with a propagation simulator and an angular-error benchmark.
-- **Type ID** (multiclass) — `drone-id`: MFCC + multinomial logistic over drone
+- **Type ID** (multiclass) - `drone-id`: MFCC + multinomial logistic over drone
   types; per-class F1 + confusion matrix.
-- **Property inference** — `drone-freq`: blade-pass fundamental / RPM estimation
+- **Property inference** - `drone-freq`: blade-pass fundamental / RPM estimation
   (HPS + cepstrum + autocorrelation fusion), benchmarked for f0 accuracy.
-- **Robustness** — SNR-sweep degradation curves over all detectors
+- **Robustness** - SNR-sweep degradation curves over all detectors
   (`benchmarks/robustness.py` + `--snr`), the "stress test earns its keep" axis.
 
 ## Conventions that make it cohere
@@ -45,6 +45,6 @@ many task "heads", a common benchmark/eval harness), not a single model.
 
 ## Why this shape
 It lets many approaches/properties be added independently (one file or one crate
-each) and compared apples-to-apples on shared infra — the same reason
+each) and compared apples-to-apples on shared infra - the same reason
 insightface shares a backbone across detection/recognition/alignment/attributes.
 See decision [0007](../decisions/0007-multi-task-suite.md).

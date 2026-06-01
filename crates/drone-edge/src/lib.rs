@@ -9,17 +9,17 @@
 //! It works on **one** [`drone_dsp::FRAME_SIZE`]-sample frame at a time, which is
 //! exactly how firmware would feed it from a DMA ring buffer. There is no model
 //! and no training: the drone-likeness score is a fixed monotonic rule over three
-//! cheap spectral features — spectral flatness, spectral entropy, and the
-//! 100–4000 Hz band-energy ratio — squashed through a logistic. This is a direct
+//! cheap spectral features - spectral flatness, spectral entropy, and the
+//! 100–4000 Hz band-energy ratio - squashed through a logistic. This is a direct
 //! port of the *rule* (untrained) path of `drone-bench`'s `spectral_gate`
 //! approach, which is the natural tiny-edge detector because it needs no learned
 //! weights.
 //!
 //! Two layers of API:
 //!
-//! * [`drone_confidence`] — stateless: window + FFT + features + rule → score in
+//! * [`drone_confidence`] - stateless: window + FFT + features + rule → score in
 //!   `[0, 1]` for a single frame.
-//! * [`EdgeDetector`] — stateful: EMA-smooths the per-frame confidence and raises
+//! * [`EdgeDetector`] - stateful: EMA-smooths the per-frame confidence and raises
 //!   a boolean alert once it holds above a threshold for `hold` frames, mirroring
 //!   the live listener's alert logic. No heap, no `std`.
 
@@ -170,10 +170,10 @@ pub struct EdgeDetector {
 impl EdgeDetector {
     /// Create a detector.
     ///
-    /// * `sample_rate` — sample rate of the incoming frames, in Hz.
-    /// * `alpha` — EMA factor in `(0, 1]` (clamped); the live default is `0.4`.
-    /// * `threshold` — alert threshold on the smoothed confidence in `[0, 1]`.
-    /// * `hold` — consecutive over-threshold frames required to latch (≥ 1).
+    /// * `sample_rate` - sample rate of the incoming frames, in Hz.
+    /// * `alpha` - EMA factor in `(0, 1]` (clamped); the live default is `0.4`.
+    /// * `threshold` - alert threshold on the smoothed confidence in `[0, 1]`.
+    /// * `hold` - consecutive over-threshold frames required to latch (≥ 1).
     pub fn new(sample_rate: u32, alpha: f32, threshold: f32, hold: u32) -> Self {
         Self {
             sample_rate,

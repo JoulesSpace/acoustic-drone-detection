@@ -7,7 +7,7 @@
 FROM rust:1.92-slim-bookworm AS builder
 WORKDIR /build
 
-# Copy all sibling crates (no workspace yet — path deps resolve relative to
+# Copy all sibling crates (no workspace yet - path deps resolve relative to
 # drone-cli). Copying the whole tree keeps the path deps valid.
 COPY crates ./crates
 

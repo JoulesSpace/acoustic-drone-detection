@@ -2,7 +2,7 @@
 
 This directory **is the agent's (Claude's) memory** for this repository. It is
 tracked in git on purpose: decisions, insights, domain notes, and session
-handoffs live here so any future session — or human — picks up with full context
+handoffs live here so any future session - or human - picks up with full context
 instead of re-deriving it.
 
 [**MEMORY.md**](MEMORY.md) is the index and the entry point. Read it first.

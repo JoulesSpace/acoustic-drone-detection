@@ -2,7 +2,7 @@
 
 "Different detections for different hardware capabilities." Each of the 12
 benchmarked approaches is mapped to one of three hardware tiers by its
-*structural* cost — what it must store and compute per clip — not just its
+*structural* cost - what it must store and compute per clip - not just its
 measured wall-clock time. The numbers below come from
 `crates/drone-bench/src/bin/pareto.rs` over the **DADS** dataset (600 clips,
 300 drone / 300 non-drone), single stratified 50/50 split, `score()` timed 3×
@@ -30,11 +30,11 @@ dimension, used as a relative compute-cost proxy.
 
 ---
 
-## tiny-edge — esp32-class MCU
+## tiny-edge - esp32-class MCU
 
 - **Intended hardware:** microcontroller, ~16 kHz mono mic, KB of RAM, no
   FPU-heavy / matrix workload. The detector is a handful of scalar statistics
-  over a magnitude spectrum — there is no learned weight matrix to store and no
+  over a magnitude spectrum - there is no learned weight matrix to store and no
   per-frame ML, so it fits where everything else does not.
 - **Approaches:** `band_ratio`, `spectral_gate`, `hps`.
 - **Feature set:** band energy ratios (`band_ratio`), a 5-element spectral
@@ -43,21 +43,21 @@ dimension, used as a relative compute-cost proxy.
 - **Approx. params / feature-dim:** 1–5 features; effectively no model state
   beyond a threshold (`spectral_gate` carries a 5-weight logistic gate).
 - **Measured latency & real-time factor (release build, host CPU):**
-  - `band_ratio` — ~25 us/frame, ~2500× RT.
-  - `hps` — ~26 us/frame, ~2460× RT.
-  - `spectral_gate` — ~33 us/frame, ~1950× RT.
+  - `band_ratio` - ~25 us/frame, ~2500× RT.
+  - `hps` - ~26 us/frame, ~2460× RT.
+  - `spectral_gate` - ~33 us/frame, ~1950× RT.
 - **Expected accuracy (leakage caveat applies):** ROC-AUC 0.94 (`band_ratio`) to
   0.99 (`hps`, `spectral_gate`); best-F1 0.92–0.99. `hps` is on the Pareto
-  frontier's "good enough, near-free" shoulder — strong harmonic structure is
+  frontier's "good enough, near-free" shoulder - strong harmonic structure is
   the cheapest reliable drone cue.
 - **Use when…** you are on bare metal / an MCU, power and RAM are the binding
   constraints, and a modest accuracy hit is acceptable. Start with `hps`; fall
   back to `band_ratio` only if FFT cost itself is too high.
 
-## balanced — phone / Raspberry Pi / Android
+## balanced - phone / Raspberry Pi / Android
 
 - **Intended hardware:** a real CPU with an FPU and MB-to-GB of RAM, but a
-  power / thermal budget — a phone, Raspberry Pi, or Android device. Affords a
+  power / thermal budget - a phone, Raspberry Pi, or Android device. Affords a
   learned linear / small-MLP head over a modest cepstral or spectral feature, or
   a single template / patch correlation.
 - **Approaches:** `mfcc_lr`, `gtcc_lr`, `mfcc_mlp`, `cepstrum`,
@@ -72,23 +72,23 @@ dimension, used as a relative compute-cost proxy.
   (`mfcc_mlp` adds ~700 MLP weights: 27×24 + 24); 34 for the comb/envelope
   pair's effective 2-dim score; 512-dim template; 384-dim spectrogram patch.
 - **Measured latency & real-time factor (release build, host CPU):**
-  - `mfcc_lr` — ~26 us/frame, ~2440× RT (fastest learned model).
-  - `template` — ~25 us/frame, ~2580× RT.
-  - `mfcc_mlp` — ~27 us/frame, ~2390× RT.
-  - `spectrogram_template` — ~30 us/frame, ~2170× RT.
-  - `gtcc_lr` — ~36 us/frame, ~1770× RT.
-  - `cepstrum` — ~740 us/frame, ~87× RT (autocorrelation-heavy).
-  - `envelope_periodicity` — ~1066 us/frame, ~60× RT (long envelope analysis).
+  - `mfcc_lr` - ~26 us/frame, ~2440× RT (fastest learned model).
+  - `template` - ~25 us/frame, ~2580× RT.
+  - `mfcc_mlp` - ~27 us/frame, ~2390× RT.
+  - `spectrogram_template` - ~30 us/frame, ~2170× RT.
+  - `gtcc_lr` - ~36 us/frame, ~1770× RT.
+  - `cepstrum` - ~740 us/frame, ~87× RT (autocorrelation-heavy).
+  - `envelope_periodicity` - ~1066 us/frame, ~60× RT (long envelope analysis).
 - **Expected accuracy (leakage caveat applies):** ROC-AUC 0.98–1.00; best-F1
-  0.97–0.99. `mfcc_lr` is the headline balanced choice — it sits on the Pareto
+  0.97–0.99. `mfcc_lr` is the headline balanced choice - it sits on the Pareto
   frontier as the fastest model that still reaches ~1.0 AUC on this split.
 - **Use when…** you have a phone / Pi-class CPU and want the best accuracy per
   millisecond. Default to `mfcc_lr`; reach for `mfcc_mlp` or `gtcc_lr` only if a
   small accuracy gain justifies the extra compute. Avoid `cepstrum` /
-  `envelope_periodicity` on this tier unless their specific cue is needed — they
+  `envelope_periodicity` on this tier unless their specific cue is needed - they
   are ~30× slower for no accuracy advantage here.
 
-## max-accuracy — server / workstation
+## max-accuracy - server / workstation
 
 - **Intended hardware:** server or workstation CPU, accuracy-first, latency and
   memory effectively unconstrained for a single stream.
@@ -102,10 +102,10 @@ dimension, used as a relative compute-cost proxy.
   logistic weights; `fusion` stacks 6 base models plus a 6-input meta-head, so
   its cost is roughly the sum of its members.
 - **Measured latency & real-time factor (release build, host CPU):**
-  - `feature_fusion` — ~46 us/frame, ~1410× RT.
-  - `fusion` — ~908 us/frame, ~71× RT (pays for all 6 base detectors).
+  - `feature_fusion` - ~46 us/frame, ~1410× RT.
+  - `fusion` - ~908 us/frame, ~71× RT (pays for all 6 base detectors).
 - **Expected accuracy (leakage caveat applies):** ROC-AUC ~1.00; best-F1 ~0.99.
-  `feature_fusion` is the top-accuracy point **and** is on the Pareto frontier —
+  `feature_fusion` is the top-accuracy point **and** is on the Pareto frontier -
   nothing is both faster and more accurate. `fusion` matches its accuracy but is
   ~20× slower, so it is dominated.
 - **Use when…** accuracy is paramount, you are on server hardware, and you want
@@ -118,8 +118,8 @@ dimension, used as a relative compute-cost proxy.
 
 ## Pareto frontier (this dataset)
 
-The speed/accuracy non-dominated set — no other approach is both cheaper *and*
-more accurate — sorted cheapest → most accurate, is:
+The speed/accuracy non-dominated set - no other approach is both cheaper *and*
+more accurate - sorted cheapest → most accurate, is:
 
 | approach | tier | cost rank | us/frame (measured) | ROC-AUC | best-F1 |
 | --- | --- | --- | --- | --- | --- |
@@ -131,7 +131,7 @@ more accurate — sorted cheapest → most accurate, is:
 Everything else is dominated by one of these four. **Determinism note:** the
 frontier is computed on a fixed per-approach *cost rank* (a relative-cost proxy
 assigned from each algorithm, mirroring the measured speed ordering), not on the
-raw stopwatch latency — measured latency jitters run-to-run, so using it for
+raw stopwatch latency - measured latency jitters run-to-run, so using it for
 frontier *membership* would make the flagged set non-deterministic for the cheap,
 speed-tied cluster. The reported / plotted `latency_us_per_frame` is still the
 measured value; only the dominance test uses the deterministic proxy, so the

@@ -4,10 +4,10 @@
 Reads every ``benchmarks/results/*.json`` (the per-approach output of the Rust
 ``drone-bench`` harness) and writes PNGs into ``benchmarks/plots/``:
 
-  * metrics_bar.png   — grouped accuracy/precision/recall/F1 per approach
-  * roc.png           — ROC curves overlaid, labelled with ROC-AUC
-  * pr.png            — Precision-Recall curves overlaid, labelled with PR-AUC
-  * cost_quality.png  — inference cost (ms/clip, log x) vs F1 (the
+  * metrics_bar.png   - grouped accuracy/precision/recall/F1 per approach
+  * roc.png           - ROC curves overlaid, labelled with ROC-AUC
+  * pr.png            - Precision-Recall curves overlaid, labelled with PR-AUC
+  * cost_quality.png  - inference cost (ms/clip, log x) vs F1 (the
                         insightface-style "what do you pay for quality" view)
 
 Pure matplotlib + stdlib; no numpy required. Run via the ``plot`` compose
@@ -119,7 +119,7 @@ def plot_cost_quality(results: list[dict]) -> None:
         ax.annotate(r["approach"], (ms, f1), textcoords="offset points",
                     xytext=(6, 4), fontsize=8)
     ax.set_xscale("log")
-    ax.set_xlabel("inference cost — ms per clip (log scale)")
+    ax.set_xlabel("inference cost - ms per clip (log scale)")
     ax.set_ylabel("F1")
     ax.set_ylim(0, 1.05)
     ax.set_title("Cost vs quality (upper-left is better)")
@@ -133,7 +133,7 @@ def main() -> int:
     PLOTS.mkdir(parents=True, exist_ok=True)
     results = load_results()
     if not results:
-        print(f"no result JSON found in {RESULTS} — run drone-bench first", file=sys.stderr)
+        print(f"no result JSON found in {RESULTS} - run drone-bench first", file=sys.stderr)
         return 1
     print(f"loaded {len(results)} approach result(s): {', '.join(r['approach'] for r in results)}")
     plot_metrics_bar(results)

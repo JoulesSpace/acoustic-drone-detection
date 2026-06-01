@@ -55,7 +55,7 @@ impl Dataset {
 
     /// Generate a deterministic synthetic dataset: `n_per_class` drone clips and
     /// `n_per_class` non-drone clips. Lets the whole pipeline run with no
-    /// downloads. NOT a substitute for real data — it validates plumbing and
+    /// downloads. NOT a substitute for real data - it validates plumbing and
     /// gives a sanity baseline only.
     pub fn synth(n_per_class: usize, sample_rate: u32, seed: u32) -> Self {
         let mut rng = Rng(seed.max(1));

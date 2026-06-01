@@ -6,7 +6,7 @@ status: accepted
 tags: [docker, tooling, ci]
 ---
 
-# 0005 — Docker-first, two compose services
+# 0005 - Docker-first, two compose services
 
 **Decision:** `Dockerfile` (multi-stage host binary) + `Dockerfile.dev`
 (toolchain with rustfmt/clippy) driven by `docker-compose.yml` services
@@ -16,5 +16,5 @@ tags: [docker, tooling, ci]
 `detector` keeps the shipped runtime image tiny while giving a fat toolchain
 image for the checks.
 
-**Gotcha it created:** the slim Rust image omits rustfmt/clippy — see
+**Gotcha it created:** the slim Rust image omits rustfmt/clippy - see
 [insight](../insights/slim-rust-missing-rustfmt-clippy.md).

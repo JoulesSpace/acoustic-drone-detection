@@ -6,12 +6,12 @@ status: accepted
 tags: [structure, edge]
 ---
 
-# 0003 — Three-crate split
+# 0003 - Three-crate split
 
 **Decision:**
-- `drone-dsp` — `no_std`-friendly DSP core (windowing, FFT, spectral features).
-- `drone-detect` — `no_std`-friendly heuristic detector on top of the core.
-- `drone-cli` — `std` host binary (`drone`) for synth + WAV analysis.
+- `drone-dsp` - `no_std`-friendly DSP core (windowing, FFT, spectral features).
+- `drone-detect` - `no_std`-friendly heuristic detector on top of the core.
+- `drone-cli` - `std` host binary (`drone`) for synth + WAV analysis.
 
 **Why:** Keep the edge-deployable math (`drone-dsp`, `drone-detect`) free of
 `std` so it can be reused in esp32/riscv firmware, while quarantining all

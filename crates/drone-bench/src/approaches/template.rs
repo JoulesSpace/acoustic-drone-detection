@@ -2,7 +2,7 @@
 //!
 //! `fit` averages L2-normalized log-magnitude spectra of the drone training
 //! clips into a single template. `score` is the cosine similarity of a clip's
-//! mean log-spectrum to that template — a bounded, amplitude-invariant
+//! mean log-spectrum to that template - a bounded, amplitude-invariant
 //! confidence. Expected to be a decent baseline but to trail harmonic-structure
 //! methods under noise / model variation (see approaches survey).
 

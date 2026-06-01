@@ -1,6 +1,6 @@
 //! Amplitude-envelope modulation-spectrum drone detector.
 //!
-//! A multirotor does more than emit a harmonic stack — it *modulates its
+//! A multirotor does more than emit a harmonic stack - it *modulates its
 //! loudness* periodically. Each blade sweeping past the airframe (and small
 //! per-revolution thrust ripples) imprints a slow amplitude modulation (AM) on
 //! the radiated sound at the blade-pass / rotor rate, typically a few tens of
@@ -13,7 +13,7 @@
 //!
 //! Pipeline:
 //!   1. **Envelope.** Full-wave rectify (`abs`) the signal and smooth with a
-//!      short moving average (cascaded twice, ~8 ms each) — a crude but
+//!      short moving average (cascaded twice, ~8 ms each) - a crude but
 //!      effective AM demodulator whose cascade gives a steep enough roll-off to
 //!      double as the decimation anti-alias filter.
 //!   2. **Downsample.** Decimate the smoothed envelope to an envelope rate
@@ -23,7 +23,7 @@
 //!      (divide by its mean, subtract 1), window it, and take a direct DFT
 //!      periodogram over the 5–200 Hz band.
 //!   4. **Confidence.** The raw strength is the **peak modulation-band power /
-//!      total envelope-spectrum power** — the fraction of envelope variation in
+//!      total envelope-spectrum power** - the fraction of envelope variation in
 //!      the single strongest periodic line. It is mapped through a logistic into
 //!      `[0, 1]`; [`Approach::fit`] calibrates the logistic centre/steepness
 //!      from the train-set score distribution.
@@ -43,14 +43,14 @@ const MOD_LO_HZ: f32 = 5.0;
 const MOD_HI_HZ: f32 = 200.0;
 
 /// Envelope-smoothing window, in milliseconds (AM demodulation low-pass).
-/// Applied twice for a steeper roll-off — a moving average alone has fat
+/// Applied twice for a steeper roll-off - a moving average alone has fat
 /// side-lobes, which would let carrier energy alias into the modulation band
 /// after decimation; cascading two of them suppresses that cleanly.
 const SMOOTH_MS: f32 = 8.0;
 
 /// Amplitude-envelope modulation detector.
 pub struct EnvelopePeriodicity {
-    /// Logistic centre — raw modulation strengths above this lean "drone".
+    /// Logistic centre - raw modulation strengths above this lean "drone".
     center: f32,
     /// Logistic steepness.
     scale: f32,
@@ -190,7 +190,7 @@ impl Approach for EnvelopePeriodicity {
     fn fit(&mut self, train: &[Sample]) {
         // Calibrate the logistic centre to the midpoint between the mean
         // positive and mean negative raw modulation strength, and the steepness
-        // from the class gap — so the decision boundary lands where the classes
+        // from the class gap - so the decision boundary lands where the classes
         // separate on *this* data.
         let mut pos_sum = 0.0_f32;
         let mut pos_n = 0usize;
@@ -308,7 +308,7 @@ mod tests {
     use super::*;
     use std::f32::consts::PI;
 
-    /// A harmonic carrier whose amplitude is modulated at `am_hz` — a drone-like
+    /// A harmonic carrier whose amplitude is modulated at `am_hz` - a drone-like
     /// signal (blade-pass AM on a rotor harmonic stack).
     fn am_harmonic(f0: f32, am_hz: f32, sr: u32, secs: f32) -> Vec<f32> {
         let n = (secs * sr as f32) as usize;
@@ -338,7 +338,7 @@ mod tests {
     }
 
     /// A single pure sine has a perfectly constant amplitude envelope, so its
-    /// mean-removed modulation index is ~0 — the canonical "no AM" negative.
+    /// mean-removed modulation index is ~0 - the canonical "no AM" negative.
     fn pure_tone(f: f32, sr: u32, secs: f32) -> Vec<f32> {
         let n = (secs * sr as f32) as usize;
         (0..n)

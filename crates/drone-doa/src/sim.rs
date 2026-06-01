@@ -3,11 +3,11 @@
 //! We have no multi-mic recordings, so the benchmark drives the estimator with
 //! a physically-faithful simulation:
 //!
-//! * Generate (or accept) a mono drone-like signal — a fundamental plus a few
+//! * Generate (or accept) a mono drone-like signal - a fundamental plus a few
 //!   harmonics, the spectral signature a multirotor's blade-pass tones produce.
 //! * For each mic `k`, delay the source by `k · d · sin(θ) / c` seconds. The
 //!   delay is generally fractional, so we resample with a **windowed-sinc**
-//!   (Lanczos) kernel rather than nearest-sample — sub-sample accuracy is the
+//!   (Lanczos) kernel rather than nearest-sample - sub-sample accuracy is the
 //!   whole point of GCC-PHAT and integer delays would cap the achievable error.
 //! * Add independent white Gaussian-ish noise to each channel at the target SNR.
 //!

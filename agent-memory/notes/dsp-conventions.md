@@ -27,15 +27,15 @@ The math the code relies on, written down so it isn't re-derived.
 
 ## Spectral features (`drone-dsp`)
 
-- `dominant_bin` — strongest bin, ignoring DC.
-- `total_energy` — Σ magnitude² over all bins (power proxy).
-- `band_energy(lo, hi)` — Σ magnitude² within a Hz band.
-- `spectral_centroid` — energy-weighted mean frequency (brightness); 0 on
+- `dominant_bin` - strongest bin, ignoring DC.
+- `total_energy` - Σ magnitude² over all bins (power proxy).
+- `band_energy(lo, hi)` - Σ magnitude² within a Hz band.
+- `spectral_centroid` - energy-weighted mean frequency (brightness); 0 on
   silence.
 
 ## Open DSP work
 
 - Fixed FFT size; no configurable resolution yet.
-- Single-frame features only — no temporal smoothing, harmonic-spacing, or SNR
+- Single-frame features only - no temporal smoothing, harmonic-spacing, or SNR
   normalization yet.
 - No multi-channel / direction-of-arrival yet (needs ≥2 mics + array geometry).

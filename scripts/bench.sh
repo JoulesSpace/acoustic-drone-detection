@@ -18,4 +18,4 @@ docker compose run --rm bench "$@"
 echo ">> plotting"
 docker compose run --rm plot
 
-echo ">> done — see benchmarks/plots/"
+echo ">> done - see benchmarks/plots/"

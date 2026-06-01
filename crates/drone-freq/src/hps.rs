@@ -4,7 +4,7 @@
 //! true fundamental lines up with its own harmonics under downsampling, so its
 //! bin is reinforced while spurious peaks are suppressed. This makes HPS strong
 //! at picking the fundamental even when higher harmonics dominate the raw
-//! spectrum — but it is prone to picking f0/2 or 2·f0 (octave errors), which is
+//! spectrum - but it is prone to picking f0/2 or 2·f0 (octave errors), which is
 //! exactly why we cross-check it against the cepstrum and autocorrelation.
 
 use drone_dsp::{hz_to_bin, Spectrum, FRAME_SIZE, NUM_BINS};

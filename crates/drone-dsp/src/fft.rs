@@ -13,7 +13,7 @@ use crate::{Frame, Spectrum, NUM_BINS};
 ///
 /// Note on bin 0: microfft packs the real-valued DC term into `re` and the
 /// real-valued Nyquist term into `im` of the first bin. We expose `|DC|` as
-/// `spectrum[0]` and drop the Nyquist magnitude — it almost never matters for
+/// `spectrum[0]` and drop the Nyquist magnitude - it almost never matters for
 /// drone signatures and keeping the layout flat keeps the downstream feature
 /// code simple. See `agent-memory/dsp-notes.md`.
 pub fn magnitude_spectrum(frame: &mut Frame) -> Spectrum {

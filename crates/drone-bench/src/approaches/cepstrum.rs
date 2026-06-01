@@ -13,7 +13,7 @@
 //!    spacing `f0`. The inverse transform of the log-magnitude spectrum (the
 //!    real cepstrum) therefore shows a peak at the quefrency matching that
 //!    spacing. We compute it with a direct cosine transform (DCT-II) over the
-//!    512 log-magnitudes — O(N^2) per frame, which is fine at benchmark scale.
+//!    512 log-magnitudes - O(N^2) per frame, which is fine at benchmark scale.
 //!
 //! Both cues respond to *regular harmonic structure* and reject white noise,
 //! single tones, and slow hum. We aggregate per-frame scores robustly and map
@@ -29,7 +29,7 @@ use crate::util::spectra;
 
 /// Cepstrum / autocorrelation periodicity detector.
 pub struct Cepstrum {
-    /// Logistic centre — periodicity scores above this lean "drone".
+    /// Logistic centre - periodicity scores above this lean "drone".
     center: f32,
     /// Logistic steepness.
     scale: f32,
@@ -58,7 +58,7 @@ impl Cepstrum {
         // harmonic regularity, but fail differently: autocorrelation can be
         // fooled by a single tone whose period-multiple lands in band, while
         // the cepstral comb test cannot. Averaging them cancels those
-        // independent failure modes — an equal blend separates the classes
+        // independent failure modes - an equal blend separates the classes
         // best across seeds.
         0.5 * acf + 0.5 * cep
     }

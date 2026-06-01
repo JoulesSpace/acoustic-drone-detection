@@ -1,11 +1,11 @@
 ---
-title: Prior-art landscape — acoustic drone detection
+title: Prior-art landscape - acoustic drone detection
 type: reference
 date: 2026-06-01
 tags: [reference, research, datasets, sota, competitors]
 ---
 
-# Acoustic drone detection — landscape & positioning
+# Acoustic drone detection - landscape & positioning
 
 Researched 2026-06-01. `[V]` = verified against a primary/strong source this
 session; `[~]` = uncertain / single weak source / verify before publishing.
@@ -15,22 +15,22 @@ OSS acoustic drone detection is **shallow & fragmented**: a few low-star Python
 notebooks, one MATLAB coursework repo, and one breakout C/ESP32 DSP detector
 (**Batear**, ~235★). Datasets are scattered (16 kHz→150 kHz, 1→64 ch, binary→
 32-class, mixed/unstated licenses). **Almost nobody publishes honest
-cross-dataset generalization** — most report >95% in-distribution that collapses
+cross-dataset generalization** - most report >95% in-distribution that collapses
 out-of-domain. **No fast, typed, edge-portable, multi-tier OSS suite with
 reproducible cross-dataset eval exists.** That's our gap to own.
 
 ## Open-source projects
-- **Batear** (github.com/batear-io/batear) — C, **DSP** (Goertzel filters at
+- **Batear** (github.com/batear-io/batear) - C, **DSP** (Goertzel filters at
   rotor harmonics) on **ESP32-S3 + ICS-43434 MEMS mic (~$15)**. ~235★, active.
-  The only real fielded edge acoustic detector — pure DSP because NN models that
+  The only real fielded edge acoustic detector - pure DSP because NN models that
   fit a Pi don't fit an ESP32. No formal perf numbers. `[V]`
-- **SudarshanChakra** (kbhujbal) — Python, mel-spectrogram→CNN, recall-optimized.
+- **SudarshanChakra** (kbhujbal) - Python, mel-spectrogram→CNN, recall-optimized.
   ~39★. `[V]`
-- **DroneAudioDataset** (saraalemadi) — dataset only, ~112★/36 forks. `[V]`
-- **uav-audio-detection** (seven-up-purdue) — Jupyter, stale ~2018, ~7★. `[V]`
-- **Acoustic-Drone-Detection-System** (shani-pinhas) — MATLAB + Arduino,
+- **DroneAudioDataset** (saraalemadi) - dataset only, ~112★/36 forks. `[V]`
+- **uav-audio-detection** (seven-up-purdue) - Jupyter, stale ~2018, ~7★. `[V]`
+- **Acoustic-Drone-Detection-System** (shani-pinhas) - MATLAB + Arduino,
   coursework. `[V]`
-- **drone-visualization** (mackenzie-jane) — viz/tool for the 32-class set. `[V]`
+- **drone-visualization** (mackenzie-jane) - viz/tool for the 32-class set. `[V]`
 - GitHub `drone-detection` topic is dominated by **vision (YOLO)** and **RF**;
   only ~2/68 are genuinely acoustic. **No Rust.** None ship a typed lib + CLI +
   reproducible benchmark. `[V]`
@@ -78,14 +78,14 @@ classes, and attention/feature-fusion nets.
 - Batear: Goertzel on ESP32-S3, off-grid, in SRAM. `[V]`
 - Sound detection ~50 ms latency achievable. `[V]`
 - ESP32 TinyML speech (analog): int8 quant −37% RAM/−27% ROM. `[V]`
-- **No published TinyML drone *classifier* with RAM/FLOPs/latency disclosed** —
+- **No published TinyML drone *classifier* with RAM/FLOPs/latency disclosed** -
   open territory. `[V]`
 
 ## Opportunities a Rust suite can own
 1. Fast, typed, memory-safe core; deterministic latency; `no_std`/edge path.
-2. **Honest cross-dataset eval** (train X → test Y, report the drop) — nobody does.
+2. **Honest cross-dataset eval** (train X → test Y, report the drop) - nobody does.
 3. **Multi-tier** ESP32→phone→server (Tier-0 BPF gate → Tier-1 light quantized →
-   Tier-2 heavy) — unclaimed in OSS.
+   Tier-2 heavy) - unclaimed in OSS.
 4. Published **edge ML RAM/FLOPs/latency** numbers.
 5. Curated **hard-negative pack** + confusion matrices.
 6. **Dataset harmonization** loader across the 16 kHz↔150 kHz / 1↔64-ch zoo.

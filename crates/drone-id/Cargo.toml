@@ -10,7 +10,7 @@ repository = "https://github.com/JoulesSpace/acoustic-drone-detection"
 # drone-detect/drone-bench answer "is a drone present?", this answers "which TYPE
 # of drone is it?". It reuses drone-bench's dataset loader and spectra front-end
 # and drone-dsp's mel/FFT primitives, then trains a multinomial logistic
-# regression (softmax) by deterministic gradient descent — no ML crate.
+# regression (softmax) by deterministic gradient descent - no ML crate.
 
 [[bin]]
 name = "drone-id"

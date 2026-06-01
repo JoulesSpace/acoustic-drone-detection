@@ -13,8 +13,8 @@
 //!
 //! This crate estimates `f0` (Hz) robustly over the ~50–400 Hz band that covers
 //! typical small-multirotor blade-pass rates. Robustness comes from fusing
-//! three independent cues per frame — Harmonic Product Spectrum, cepstrum, and
-//! time-domain autocorrelation — and cross-checking them to kill the octave
+//! three independent cues per frame - Harmonic Product Spectrum, cepstrum, and
+//! time-domain autocorrelation - and cross-checking them to kill the octave
 //! errors any single cue is prone to, then taking a confidence-weighted robust
 //! median across the clip's frames.
 //!

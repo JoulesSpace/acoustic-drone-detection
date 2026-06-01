@@ -2,7 +2,7 @@
 //!
 //! The contract is small on purpose: an [`Approach`] turns a clip of mono audio
 //! into a confidence in `[0, 1]` that a drone is present. The harness handles
-//! everything else — loading/splitting data, timing, metrics, JSON output — so
+//! everything else - loading/splitting data, timing, metrics, JSON output - so
 //! a new approach is just one file implementing one trait.
 
 pub mod approach;

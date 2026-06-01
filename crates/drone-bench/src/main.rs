@@ -1,4 +1,4 @@
-//! `drone-bench` — run every registered detection approach over a dataset and
+//! `drone-bench` - run every registered detection approach over a dataset and
 //! write per-approach metric JSON for plotting.
 //!
 //! Data sources: `--synth` (a deterministic synthetic dataset, no files) or
@@ -47,7 +47,7 @@ struct Cli {
     /// K-fold cross-validation (pooled out-of-fold predictions). 1 = single split.
     #[arg(long, default_value_t = 1)]
     kfold: usize,
-    /// If set, add white noise to TEST clips at this SNR (dB) — robustness eval.
+    /// If set, add white noise to TEST clips at this SNR (dB) - robustness eval.
     #[arg(long)]
     snr: Option<f32>,
     /// RNG seed (synth generation and split).
@@ -87,9 +87,9 @@ fn main() -> Result<(), Box<dyn Error>> {
         dataset.len(),
         dataset.n_pos(),
         if kfold > 1 {
-            format!(" — {kfold}-fold CV")
+            format!(" - {kfold}-fold CV")
         } else {
-            format!(" — single split (train_frac {})", cli.train_frac)
+            format!(" - single split (train_frac {})", cli.train_frac)
         },
         match cli.snr {
             Some(db) => format!(", test noise @ {db} dB SNR"),
@@ -195,7 +195,7 @@ fn instantiate(name: &str) -> Box<dyn Approach> {
 
 /// Score a set of clips with a fitted approach. Returns the `(score, label)`
 /// pairs, the total wall-clock time spent inside `score()` (seconds), and the
-/// total audio duration scored (seconds) — the latter two give the real-time
+/// total audio duration scored (seconds) - the latter two give the real-time
 /// factor. Noise injection (for `--snr`) is done outside the timed region so the
 /// measurement reflects detector cost, not the eval harness.
 fn score_set(

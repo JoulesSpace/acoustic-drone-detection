@@ -68,11 +68,11 @@ impl SpectralGate {
     /// silent (so the caller can return a confident 0.0).
     ///
     /// Features (all clamped to be finite):
-    ///   0. spectral flatness   — geo_mean / arith_mean of magnitudes (low = tonal)
-    ///   1. spectral entropy    — normalized Shannon entropy of the power spectrum (low = peaky)
-    ///   2. band-energy ratio   — in-band power / total power (high for drones)
-    ///   3. spectral centroid   — energy-weighted mean frequency, in Hz
-    ///   4. spectral rolloff    — frequency below which `ROLLOFF_FRAC` of power sits, in Hz
+    ///   0. spectral flatness   - geo_mean / arith_mean of magnitudes (low = tonal)
+    ///   1. spectral entropy    - normalized Shannon entropy of the power spectrum (low = peaky)
+    ///   2. band-energy ratio   - in-band power / total power (high for drones)
+    ///   3. spectral centroid   - energy-weighted mean frequency, in Hz
+    ///   4. spectral rolloff    - frequency below which `ROLLOFF_FRAC` of power sits, in Hz
     fn features(samples: &[f32], sample_rate: u32) -> Option<[f32; N_FEATURES]> {
         let frames = spectra(samples);
         if frames.is_empty() {

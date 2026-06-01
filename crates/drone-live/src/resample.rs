@@ -3,7 +3,7 @@
 //! The detector front-end ([`drone_dsp`] framing) is tuned for ~16 kHz audio:
 //! `FRAME_SIZE = 1024` samples is a 64 ms frame at 16 kHz with ~15.6 Hz/bin,
 //! which resolves the blade-pass fundamental and its harmonics well. Microphones
-//! almost never hand us mono 16 kHz directly — they hand us interleaved stereo
+//! almost never hand us mono 16 kHz directly - they hand us interleaved stereo
 //! at 44.1/48 kHz. This module turns whatever the device produces into the mono
 //! 16 kHz stream the detector expects, in two cheap, deterministic steps:
 //!
@@ -13,7 +13,7 @@
 //!
 //! Linear interpolation is not audiophile-grade, but for a tonal/harmonic
 //! detector running on a logarithmic confidence it is more than adequate and
-//! costs almost nothing per sample — important when this has to keep up with a
+//! costs almost nothing per sample - important when this has to keep up with a
 //! live stream on a modest host (or, eventually, an Android phone).
 
 /// The rate the detector front-end is tuned for.
@@ -55,7 +55,7 @@ impl Resampler {
     }
 
     /// True if the input rate already matches [`TARGET_RATE`] and there is a
-    /// single channel — i.e. no work beyond a copy is needed. (Informational;
+    /// single channel - i.e. no work beyond a copy is needed. (Informational;
     /// [`push`](Self::push) is correct either way.)
     pub fn is_passthrough(&self) -> bool {
         self.channels == 1 && (self.step - 1.0).abs() < 1e-9
@@ -99,7 +99,7 @@ impl Resampler {
                 mono[(i + 1) as usize]
             } else {
                 // Right neighbour past this buffer: hold the last sample. The
-                // next push continues from a `pos` rebased to start at -? — see
+                // next push continues from a `pos` rebased to start at -? - see
                 // the rebase below, which keeps the seam continuous.
                 mono[n_frames - 1]
             };
@@ -158,7 +158,7 @@ mod tests {
     #[test]
     fn seam_is_continuous_across_buffers() {
         // Feeding one buffer or two halves of it must yield (nearly) the same
-        // resampled stream — the carried state prevents a glitch at the seam.
+        // resampled stream - the carried state prevents a glitch at the seam.
         let input: Vec<f32> = (0..3000).map(|i| (i as f32 * 0.02).sin()).collect();
 
         let mut r1 = Resampler::new(44_100, 1);

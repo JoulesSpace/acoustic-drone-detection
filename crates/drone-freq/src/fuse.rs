@@ -1,7 +1,7 @@
 //! Cue fusion: turn the three per-frame f0 candidates into one robust estimate.
 //!
 //! Each cue (HPS, cepstrum, autocorrelation) returns an `(f0, confidence)`
-//! candidate. Individually they have characteristic failure modes — HPS likes
+//! candidate. Individually they have characteristic failure modes - HPS likes
 //! octave errors, autocorrelation can lock onto a sub-harmonic, the cepstrum
 //! can be noisy at low SNR. Fusing them removes most of these:
 //!
@@ -70,7 +70,7 @@ pub fn fuse(
         return None;
     }
 
-    const TOL: f32 = 0.06; // 6% — about a bin's worth at these frequencies.
+    const TOL: f32 = 0.06; // 6% - about a bin's worth at these frequencies.
 
     let mut best: Option<(f32, Candidate, f32)> = None; // (score, cand, agreement)
     for &c in &cands {
@@ -81,7 +81,7 @@ pub fn fuse(
 
         // Agreement bonus: other cues that land on the same f0 reinforce it; an
         // octave match (×2 or ×0.5) is weaker evidence but still meaningful and
-        // is how we damp octave errors — the candidate that the others agree
+        // is how we damp octave errors - the candidate that the others agree
         // with *directly* outscores its own octave.
         let mut agree = 0.0_f32;
         for &other in &cands {

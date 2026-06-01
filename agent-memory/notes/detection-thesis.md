@@ -5,7 +5,7 @@ date: 2026-06-01
 tags: [detection, domain]
 ---
 
-# Detection thesis — why a drone is acoustically distinguishable
+# Detection thesis - why a drone is acoustically distinguishable
 
 A multirotor's sound is **quasi-periodic**: each motor spins at a roughly steady
 rate, and the blades produce a blade-pass fundamental (tens to low hundreds of
@@ -24,7 +24,7 @@ Cheap, interpretable, runs on a microcontroller.
 Fundamental `f` with 6 harmonics (amplitude `0.5/k`), a slow 8 Hz amplitude
 modulation (rotor wobble), and light broadband noise (xorshift32 PRNG,
 deterministic). A `--plain` sine is the negative control. This is a controllable
-stand-in, **not** a real drone — it tests the plumbing, not robustness. Result:
+stand-in, **not** a real drone - it tests the plumbing, not robustness. Result:
 [insight](../insights/synthetic-signal-discriminates.md).
 
 ## What real robustness will need
