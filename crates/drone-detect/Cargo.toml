@@ -1,0 +1,14 @@
+[package]
+name = "drone-detect"
+version = "0.1.0"
+edition = "2021"
+license = "AGPL-3.0-or-later"
+description = "Heuristic acoustic drone detector built on drone-dsp spectral features."
+repository = "https://github.com/JoulesSpace/acoustic-drone-detection"
+
+[features]
+default = ["std"]
+std = ["drone-dsp/std"]
+
+[dependencies]
+drone-dsp = { path = "../drone-dsp", default-features = false }
