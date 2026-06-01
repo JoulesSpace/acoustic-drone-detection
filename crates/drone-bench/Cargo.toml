@@ -1,0 +1,23 @@
+[package]
+name = "drone-bench"
+version = "0.1.0"
+edition = "2021"
+license = "AGPL-3.0-or-later"
+description = "Benchmark harness for acoustic drone-detection approaches: pluggable Approach trait, dataset loader, metrics, JSON results."
+repository = "https://github.com/JoulesSpace/acoustic-drone-detection"
+
+# Host-side (std) crate. Approaches here are for benchmarking; the deployable
+# subset can later be ported into the no_std crates. Each approach lives in its
+# own file under src/approaches/ so they can be developed independently.
+
+[[bin]]
+name = "drone-bench"
+path = "src/main.rs"
+
+[dependencies]
+drone-dsp = { path = "../drone-dsp" }
+drone-detect = { path = "../drone-detect" }
+hound = "3.5"
+clap = { version = "4", features = ["derive"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
