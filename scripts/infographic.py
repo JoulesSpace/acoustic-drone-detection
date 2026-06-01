@@ -143,7 +143,7 @@ def panel_adc(ax):
 
 
 def panel_spectrum(ax):
-    ax.set_title("6 · STFT magnitude — blade-pass comb", loc="left")
+    ax.set_title("6 · STFT magnitude - blade-pass comb", loc="left")
     n = FRAME
     t = np.arange(n) / FS
     x = drone_signal(t) * np.hanning(n)
@@ -160,9 +160,9 @@ def panel_spectrum(ax):
     ax.set_ylabel("|X| (norm)")
     ax.set_yticks([])
     ax.grid(True, color=GRID, lw=0.5)
-    ax.text(0.0, 1.04,
-            "frame 1024 @16 kHz = 64 ms, 15.6 Hz/bin · Hann · band 100–4000 Hz",
-            transform=ax.transAxes, fontsize=7.3)
+    ax.text(0.97, 0.93,
+            "frame 1024 @16 kHz = 64 ms · 15.6 Hz/bin\nHann · band 100–4000 Hz",
+            transform=ax.transAxes, ha="right", va="top", fontsize=7.0)
 
 
 def _box(ax, x, y, w, h, text, fc, ec=INK):
@@ -258,9 +258,9 @@ def panel_compression(ax):
     ax.set_ylim(0, 2.35)
     ax.set_yticks([])
     ax.set_xlabel("frequency (Hz)")
-    ax.text(820, 1.92, "PCM / WAV — lossless,\nfull comb kept", color=ACCENT,
+    ax.text(820, 1.92, "PCM / WAV - lossless,\nfull comb kept", color=ACCENT,
             fontsize=7.3, va="center")
-    ax.text(820, 0.82, "mp3 / opus — perceptual\nmasking trims weak highs",
+    ax.text(820, 0.82, "mp3 / opus - perceptual\nmasking trims weak highs",
             color=WARN, fontsize=7.3, va="center")
     ax.text(0.0, -0.20, "high harmonics & BPF cues degrade → prefer lossless at the edge",
             transform=ax.transAxes, fontsize=7.3)
@@ -292,7 +292,7 @@ def main() -> int:
     gs = fig.add_gridspec(4, 3, height_ratios=[1, 1, 1, 0.6], hspace=0.62,
                           wspace=0.22, left=0.045, right=0.985, top=0.915,
                           bottom=0.04)
-    fig.suptitle("Acoustic Drone Detection — Signal Chain & Physics",
+    fig.suptitle("Acoustic Drone Detection - Signal Chain & Physics",
                  fontsize=16, fontweight="bold", y=0.962)
     fig.text(0.045, 0.936,
              "rotor → pressure wave → propagation → sampling → ADC → STFT → "
