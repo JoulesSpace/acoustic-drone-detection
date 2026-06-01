@@ -12,6 +12,10 @@
 #   docker compose run --rm detector synth --out /data/test.wav
 #   docker compose run --rm detector analyze --input /data/test.wav
 #   docker compose run --rm dev            # runs the full check suite
+#   docker compose run --rm bench          # run the benchmark (synthetic data)
+#   docker compose run --rm plot           # render plots from results JSON
+#
+# Convenience: scripts/bench.sh runs bench then plot in one go.
 
 services:
   detector:
@@ -36,6 +40,32 @@ services:
     environment:
       CARGO_TARGET_DIR: /work/.docker-target
     command: ["bash", "scripts/check.sh"]
+
+  bench:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    image: drone-dev:toolchain
+    working_dir: /work
+    volumes:
+      - ./:/work
+      - cargo-registry:/usr/local/cargo/registry
+      - target-cache:/work/.docker-target
+    environment:
+      CARGO_TARGET_DIR: /work/.docker-target
+    # Defaults to synthetic data; override args, e.g.:
+    #   docker compose run --rm bench --data /work/data/dads --n 0
+    entrypoint:
+      ["cargo", "run", "--release", "--manifest-path", "crates/drone-bench/Cargo.toml", "--"]
+    command: ["--synth", "--n", "300"]
+
+  plot:
+    build:
+      context: .
+      dockerfile: Dockerfile.plot
+    image: drone-plot:dev
+    volumes:
+      - ./:/work
 
 volumes:
   cargo-registry:
