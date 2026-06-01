@@ -67,6 +67,18 @@ services:
     volumes:
       - ./:/work
 
+  # Stream a balanced subset of the DADS dataset into ./data/dads.
+  #   docker compose run --rm data --per-class 300
+  data:
+    build:
+      context: .
+      dockerfile: Dockerfile.data
+    image: drone-data:dev
+    working_dir: /work
+    volumes:
+      - ./:/work
+    command: ["--per-class", "300"]
+
 volumes:
   cargo-registry:
   target-cache:
