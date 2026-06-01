@@ -1,0 +1,13 @@
+# Rust build artifacts
+/target/
+**/target/
+
+# Docker dev-service target volume mount point (if it ever materializes on host)
+/.docker-target/
+
+# Generated / sample audio — keep binaries out of git
+*.wav
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
