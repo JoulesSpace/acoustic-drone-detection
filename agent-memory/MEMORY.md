@@ -28,6 +28,7 @@ How this store is organized and maintained: [README.md](README.md).
 - [Detection thesis](notes/detection-thesis.md) — why a drone is acoustically distinguishable
 - [Drone audio datasets](notes/datasets.md) — DADS (HF, primary), negatives, download methods
 - [Detection approaches survey](notes/approaches-survey.md) — ranked approaches + SOTA + eval conventions
+- [Project goal](notes/project-goal.md) — the parity-or-better-vs-upstream north star
 
 ## 🗂 Handoffs (session log, newest first)
 - [2026-06-01 — v0.1.0 scaffold](handoffs/2026-06-01-v0.1.0-scaffold.md)
