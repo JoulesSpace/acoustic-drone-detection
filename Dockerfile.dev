@@ -6,6 +6,9 @@
 
 FROM rust:1.92-slim-bookworm
 RUN rustup component add rustfmt clippy
+# Bare-metal RISC-V target (esp32-C3/C6 class) so the edge no_std cross-build is
+# part of CI. Xtensa (esp32-S3) needs the esp-rs fork toolchain, not mainline.
+RUN rustup target add riscv32imc-unknown-none-elf
 # libasound2-dev: `drone-live` depends on cpal, which needs ALSA headers to
 # build on Linux (the live audio backend). pkg-config locates it.
 RUN apt-get update \
