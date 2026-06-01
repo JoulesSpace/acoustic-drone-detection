@@ -1,0 +1,28 @@
+[package]
+name = "drone-live"
+version = "0.1.0"
+edition = "2021"
+license = "AGPL-3.0-or-later"
+description = "Real-time acoustic drone detection from a live microphone, plus a hardware/mic probe that enumerates audio input devices and their capabilities."
+repository = "https://github.com/JoulesSpace/acoustic-drone-detection"
+
+# Host-side (std) crate. Unlike `drone-dsp`/`drone-detect` (which stay no_std so
+# they can lower onto edge targets), this binary owns the live audio capture and
+# CLI, so it depends on `std` + `cpal`. The detection logic is reused wholesale
+# from `drone-bench` so live and offline detection share one implementation.
+
+[[bin]]
+name = "drone-live"
+path = "src/main.rs"
+
+[dependencies]
+# Detection approaches + dataset loader, reused verbatim so live detection uses
+# the exact same scorers the benchmark harness evaluates.
+drone-bench = { path = "../drone-bench" }
+# Framing constants (FRAME_SIZE / HOP) and the fixed analysis-frame contract.
+drone-dsp = { path = "../drone-dsp" }
+# Cross-platform audio capture: Windows (WASAPI), macOS (CoreAudio), Linux
+# (ALSA/JACK), Android (AAudio/Oboe). One API, real input devices on each.
+cpal = "0.15"
+# CLI parsing (derive API), same major version as the rest of the workspace.
+clap = { version = "4", features = ["derive"] }
