@@ -205,7 +205,13 @@ pub struct ApproachResult {
     pub n_test: usize,
     pub n_pos: usize,
     pub n_neg: usize,
+    /// Mean wall-clock inference time per clip (ms), `score()` only (no training).
     pub mean_infer_ms: f64,
+    /// Inference time per second of audio (ms). Length-normalized cost.
+    pub ms_per_audio_sec: f64,
+    /// Real-time factor = inference time / audio duration. < 1.0 means the
+    /// detector runs faster than real time (one stream, this machine).
+    pub realtime_factor: f64,
     #[serde(flatten)]
     pub metrics: Metrics,
     /// Per-clip `(score, label)` for downstream plotting.
