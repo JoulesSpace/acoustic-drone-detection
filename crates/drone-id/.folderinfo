@@ -1,0 +1,1 @@
+Multiclass drone-type recognition crate (the recognition head): MFCC features + softmax logistic regression, benchmarked with per-class metrics and a confusion matrix.
