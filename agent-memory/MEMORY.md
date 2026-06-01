@@ -26,6 +26,8 @@ How this store is organized and maintained: [README.md](README.md).
 ## 📓 Notes (domain knowledge)
 - [DSP conventions](notes/dsp-conventions.md) — frame size, FFT, windowing, frequency math
 - [Detection thesis](notes/detection-thesis.md) — why a drone is acoustically distinguishable
+- [Drone audio datasets](notes/datasets.md) — DADS (HF, primary), negatives, download methods
+- [Detection approaches survey](notes/approaches-survey.md) — ranked approaches + SOTA + eval conventions
 
 ## 🗂 Handoffs (session log, newest first)
 - [2026-06-01 — v0.1.0 scaffold](handoffs/2026-06-01-v0.1.0-scaffold.md)
