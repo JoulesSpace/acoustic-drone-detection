@@ -1,0 +1,24 @@
+[package]
+name = "drone-freq"
+version = "0.1.0"
+edition = "2021"
+license = "AGPL-3.0-or-later"
+description = "Estimate a drone's blade-pass fundamental frequency (and thereby rotor RPM) from audio, fusing harmonic-product-spectrum, cepstral and autocorrelation cues."
+repository = "https://github.com/JoulesSpace/acoustic-drone-detection"
+
+# Host-side (std) crate. It reuses the no_std DSP core (`drone-dsp`) for the
+# FFT / magnitude spectrum and the bench harness (`drone-bench`) for framing and
+# dataset loading, and adds a robust multi-cue f0 estimator on top.
+
+[[bin]]
+name = "freq-bench"
+path = "src/bin/freq-bench.rs"
+
+[dependencies]
+drone-dsp = { path = "../drone-dsp" }
+drone-bench = { path = "../drone-bench" }
+clap = { version = "4", features = ["derive"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+[dev-dependencies]
