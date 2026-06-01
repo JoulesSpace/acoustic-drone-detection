@@ -132,12 +132,17 @@ subset (300 + 300 clips, 50/50 split); `F1*` = best-threshold (calibrated) F1,
 | `band_ratio` — baseline heuristic | 0.766 | 0.921 | 0.915 | 2450× |
 | `template` — cosine vs. averaged drone spectrum | 0.706 | 0.986 | 0.995 | 2370× |
 
-Cheap classical/light methods **meet or beat** published CNN baselines
-(≈0.93–0.955 F1) on this binary task — no GPU, all real-time on a desktop. Plots
-(ROC, PR, cost-vs-quality, robustness) live in [`benchmarks/plots/`](benchmarks/);
-methodology and caveats (leakage, threshold calibration) in
-[`benchmarks/README.md`](benchmarks/README.md). These are in-distribution subset
-numbers — see the caveats before quoting them.
+Cheap classical/light methods score very high here — no GPU, all real-time on a
+desktop. **⚠ Honesty caveat:** these are *in-distribution* numbers on a random
+clip-level split of one dataset (DADS), which very likely has recording-level
+**leakage** (short clips from shared source recordings landing in both train and
+test), so they are optimistic and **not** an apples-to-apples win over published
+CNN baselines. The trustworthy tests — **cross-dataset** and **hard-negative**
+(aircraft / car / wind) evaluation — are the current priority; see
+[`agent-memory/notes/honest-limitations.md`](agent-memory/notes/honest-limitations.md).
+Plots (ROC, PR, cost-vs-quality, robustness) live in
+[`benchmarks/plots/`](benchmarks/); methodology in
+[`benchmarks/README.md`](benchmarks/README.md).
 
 ### Quick start (Docker-first)
 
