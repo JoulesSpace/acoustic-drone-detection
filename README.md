@@ -2,7 +2,17 @@
 
 Detecting drones accoustically.
 
-## Scope
+## TOC
+
+1. Scope
+2. On Audio and Sound
+3. Possible Approaches
+4. Constraints of v0.1.0
+5. Implementation
+6. Contributing
+7. License
+
+## 1. Scope
 
 Design an acoustic drone detection pipeline, and validate your ideas in simulation.
 
@@ -13,7 +23,7 @@ Questions we answer with this porject:
 - Robustness. Real deployments are noisy — literally. Wind, rain, overlapping sources, varying drone types. How would you stress-test your approach? This is where simulation earns its keep: you control what you throw at it.
 - System Design. What would a real deployment look like? How many microphones, in what configuration, at what sample rate? What detection range would you expect and why? What are the fundamental physical limits?
 
-## On Audio and Sound (Human reasoning)
+## 2. On Audio and Sound (Human reasoning)
 
 **Sound** is the pressure of a material (mostly air) fluctuating over time. Sound has a speed of `355 m/s` m air at 40 degrees celsius and a speed of `343m/s` in air at 20 degrees celsius. So environmental conditions are relevant to detection.
 
@@ -33,7 +43,7 @@ Questions we answer with this porject:
   + audio is usually stored compressedly, as storing it as a raw `.wav` file / pickled numpy array takes too much storage.
   + audio compression is lossy, as humans dont need to head all the spectrum to detect voice for example. different audio codecs exist, for example implemented in the `ffmpeg project` (c++). modern codecs include `.mp3`, `.m4a`, `.opus` (whatsapp). it is important to consider these differences for data quality also, as a lossy codec might ruin predictions of more precise properties of a drone or situation.
 
-## Possible Approaches (Human reasoning)
+## 3. Possible Approaches (Human reasoning)
 
 - Detection:
   + Audio is sampled at a rate `f`, keep in mind [Nyquist–Shannon sampling theorem](https://en.wikipedia.org/wiki/Nyquist%E2%80%93Shannon_sampling_theorem) -> fft / short time fourrier transform -> frequencies histogram which should be characteristic (like for guitars / pianos / fridges) ; drone audio may also be assumed sort of periodic
@@ -56,7 +66,7 @@ Questions we answer with this porject:
   + edge hardware / is it an `avr8` or `xtensa` esp32 or something like an intel edge ai thing?
   + for maxium performance of audio processing, a fpga or asic chip might be needed to handle the full bit-width and high sample rates at once (we got one at home to test possibly later, has 45k look up tables)
 
-## Constraints of this projects first iteration (v0.1.0)
+## 4. Constraints of this projects first iteration (v0.1.0)
 
 - Only one real drone for testing
 - Limited hardware: esp32 s3, c6, p4 modules, and a ffew arduino boards notably the Q 4gb ram one
@@ -64,7 +74,7 @@ Questions we answer with this porject:
 - Limited AI Budget of 50€ (claude weekly limit)
 - Limited dev time, only one afternoon time for v0.1.0
 
-## Implementation (v0.1.0)
+## 5. Implementation (v0.1.0)
 
 Built in Rust for fast, typed iteration on real DSP — and so the core can later
 be lowered onto edge hardware (esp32 xtensa / riscv). It's structured as a
@@ -159,11 +169,11 @@ docker compose run --rm dev
 Agent working memory — decisions, insights, domain notes, and session handoffs —
 is tracked in [`agent-memory/`](agent-memory/MEMORY.md).
 
-## Contributing
+## 6. Contributing
 
 Welcome! fork -> branch `[name]/feat|fix-[feat/fix-name]` -> pr -> fix feedback -> get merged
 
-## License
+## 7. License
 
 Use in the open only.
 
