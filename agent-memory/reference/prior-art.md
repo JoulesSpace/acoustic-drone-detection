@@ -43,16 +43,50 @@ reproducible cross-dataset eval exists.** That's our gap to own.
 - MDPI Drones 9(6):389 (2025): **ResNet10_CBAM F1 94.3%**, big gains at SNR
   −20/−25/−30 dB. `[~]` (paywalled)
 - RF+Acoustic LSTM fusion (PMC11054550): ~91% acc at −10 dB. `[V]`
-- MEMS+ML (Acta Acustica 2026): precision 92.3%/recall 86.7% controlled →
-  88.5%/83.0% outdoor (≈4 pt FP rise outdoors = confusion is the real failure
-  mode). `[V]`
+- **Ghouli (Acta Acustica 2026)** - MEMS (INMP441) 8-mic square array (15 cm),
+  ESP32-S3 I2S acquisition + Raspberry Pi 4, Random Forest on MFCC + TDOA/GCC
+  localization. precision 92.3%/recall 86.7% controlled → 88.5%/83.0% outdoor;
+  real-world DoA **MAE 6.3 deg**, 2D position median **1.2 m**, range **50-60 m**
+  (DJI Phantom), latency ~150 ms. Honest split (no same-recording leakage) but
+  single drone, no cross-dataset. `[V]`
+- **Paszkowski & Gola (Adv. Sci. Tech. Res. J. 2024)** - 4 condenser mics +
+  PCM1864 ADC + BeagleBone Black; 48 kHz low-passed at 6.5 kHz and decimated to
+  ~16 kHz; spectrogram → small CNN (1.66 M params, 516 images). ~97% on the
+  anechoic reference but only **0.757 on the real park drone** (Mavic 2 Pro) - a
+  textbook in-distribution-to-field collapse on tiny single-drone data; also
+  feeds lossy JPEG spectrograms to the CNN. `[V]`
+- **Kang et al. (AIP Advances 15, 120701, 2025)** - comprehensive review; its
+  taxonomy (acquisition → preprocessing → BSS → features → recognition →
+  localization) mirrors our problem-layers decomposition (README §3) and treats
+  detection/localization as outputs of one chain. In-distribution benchmark on a
+  Bebop/Mambo+ESC set (16 kHz, 8:2): CNN-LSTM best ~96.9%, CRNN ~96%, Transformer
+  ~96.4% (slowest, 6.84 s), classical ML ~88-92% but <1 s. Adds **blind source
+  separation** (ICA/FastICA/IVA) as a multi-UAV layer we lacked. (Note: body text
+  vs Table III MLP figure is inconsistent: 97.87 vs 91.87.) `[V]`
+- **Toma et al. (NATO STO-MP-IST-190)** - RF-assisted acoustic from a flying UAV:
+  19-ch Zylia spherical MEMS (4.5 cm, 69 dB SNR, 48 kHz/24-bit) + 4-stage CNN
+  fusing acoustic-covariance phase with RF RSS for joint recognition + DoA +
+  distance. Recognition acc **0.957**; localization weak (**DoA RMSE ~42 deg**,
+  distance ~3 m, semi-simulated RF). Small array → poor spatial resolution
+  motivates RF cueing. `[V]`
 - AUDRON (arXiv 2512.20407): fused signatures for type recognition. `[~]`
 
 ## Commercial
 - **Squarehead Discovair G2+**: 128-mic array + cam; range **180 m (DJI S1000),
   120 m (Mavic Pro), 90 m (Spark)**; near-zero FP via ML. `[V]`
 - **Hall Lidar UDL-64** (2026), **Robin Radar ELVIRA** (acoustic as fusion).
+- **Fraunhofer IDMT** (Oldenburg, 2025): fielded acoustic detection that "hears
+  around corners" (non-LOS, forested/built-up), combinable with radar/camera/
+  lidar; **50-200 m**, 360 deg, 1 s resolution, battery-autonomous; *cues* other
+  sensors after acoustic contact (projects AMBOS / ALADDIN). `[V]`
 - Class typical best-case **300–500 m**, degrades hard in noise. `[V]`
+
+**Real-world calibration band (acoustic, single array).** Effective range is
+typically **50-200 m** (Ghouli 50-60, Fraunhofer 50-200, most cited works
+10-100; the Benyamin tetrahedral array at 27 cm spacing is the 600 m outlier).
+Real-world **DoA accuracy is 6-42 deg** depending on aperture (Ghouli 6.3, Toma
+42), i.e. our simulated `drone-doa` sub-degree numbers are best-case, not
+field-typical.
 
 ## Datasets (beyond ours)
 - **32-class brand set** (arXiv 2509.04715): 3,200 clips/16,000 s, 32 brand/model

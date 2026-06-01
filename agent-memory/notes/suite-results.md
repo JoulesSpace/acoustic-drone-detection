@@ -27,6 +27,14 @@ peak for a narrowband drone - key fix). `no_std` core. Endfire (±70/80°) carri
 most of the error (steep sin θ mapping). Simulated, not real multi-mic - the
 honest caveat.
 
+**Reality check vs field literature.** Published real-world acoustic DoA lands
+at **6-42°**, not sub-degree: Ghouli (8-mic MEMS square, 15 cm) gets MAE 6.3° /
+2D position ~1.2 m at 50-60 m; Toma (19-mic Zylia, 4.5 cm, on/near a UAV) gets
+DoA RMSE ~42°. So our 0.88° is a clean-simulation best case; a real array with a
+small aperture and outdoor noise should be expected in the single-digit-to-tens
+of degrees. Effective acoustic range is typically **50-200 m** for a single
+array. See [[prior-art]] for the calibration band and citations.
+
 ## Type ID - `drone-id` (real Al-Emadi multiclass, balanced 600/class)
 accuracy 0.861, **macro-F1 0.860**. Per-class F1: bebop 0.893, membo 0.829,
 unknown 0.860. Confusion mostly membo↔unknown. Linear softmax on pooled MFCC

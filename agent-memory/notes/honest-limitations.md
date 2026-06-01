@@ -27,6 +27,23 @@ apples-to-apples. And even 0.85 is optimistic: `xeval` tested on Al-Emadi/ESC-50
 which are *inside* the DADS merge ([dads-is-a-merge-superset](../insights/dads-is-a-merge-superset.md)) -
 a truly held-out set (DroneAudioset) is the next test and will likely be lower.
 
+## Update (v0.4): which first-pass gaps are now CLOSED
+The list below was the *first-pass* assessment. Since then, built + committed:
+- **Live mic + hardware probe:** `drone-live` (`devices` + `listen`). DONE.
+- **Edge:** `drone-edge` no_std cross-builds for riscv32imc; **`drone-firmware`**
+  is a real esp32-C6 esp-hal firmware that links (riscv32imac, ~66 KB .text) and
+  runs the detector (I2S mic read still a stub). DONE (flashing needs hardware).
+- **Hard negatives:** `xeval` measured per-confounder FP rates (chainsaw/engine/
+  helicopter are the real confusers). DONE.
+- **Speed-accuracy Pareto + tiers + model cards; rate/bit-depth sweep.** DONE.
+- **Vendors:** `drone-vendor` real 32-brand macro-F1 0.93 (within-recording). DONE.
+- **Cross-dataset honest eval:** `xeval` + `physics_fused` (0.925). DONE.
+- **Field tooling:** `drone-live record` + `fieldeval` + `FIELD_PROTOCOL.md`. DONE.
+
+Still open (mostly needs the human/hardware): the actual **field recording**, a
+real **I2S mic** in firmware + flashing a C6, **Android** build, configurable FFT
+frame size, distance/SNR regression, multi-recording-per-brand vendor data.
+
 ## What is and isn't true (as of first pass)
 - **Datasets:** used ~1.x real (DADS for detection, Al-Emadi for type-ID).
   Researched ~7. NOT "12 datasets" (12 = approaches). No cross-dataset eval.
@@ -38,6 +55,8 @@ a truly held-out set (DroneAudioset) is the next test and will likely be lower.
 - **Hard negatives (wind turbine / car / airplane / helicopter):** UNTESTED.
   Likely our weakest point - aircraft/props share harmonic+broadband structure.
 - **Multichannel:** only `drone-doa`, and simulated. Detection/ID/freq are mono.
+  Field literature puts real acoustic DoA at **6-42°** (Ghouli 6.3°, Toma 42°),
+  so our simulated 0.88° is best-case; range is typically **50-200 m** per array.
 - **Sample rate:** frame is hard-fixed at 1024, tuned for 16 kHz. Higher rates
   coarsen low-freq resolution (47 Hz/bin @48 kHz) → hurts blade-pass f0 unless
   frame scales. Not yet configurable.
