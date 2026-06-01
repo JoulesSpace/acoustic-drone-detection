@@ -95,7 +95,15 @@ unseen drones is the clean metric** - it needs no negatives).
 only **~65% (miss ~35%)**; best ranker is **`hps` (AUC 0.855)**. Key correction:
 **`physics_fused`'s xeval 0.925 was still optimistic** (xeval positives = Al-Emadi,
 which is in DADS); on truly-unseen drones it drops to recall 0.10 / AUC 0.784.
-**On truly-unseen drones, `hps` (not physics_fused) is the most robust.**
+**On truly-unseen drones, `hps` (not physics_fused) is the most robust single
+detector.** The **`sentry`** recall-first ensemble (soft-OR of hps + envelope +
+feature_fusion + mfcc_lr, calibrated on a DADS slice) raises **recall@0.5 on
+unseen drones to 0.873** (vs hps 0.721) with AUC ~tied (0.844); it trades
+false-alarm rate for catch-rate (the right counter-UAS trade, a miss is costly).
+Caveat: soft-OR score saturation hurts its very-low-FPR (<=0.05) and calibrated
+points; a rank/saturation-resistant combine is the next improvement. Honest
+deployment statement: **we catch ~87% of unseen drone models at the cost of a
+raised false-alarm rate, or ~72% as a clean ranker (hps) - not >95%.**
 Calibration matters hugely: `envelope_periodicity`/`physics_fused` are decent
 rankers but badly placed at thr 0.5; `template`/`band_ratio` fire on everything
 (AUC <= chance). This is the honest number to quote for generalization, and it is
