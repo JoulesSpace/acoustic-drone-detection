@@ -28,3 +28,6 @@ __pycache__/
 # OS / editor noise
 .DS_Store
 Thumbs.db
+
+# Agent worktrees
+/.claude/worktrees/
