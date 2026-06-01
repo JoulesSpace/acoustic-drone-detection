@@ -1,0 +1,24 @@
+[package]
+name = "drone-dsp"
+version = "0.1.0"
+edition = "2021"
+license = "AGPL-3.0-or-later"
+description = "no_std-friendly DSP core for acoustic drone detection: windowing, FFT, magnitude spectrum and spectral features."
+repository = "https://github.com/JoulesSpace/acoustic-drone-detection"
+
+# This crate is the part that must lower to edge targets (esp32 xtensa, riscv).
+# It is no_std by default-feature-removal: depend on it with
+#   drone-dsp = { path = "...", default-features = false }
+# to drop std. All float math goes through `libm` so it works either way.
+
+[features]
+default = ["std"]
+std = []
+
+[dependencies]
+# Pure-Rust, no_std FFT. Fixed power-of-two sizes via const-generic functions.
+microfft = "0.6"
+# Float math (sqrtf, cosf, ...) that works without std, for bare-metal targets.
+libm = "0.2"
+
+[dev-dependencies]
