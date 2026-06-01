@@ -19,6 +19,10 @@ pub struct Metrics {
     pub pr_auc: f32,
     /// Brier score (mean squared error of the confidence vs the label).
     pub brier: f32,
+    /// Best F1 achievable over all thresholds (calibrated operating point).
+    pub f1_best: f32,
+    /// Threshold that achieves `f1_best`.
+    pub threshold_best: f32,
 }
 
 /// A point on a curve (ROC or PR). `x`/`y` meaning depends on the curve.
@@ -59,6 +63,7 @@ pub fn evaluate(scored: &[(f32, u8)], threshold: f32) -> Metrics {
         })
         .sum::<f32>()
         / total;
+    let (threshold_best, f1_best) = best_f1(scored);
     Metrics {
         threshold,
         accuracy,
@@ -72,7 +77,28 @@ pub fn evaluate(scored: &[(f32, u8)], threshold: f32) -> Metrics {
         roc_auc: roc_auc(scored),
         pr_auc: pr_auc(scored),
         brier,
+        f1_best,
+        threshold_best,
     }
+}
+
+/// Threshold (over the distinct-score sweep) maximizing F1, and that F1.
+///
+/// Reported alongside the fixed-threshold F1 so a great *ranker* with a
+/// miscalibrated raw-score scale (e.g. the cosine `template`) isn't unfairly
+/// penalized by the default 0.5 cut.
+pub fn best_f1(scored: &[(f32, u8)]) -> (f32, f32) {
+    let mut best = (0.5_f32, 0.0_f32);
+    for t in thresholds(scored) {
+        let (tp, fp, fn_, _tn) = confusion(scored, t);
+        let precision = safe_div(tp as f32, (tp + fp) as f32);
+        let recall = safe_div(tp as f32, (tp + fn_) as f32);
+        let f1 = safe_div(2.0 * precision * recall, precision + recall);
+        if f1 > best.1 {
+            best = (t, f1);
+        }
+    }
+    best
 }
 
 /// ROC-AUC via the rank-sum (Mann–Whitney U) statistic, tie-aware.
