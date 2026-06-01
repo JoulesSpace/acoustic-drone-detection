@@ -1,1 +1,1 @@
-benchmark binaries: xeval (cross-dataset+hard-neg), ratesweep (rate+bit-depth), pareto (speed-accuracy+tiers), robust (augmentation study), fieldeval (held-out field eval)
+benchmark binaries: xeval, ratesweep, pareto, robust, fieldeval, heldout32 (truly held-out unseen-drone eval)
