@@ -1,0 +1,42 @@
+# Docker Compose for the acoustic drone detector.
+#
+# Two services:
+#   detector — the built runtime image. Mounts ./data so synth/analyze can
+#              read and write WAV files on the host.
+#   dev      — a Rust toolchain container with the source mounted, used to run
+#              fmt / clippy / test (see scripts/check.sh). Build artifacts live
+#              in a named volume so they never collide with host-side builds or
+#              pollute the Windows working tree.
+#
+# Usage:
+#   docker compose run --rm detector synth --out /data/test.wav
+#   docker compose run --rm detector analyze --input /data/test.wav
+#   docker compose run --rm dev            # runs the full check suite
+
+services:
+  detector:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: drone-detect:dev
+    volumes:
+      - ./data:/data
+    command: ["--help"]
+
+  dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    image: drone-dev:toolchain
+    working_dir: /work
+    volumes:
+      - ./:/work
+      - cargo-registry:/usr/local/cargo/registry
+      - target-cache:/work/.docker-target
+    environment:
+      CARGO_TARGET_DIR: /work/.docker-target
+    command: ["bash", "scripts/check.sh"]
+
+volumes:
+  cargo-registry:
+  target-cache:

@@ -1,0 +1,9 @@
+# syntax=docker/dockerfile:1
+#
+# Toolchain image for the `dev` compose service. The slim official Rust image
+# omits rustfmt/clippy, which are our correctness oracles, so add them once here
+# instead of re-downloading them on every `docker compose run --rm dev`.
+
+FROM rust:1.92-slim-bookworm
+RUN rustup component add rustfmt clippy
+WORKDIR /work

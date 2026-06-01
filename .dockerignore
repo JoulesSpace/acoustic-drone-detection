@@ -1,0 +1,10 @@
+.git
+target
+**/target
+.docker-target
+data/*.wav
+*.wav
+agent-memory
+README.md
+PROMPTS.md
+INSIGHTS.md
