@@ -10,6 +10,7 @@ How this store is organized and maintained: [README.md](README.md).
 - [Latest handoff — multi-task suite (v0.2)](handoffs/2026-06-01-multitask-suite.md) — current state & next steps
 - [Multi-task architecture](notes/architecture.md) — the big-picture map
 - [Suite results](notes/suite-results.md) — all heads' numbers
+- [⚠ Honest limitations](notes/honest-limitations.md) — read before quoting numbers (leakage, untested confounders, no live/edge yet)
 
 ## 📐 Decisions (ADRs)
 - [0001 — Rust as the implementation language](decisions/0001-rust-implementation-language.md) — typed, fast DSP that can lower to edge
