@@ -42,6 +42,36 @@ Questions we answer with this porject:
 - Limited AI Budget of 50€ (claude weekly limit)
 - Limited dev time, only one afternoon time for v0.1.0
 
+## Implementation (v0.1.0)
+
+Built in Rust for fast, typed iteration on real DSP — and so the core can later
+be lowered onto edge hardware (esp32 xtensa / riscv). Crates live under
+`crates/` (no workspace yet, by design):
+
+- **`drone-dsp`** — `no_std`-friendly DSP core: Hann windowing, real FFT
+  (`microfft`), magnitude spectrum, and spectral features. All math via `libm`,
+  so it builds bare-metal.
+- **`drone-detect`** — `no_std`-friendly heuristic detector: energy-in-band
+  ratio plus a dominant-tone-in-band test. A transparent baseline to beat.
+- **`drone-cli`** — host binary `drone` that can `synth` a test signal and
+  `analyze` WAV files frame-by-frame.
+
+### Quick start (Docker-first)
+
+```bash
+# Generate a synthetic drone signal and analyze it (writes into ./data)
+docker compose run --rm detector synth   --out /data/test.wav --fundamental 120
+docker compose run --rm detector analyze --input /data/test.wav
+
+# Run the full check suite: fmt, clippy -D warnings, tests, no_std build
+docker compose run --rm dev
+```
+
+> On Git Bash (Windows) prefix docker commands with `MSYS_NO_PATHCONV=1`, or use
+> PowerShell — otherwise `/data/...` args get rewritten. See `CLAUDE.md`.
+
+Agent working notes, decisions, and handoffs are tracked in `agent-memory/`.
+
 ## Contributing
 
 Welcome! fork -> branch `[name]/feat|fix-[feat/fix-name]` -> pr -> fix feedback -> get merged
