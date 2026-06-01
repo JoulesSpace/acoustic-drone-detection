@@ -1,0 +1,36 @@
+[package]
+name = "drone-doa"
+version = "0.1.0"
+edition = "2021"
+license = "AGPL-3.0-or-later"
+description = "Acoustic Direction-of-Arrival (DoA) estimation for a drone source: ULA geometry, GCC-PHAT TDOA, azimuth estimation, a propagation simulator, and a benchmark."
+repository = "https://github.com/JoulesSpace/acoustic-drone-detection"
+
+# The estimation core (`geometry`, `gcc_phat`, `azimuth`, `sim`) is written to
+# stay `no_std`-friendly so it can lower onto the same edge targets as
+# `drone-dsp`: all float math goes through `libm` and the FFT uses `microfft`
+# (the conjugate trick gives the inverse transform). The `doa-bench` binary is
+# host-only (`std`) and is gated behind the default `std` feature.
+
+[features]
+default = ["std"]
+std = ["drone-dsp/std", "dep:serde", "dep:serde_json", "dep:clap"]
+
+[[bin]]
+name = "doa-bench"
+path = "src/bin/doa-bench.rs"
+required-features = ["std"]
+
+[dependencies]
+# FFT/feature core. We reuse its pinned `microfft`/`libm` versions transitively
+# but also name them directly for the GCC-PHAT cross-spectrum and float math.
+drone-dsp = { path = "../drone-dsp", default-features = false }
+microfft = "0.6"
+libm = "0.2"
+
+# Host-only, behind the `std` feature (the benchmark binary).
+serde = { version = "1", features = ["derive"], optional = true }
+serde_json = { version = "1", optional = true }
+clap = { version = "4", features = ["derive"], optional = true }
+
+[dev-dependencies]
