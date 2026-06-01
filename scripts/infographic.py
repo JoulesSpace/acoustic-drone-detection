@@ -2,9 +2,15 @@
 """Generate the acoustic-drone-detection signal-chain infographic.
 
 A single data-dense, scientifically-correct figure tracing the physics from a
-spinning rotor to an edge alert: acoustic radiation → pressure wave → sampling
-(Nyquist) → ADC quantization → STFT spectrum (blade-pass comb) → detection
-pipeline → hardware tiers. Numbers are this project's real measurements.
+spinning rotor to an edge alert. Nine panels + a pipeline strip:
+
+  1 acoustic source     2 pressure wave p(t)   3 propagation & range
+  4 sampling (Nyquist)  5 ADC quantization     6 STFT blade-pass comb
+  7 hardware tiers       8 lossy compression    9 real-time budget
+  + the detection pipeline strip
+
+Every number is this project's real measurement (DADS blade-pass f0 ~230 Hz,
+ROC-AUC robust to 4-bit, ~26 us/frame on edge, 90-2400x real-time).
 
 Pure matplotlib + numpy (both in the `plot` container). Deterministic. Output:
 `assets/signal_chain.png`. Regenerate with:
@@ -96,7 +102,7 @@ def panel_wave(ax):
 
 
 def panel_sampling(ax):
-    ax.set_title("3 · sampling  ($f_s$ = 16 kHz, Nyquist 8 kHz)", loc="left")
+    ax.set_title("4 · sampling  ($f_s$ = 16 kHz, Nyquist 8 kHz)", loc="left")
     t = np.linspace(0, 0.01, 1500)
     ax.plot(t * 1000, drone_signal(t), color=ACCENT, lw=1.0, alpha=0.55)
     # sample dots at fs (decimated visually for clarity ~ every 1/4 ms)
@@ -114,7 +120,7 @@ def panel_sampling(ax):
 
 
 def panel_adc(ax):
-    ax.set_title("4 · ADC quantization", loc="left")
+    ax.set_title("5 · ADC quantization", loc="left")
     t = np.linspace(0, 1, 500)
     sig = 0.9 * np.sin(2 * np.pi * 1.5 * t)
     ax.plot(t, sig, color=ACCENT, lw=1.0, alpha=0.6, label="analog")
@@ -131,13 +137,13 @@ def panel_adc(ax):
     ax.set_xticks([])
     ax.text(0.0, -1.62,
             "step $q=2^{-(N-1)}$ · SQNR ≈ 6.02$N$+1.76 dB\n"
-            "ours: ROC-AUC holds to 4-bit (strong detectors)",
+            "4/8/16/24-bit ≈ 26/50/98/146 dB · ROC-AUC holds to 4-bit",
             fontsize=7.5)
     ax.set_ylim(-1.75, 1.2)
 
 
 def panel_spectrum(ax):
-    ax.set_title("5 · STFT magnitude — blade-pass comb", loc="left")
+    ax.set_title("6 · STFT magnitude — blade-pass comb", loc="left")
     n = FRAME
     t = np.arange(n) / FS
     x = drone_signal(t) * np.hanning(n)
@@ -166,7 +172,7 @@ def _box(ax, x, y, w, h, text, fc, ec=INK):
 
 
 def panel_hardware(ax):
-    ax.set_title("6 · hardware tiers (real numbers)", loc="left")
+    ax.set_title("7 · hardware tiers (real numbers)", loc="left")
     ax.set_xlim(0, 10)
     ax.set_ylim(0, 10)
     ax.axis("off")
@@ -214,25 +220,95 @@ def pipeline_strip(ax):
             fontsize=7.6)
 
 
+def panel_propagation(ax):
+    ax.set_title("3 · propagation & range", loc="left")
+    r = np.linspace(1, 400, 500)
+    sl0 = 75.0                              # source level (dB SPL @ 1 m), small quad
+    spl = sl0 - 20 * np.log10(r)            # spherical spreading: -6 dB per 2× range
+    floor = 35.0                            # quiet ambient noise floor (dB)
+    r_det = 10 ** ((sl0 - floor) / 20)      # geometric detection limit (~100 m)
+    ax.axvspan(1, r_det, color=GOOD, alpha=0.10)
+    ax.plot(r, spl, color=ACCENT, lw=1.5)
+    ax.axhline(floor, color=WARN, lw=1.0, ls="--")
+    ax.axvline(r_det, color=GOOD, lw=1.0, ls=":")
+    ax.set_xscale("log")
+    ax.set_xlim(1, 400)
+    ax.set_ylim(floor - 12, sl0 + 5)
+    ax.set_xlabel("range  r (m)")
+    ax.set_ylabel("SPL (dB)")
+    ax.grid(True, which="both", color=GRID, lw=0.5)
+    ax.text(1.15, floor + 1.8, "noise floor", color=WARN, fontsize=7)
+    ax.text(r_det * 1.08, sl0 - 6, f"~{r_det:.0f} m\nlimit", color=GOOD, fontsize=7)
+    ax.text(0.0, -0.34,
+            "$I\\propto 1/r^2$ → −6 dB per 2× range · "
+            "air absorbs highs → far drone low-passed",
+            transform=ax.transAxes, fontsize=7.3)
+
+
+def panel_compression(ax):
+    ax.set_title("8 · lossy compression", loc="left")
+    hf = np.array([F0 * k for k in range(1, 8)])
+    ha = np.array([1.0 / k for k in range(1, 8)])
+    ax.axhspan(0.55, 1.15, color=GRID, alpha=0.45)
+    ax.vlines(hf, 1.25, 1.25 + ha * 0.80, color=ACCENT, lw=2.6)      # PCM: full comb
+    keep = hf <= 600                                                  # codec trims highs
+    a2 = np.where(keep, ha * 0.80, ha * 0.18)
+    ax.vlines(hf, 0.05, 0.05 + a2 * 0.80, color=WARN, lw=2.6)
+    ax.set_xlim(0, 1700)
+    ax.set_ylim(0, 2.35)
+    ax.set_yticks([])
+    ax.set_xlabel("frequency (Hz)")
+    ax.text(820, 1.92, "PCM / WAV — lossless,\nfull comb kept", color=ACCENT,
+            fontsize=7.3, va="center")
+    ax.text(820, 0.82, "mp3 / opus — perceptual\nmasking trims weak highs",
+            color=WARN, fontsize=7.3, va="center")
+    ax.text(0.0, -0.20, "high harmonics & BPF cues degrade → prefer lossless at the edge",
+            transform=ax.transAxes, fontsize=7.3)
+
+
+def panel_realtime(ax):
+    ax.set_title("9 · real-time budget", loc="left")
+    ax.set_xlim(0, 74)
+    ax.set_ylim(0, 10)
+    ax.axis("off")
+    ax.add_patch(FancyBboxPatch((2, 5.6), 64, 1.9, boxstyle="round,pad=0.02",
+                                fc="#eef2f7", ec=INK, lw=1.2))
+    ax.add_patch(FancyBboxPatch((2, 5.6), 1.0, 1.9, boxstyle="round,pad=0.02",
+                                fc=GOOD, ec="none"))
+    ax.annotate("compute ≪ 1 ms", xy=(3.0, 6.6), xytext=(12, 8.7),
+                fontsize=7.4, color=GOOD,
+                arrowprops=dict(arrowstyle="->", color=GOOD, lw=1.0))
+    ax.text(67, 6.55, "64 ms\nframe", fontsize=7.3, fontweight="bold", va="center")
+    ax.text(2, 4.0, "frame = $N/f_s$ = 1024/16000 = 64 ms", fontsize=7.8)
+    ax.text(2, 2.7, "→ 90–2400× real-time headroom · GPU-free, deterministic",
+            fontsize=7.8, color=GOOD)
+    ax.text(2, 1.3, "end-to-end alert latency ≈ window + hold ≈ 0.5 s",
+            fontsize=7.8, color=ACCENT)
+
+
 def main() -> int:
     os.makedirs("assets", exist_ok=True)
-    fig = plt.figure(figsize=(13.5, 11.0), dpi=130)
-    gs = fig.add_gridspec(3, 3, height_ratios=[1, 1, 0.62], hspace=0.5, wspace=0.22,
-                          left=0.045, right=0.985, top=0.88, bottom=0.055)
+    fig = plt.figure(figsize=(13.5, 15.5), dpi=130)
+    gs = fig.add_gridspec(4, 3, height_ratios=[1, 1, 1, 0.6], hspace=0.62,
+                          wspace=0.22, left=0.045, right=0.985, top=0.915,
+                          bottom=0.04)
     fig.suptitle("Acoustic Drone Detection — Signal Chain & Physics",
-                 fontsize=16, fontweight="bold", y=0.975)
-    fig.text(0.045, 0.93,
-             "rotor → pressure wave → sampling → ADC → STFT → detection → edge alert."
-             "  Parameters are this project's real measurements.",
+                 fontsize=16, fontweight="bold", y=0.962)
+    fig.text(0.045, 0.936,
+             "rotor → pressure wave → propagation → sampling → ADC → STFT → "
+             "detection → edge alert.  Parameters are this project's real measurements.",
              fontsize=9)
 
     panel_rotor(fig.add_subplot(gs[0, 0]))
     panel_wave(fig.add_subplot(gs[0, 1]))
-    panel_sampling(fig.add_subplot(gs[0, 2]))
-    panel_adc(fig.add_subplot(gs[1, 0]))
-    panel_spectrum(fig.add_subplot(gs[1, 1]))
-    panel_hardware(fig.add_subplot(gs[1, 2]))
-    pipeline_strip(fig.add_subplot(gs[2, :]))
+    panel_propagation(fig.add_subplot(gs[0, 2]))
+    panel_sampling(fig.add_subplot(gs[1, 0]))
+    panel_adc(fig.add_subplot(gs[1, 1]))
+    panel_spectrum(fig.add_subplot(gs[1, 2]))
+    panel_hardware(fig.add_subplot(gs[2, 0]))
+    panel_compression(fig.add_subplot(gs[2, 1]))
+    panel_realtime(fig.add_subplot(gs[2, 2]))
+    pipeline_strip(fig.add_subplot(gs[3, :]))
 
     out = "assets/signal_chain.png"
     fig.savefig(out, dpi=130, facecolor="white")
