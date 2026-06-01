@@ -1,0 +1,26 @@
+# esp32-C6 is RISC-V (RV32IMAC), so this firmware links on MAINLINE Rust - no
+# xtensa fork needed. This config pins the bare-metal target and the esp linker
+# args so a plain `cargo build --release` in this directory just works.
+
+[build]
+target = "riscv32imac-unknown-none-elf"
+
+[target.riscv32imac-unknown-none-elf]
+# `espflash flash --monitor` turns `cargo run` into flash-and-watch-serial.
+runner = "espflash flash --monitor"
+rustflags = [
+  # esp-hal re-exports the full linker script as `linkall.x`; this wires in the
+  # RISC-V runtime, the .text/.rodata placement, and the vector table.
+  "-C", "link-arg=-Tlinkall.x",
+  # Keep frame pointers so esp-backtrace can unwind on panic.
+  "-C", "force-frame-pointers",
+]
+
+[env]
+# esp-println's log backend reads this; "info" surfaces the alert lines.
+ESP_LOG = "info"
+
+[unstable]
+# esp-hal's examples build core/alloc from source so frame pointers and the esp
+# config knobs apply uniformly. Requires the `rust-src` rustup component.
+build-std = ["core", "alloc"]

@@ -28,4 +28,9 @@ echo "== drone-doa: no_std core build =="
 echo "== drone-edge: riscv32imc bare-metal cross-build =="
 ( cd crates/drone-edge && cargo build --release --target riscv32imc-unknown-none-elf )
 
+# Note: crates/drone-firmware (esp32-C6, esp-hal) is intentionally NOT in CRATES.
+# It targets bare-metal riscv32imac with build-std and must build from its own
+# dir; build it with scripts/build-firmware.sh (needs the target + rust-src +
+# network for the esp-hal crates).
+
 echo "ALL CHECKS PASSED"

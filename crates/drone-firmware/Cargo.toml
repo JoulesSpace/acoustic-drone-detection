@@ -1,0 +1,53 @@
+[package]
+name = "drone-firmware"
+version = "0.1.0"
+edition = "2021"
+license = "AGPL-3.0-or-later"
+description = "no_std/no_main esp32-C6 (RISC-V) firmware that runs the drone-edge detector over audio frames and raises a GPIO + serial alert."
+repository = "https://github.com/JoulesSpace/acoustic-drone-detection"
+publish = false
+
+# This crate is the *deployment proof*: a real `#![no_std] #![no_main]` firmware
+# for the esp32-C6 (RISC-V, target `riscv32imac-unknown-none-elf`) that feeds
+# `drone_dsp::FRAME_SIZE`-sample frames into `drone_edge::EdgeDetector` and lights
+# an LED GPIO + prints a log line on a latched drone alert. esp32-C6 is RISC-V, so
+# this links on mainline (non-xtensa) Rust. The detector path is real; the only
+# stub is the I2S MEMS-mic read (see the TODO in `src/main.rs`).
+#
+# Build (from the repo root):
+#   rustup target add riscv32imac-unknown-none-elf
+#   cargo build --release --manifest-path crates/drone-firmware/Cargo.toml
+# The crate's `.cargo/config.toml` pins the target + esp linker args, so a plain
+# `cargo build --release` inside `crates/drone-firmware/` works too.
+
+[dependencies]
+# Real detector path: no_std, alloc-free, training-free spectral-rule detector.
+drone-edge = { path = "../drone-edge" }
+# no_std DSP core, std turned off, for FRAME_SIZE and the frame type.
+drone-dsp = { path = "../drone-dsp", default-features = false }
+# no_std float math (sinf) for the synthetic mic-frame generator.
+libm = "0.2"
+
+# --- esp-rs ecosystem, pinned to the consistent esp-hal v1.0.0 release set ---
+# Hardware abstraction layer for esp32-C6 (GPIO, clocks, delay, RISC-V runtime).
+esp-hal = { version = "1.0.0", features = ["esp32c6", "unstable", "log-04"] }
+# Panic handler + backtrace printing over the serial-JTAG console.
+esp-backtrace = { version = "0.18.0", features = [
+    "esp32c6",
+    "panic-handler",
+    "println",
+] }
+# Emits the esp-idf-style app descriptor the 2nd-stage bootloader expects.
+esp-bootloader-esp-idf = { version = "0.4.0", features = ["esp32c6"] }
+# `println!` over USB-Serial-JTAG (default on the C6 dev kits) for the alert log.
+esp-println = { version = "0.16.0", features = ["esp32c6", "log-04"] }
+
+# Release profile mirrors esp-hal's own examples: frame pointers + fat LTO keep
+# the image small while preserving usable backtraces.
+[profile.release]
+opt-level = "s"
+lto = "fat"
+codegen-units = 1
+debug = 2
+debug-assertions = false
+overflow-checks = false

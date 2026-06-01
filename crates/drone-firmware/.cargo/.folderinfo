@@ -1,0 +1,1 @@
+cargo config pinning the riscv32imac esp32-C6 target and the esp linker args for this firmware crate

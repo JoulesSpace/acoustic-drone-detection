@@ -1,0 +1,1 @@
+firmware source: bare-metal main entry point that feeds audio frames to drone-edge and drives the alert LED

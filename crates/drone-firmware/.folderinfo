@@ -1,0 +1,1 @@
+no_std/no_main esp32-C6 (RISC-V) firmware that runs the drone-edge detector and raises a GPIO + serial alert
