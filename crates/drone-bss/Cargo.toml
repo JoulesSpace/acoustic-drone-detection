@@ -1,0 +1,29 @@
+[package]
+name = "drone-bss"
+version = "0.1.0"
+edition = "2021"
+license = "AGPL-3.0-or-later"
+description = "Blind source separation (FastICA) for multi-UAV / heavy-noise acoustic scenes: unmix sources so detection works on the recovered drone component."
+repository = "https://github.com/JoulesSpace/acoustic-drone-detection"
+
+# Host-side (std) crate. The separation core (FastICA, a Jacobi symmetric
+# eigensolver, whitening) is pure Rust with seeded RNG so results are
+# deterministic. The benchmark binary additionally leans on `drone-bench`
+# (the Approach detectors) and `drone-dsp` (DSP primitives) to show that BSS
+# rescues detection in multi-source scenes.
+
+[lib]
+name = "drone_bss"
+path = "src/lib.rs"
+
+[[bin]]
+name = "drone-bss"
+path = "src/bin/bench.rs"
+
+[dependencies]
+# Reused for the detection-improvement payoff: the `hps` / `spectral_gate`
+# detectors via `drone_bench::approaches`, and `drone_bench::dataset` helpers.
+drone-bench = { path = "../drone-bench" }
+drone-dsp = { path = "../drone-dsp" }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
