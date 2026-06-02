@@ -162,6 +162,18 @@ helicopter), exactly as the literature warns.
 - Caveat: DADS is 16 kHz native, so >8 kHz points are informational; frame fixed
   at 1024.
 
+## Distance estimation - `drone-range` (the hardest property head)
+Physics range simulator (1/r spreading + frequency-dependent air absorption
+`alpha~f^2` + ambient floor so SNR falls with range), 10-200 m, 30% loudness
+jitter as confounder. Regression **MAE 12.6 m** (median 10.5 m); 20 m-bin
+accuracy 59% overall (100% at 0-20 m, noise-limited at far range). **Key
+ablation: level-only MAE 27.1 m -> +tilt 16.0 m -> full 12.6 m** - the
+air-absorption spectral tilt (level-invariant, unit-tested) carries range info
+beyond loudness, the range-specific cue. no_std core. Simulator-only (no ground
+reflection/wind/drone-type loudness); real band ~61-98% (Kim drone-to-drone
+61-78% @ 20-60 m, Kang ground-array 94-98% @ 5-50 m). Distance is the hardest
+head; needs UaVirBASE/Svanstrom/DREGON real data to move past simulation.
+
 ## Blind source separation - `drone-bss` (multi-UAV / ego-noise layer)
 FastICA (from-scratch Jacobi eigensolver + tanh fixed-point) on simulated
 instantaneous mixtures: **mean SIR improvement 56 dB**, **100% drone recovery**.

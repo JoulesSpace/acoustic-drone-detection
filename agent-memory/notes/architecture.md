@@ -36,6 +36,13 @@ many task "heads", a common benchmark/eval harness), not a single model.
   (`benchmarks/robustness.py` + `--snr`), the "stress test earns its keep" axis.
 - **Vendor/brand ID** - `drone-vendor`: MFCC + softmax over many brands (real
   32-brand macro-F1 0.93, synthetic 12-brand).
+- **Distance** - `drone-range`: air-absorption-tilt + level features -> ridge
+  regression / range bins (sim MAE 12.6 m; hardest head; no_std core).
+- **Blind source separation** - `drone-bss`: FastICA preprocessing layer that
+  rescues detection on masked multi-UAV / ego-noise scenes (56 dB SIR;
+  hps recall 17->100% when masked).
+- **Upstream baseline** - `drone-cnn`: faithful mel-CNN (candle); perfect in-dist,
+  collapses on unseen drones (the honest head-to-head we win).
 
 ## Deployment spectrum (same detector, four tiers)
 - **MCU** - `drone-edge` (no_std lib) + `drone-firmware` (real esp32-C6 esp-hal,
