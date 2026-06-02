@@ -38,6 +38,7 @@ How this store is organized and maintained: [README.md](README.md).
 ## 📓 Notes (domain knowledge)
 - [Multi-task architecture](notes/architecture.md) - shared backbone + task heads (start here for the big picture)
 - [DSP conventions](notes/dsp-conventions.md) - frame size, FFT, windowing, frequency math
+- [Sensors & arrays](notes/sensors-and-arrays.md) - mic taxonomy, near/far-field, cueing/tiered confirmation
 - [Detection thesis](notes/detection-thesis.md) - why a drone is acoustically distinguishable
 - [Drone audio datasets](notes/datasets.md) - DADS (HF, primary), negatives, download methods
 - [Detection approaches survey](notes/approaches-survey.md) - ranked approaches + SOTA + eval conventions
