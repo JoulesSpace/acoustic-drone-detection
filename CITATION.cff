@@ -1,0 +1,27 @@
+cff-version: 1.2.0
+title: "acoustic-drone-detection: a Rust DSP and machine-learning toolbox for detecting drones from sound"
+message: "If you use this software, please cite it using these metadata."
+type: software
+authors:
+  - name: "Julia Yukovich"
+repository-code: "https://github.com/JoulesSpace/acoustic-drone-detection"
+abstract: >
+  An open-source acoustic drone-detection toolbox built in Rust. A shared no_std
+  DSP backbone (windowing, real FFT, spectral features) feeds many task heads:
+  detection (12+ classical and learned approaches benchmarked head-to-head),
+  direction-of-arrival (GCC-PHAT on a microphone array), drone-type and vendor
+  recognition, blade-pass-frequency / RPM estimation, distance estimation, and
+  blind source separation. A common evaluation harness reports calibrated
+  detection metrics with robustness sweeps over SNR, sample rate, and bit depth,
+  and the core cross-builds onto esp32-class edge hardware.
+keywords:
+  - acoustic drone detection
+  - digital signal processing
+  - machine learning
+  - direction of arrival
+  - blind source separation
+  - embedded systems
+  - no_std
+  - Rust
+license: AGPL-3.0-or-later
+version: 0.1.0
