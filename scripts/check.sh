@@ -6,7 +6,7 @@ set -euo pipefail
 echo "== folderinfo lint =="
 bash scripts/folderinfo.sh
 
-CRATES=(drone-dsp drone-detect drone-cli drone-bench drone-freq drone-id drone-doa drone-live drone-edge drone-vendor drone-mobile drone-cnn drone-bss)
+CRATES=(drone-dsp drone-detect drone-cli drone-bench drone-freq drone-id drone-doa drone-live drone-edge drone-vendor drone-mobile drone-cnn drone-bss drone-range)
 
 for c in "${CRATES[@]}"; do
   echo "== $c: fmt =="
@@ -24,6 +24,9 @@ echo "== drone-dsp: no_std build =="
 
 echo "== drone-doa: no_std core build =="
 ( cd crates/drone-doa && cargo build --no-default-features )
+
+echo "== drone-range: no_std core build =="
+( cd crates/drone-range && cargo build --no-default-features )
 
 echo "== drone-edge: riscv32imc bare-metal cross-build =="
 ( cd crates/drone-edge && cargo build --release --target riscv32imc-unknown-none-elf )

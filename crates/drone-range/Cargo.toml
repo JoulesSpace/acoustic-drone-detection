@@ -1,0 +1,39 @@
+[package]
+name = "drone-range"
+version = "0.1.0"
+edition = "2021"
+license = "AGPL-3.0-or-later"
+description = "Acoustic distance (range) estimation for a drone source: air-absorption / spectral-tilt features, ridge regression (metres) and multinomial-logistic range bins, validated on a physics range simulator with a level-only-vs-tilt ablation."
+repository = "https://github.com/JoulesSpace/acoustic-drone-detection"
+
+# Distance is the hardest of the property heads: real range is confounded by
+# source loudness and environment, so audio-only literature spans ~61-98%
+# depending on setup (Kim 2023 drone-to-drone vs Kang ground-array bins). The
+# estimation core (`sim`, `features`, `regress`, `classify`) is kept
+# `no_std`-friendly so it can lower onto the same edge targets as `drone-dsp`:
+# float math goes through `libm`. The `range-bench` binary is host-only (`std`)
+# and gated behind the default `std` feature.
+
+[features]
+default = ["std"]
+std = ["drone-dsp/std", "dep:drone-bench", "dep:serde", "dep:serde_json", "dep:clap"]
+
+[[bin]]
+name = "range-bench"
+path = "src/bin/range-bench.rs"
+required-features = ["std"]
+
+[dependencies]
+# FFT/feature core. Reused transitively (pinned microfft/libm) and named
+# directly for the spectral-feature math.
+drone-dsp = { path = "../drone-dsp", default-features = false }
+libm = "0.2"
+
+# Host-only, behind the `std` feature (the benchmark binary reuses
+# `drone_bench::util::spectra` for clip framing).
+drone-bench = { path = "../drone-bench", optional = true }
+serde = { version = "1", features = ["derive"], optional = true }
+serde_json = { version = "1", optional = true }
+clap = { version = "4", features = ["derive"], optional = true }
+
+[dev-dependencies]
