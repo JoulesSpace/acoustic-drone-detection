@@ -68,14 +68,27 @@ isn't, start "Docker Desktop.exe".
 
 ```
 crates/
-  drone-dsp/      no_std DSP core: windowing, real FFT (microfft), spectral features
-  drone-detect/   no_std heuristic detector built on drone-dsp
-  drone-cli/      std host binary `drone`: synth test audio + analyze WAVs
-  drone-bench/    benchmark harness: Approach trait, dataset loader, metrics → JSON
-Dockerfile         multi-stage build of the `drone` host binary
-docker-compose.yml detector (runtime) + dev (checks) + bench/plot services
-scripts/           checks, dataset downloads, folderinfo lint
-benchmarks/        benchmark results (JSON) and matplotlib plotting (Python)
+  drone-dsp/       no_std DSP backbone: windowing, real FFT (microfft), spectral features
+  drone-detect/    no_std heuristic detector (energy-in-band baseline)
+  drone-cli/       std host binary `drone`: synth test audio + analyze WAVs
+  drone-bench/     eval harness: Approach trait, dataset, metrics; 14 detection approaches
+                   + analysis bins (xeval, heldout32, pareto, ratesweep, robust, fieldeval)
+  drone-doa/       direction of arrival (GCC-PHAT + ULA), no_std core
+  drone-id/        multiclass drone-type recognition
+  drone-vendor/    multi-brand / vendor recognition
+  drone-freq/      blade-pass frequency / RPM estimation
+  drone-range/     distance estimation (no_std core)
+  drone-bss/       blind source separation (FastICA) for multi-UAV / ego-noise
+  drone-cnn/       upstream mel-CNN baseline (candle) for the honest head-to-head
+  drone-edge/      no_std training-free detector (cross-builds to riscv32imc)
+  drone-firmware/  real esp32-C6 firmware running drone-edge (scripts/build-firmware.sh)
+  drone-live/      cpal live mic: device probe + listen/alert + record
+  drone-mobile/    C ABI / JNI FFI over drone-edge (Android/iOS via cargo-ndk)
+docker/            Dockerfiles: runtime, dev toolchain (.dev), plot, data
+docker-compose.yml services: detector, dev, bench, plot, data
+scripts/           checks, dataset download, folderinfo + firmware build, infographic
+benchmarks/        results (JSON, gitignored) + matplotlib plots + MODEL_CARDS.md
+assets/            generated infographic (signal_chain.png)
 data/              datasets - git-ignored contents (.gitkeep + .folderinfo tracked)
 workspace/         gitignored scratch for cloning/inspecting upstream repos
 agent-memory/      tracked agent memory; see agent-memory/MEMORY.md

@@ -8,7 +8,7 @@ tags: [docker, tooling, ci]
 
 # 0005 - Docker-first, two compose services
 
-**Decision:** `Dockerfile` (multi-stage host binary) + `Dockerfile.dev`
+**Decision:** `docker/Dockerfile` (multi-stage host binary) + `docker/Dockerfile.dev`
 (toolchain with rustfmt/clippy) driven by `docker-compose.yml` services
 `detector` and `dev`. `scripts/check.sh` is the correctness oracle.
 

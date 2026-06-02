@@ -24,7 +24,7 @@ How this store is organized and maintained: [README.md](README.md).
 ## 💡 Insights (gotchas & learnings)
 - [Git Bash mangles `/data` docker args](insights/msys-path-mangling.md) - use PowerShell or `MSYS_NO_PATHCONV=1`
 - [microfft packs Nyquist into bin 0](insights/microfft-nyquist-packing.md) - we expose `|DC|`, drop Nyquist
-- [Slim Rust image lacks rustfmt/clippy](insights/slim-rust-missing-rustfmt-clippy.md) - why `Dockerfile.dev` exists
+- [Slim Rust image lacks rustfmt/clippy](insights/slim-rust-missing-rustfmt-clippy.md) - why `docker/Dockerfile.dev` exists
 - [Synthetic signal discriminates cleanly](insights/synthetic-signal-discriminates.md) - verified pipeline result
 - [Synthetic scores lie; validate on real data](insights/synth-vs-real-generalization.md) - HPS 0.972 synth → 0.082 real
 - [Commit before dispatching tree-mutating agents](insights/commit-before-dispatching-tree-mutating-agents.md) - agent git-revert clobbered uncommitted work
