@@ -1,12 +1,30 @@
-# Acoustic-Drone-Detection
+# Acoustic Drone Detection
 
-Detecting drones accoustically.
+[![CI](https://github.com/JoulesSpace/acoustic-drone-detection/actions/workflows/ci.yml/badge.svg)](https://github.com/JoulesSpace/acoustic-drone-detection/actions/workflows/ci.yml)
+[![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](LICENSE)
+[![Rust 2021](https://img.shields.io/badge/rust-2021-orange.svg)](https://www.rust-lang.org/)
+[![no_std core](https://img.shields.io/badge/core-no__std-green.svg)](crates/drone-dsp)
+[![edge: esp32 / riscv32](https://img.shields.io/badge/edge-esp32%20%2F%20riscv32-8a2be2.svg)](crates/drone-edge)
+
+**A Rust DSP and machine-learning toolbox for detecting drones from sound.** A
+shared `no_std` signal-processing backbone feeds many task heads - detection,
+direction-of-arrival, type and vendor ID, blade-pass / RPM, range, and source
+separation - each benchmarked head-to-head on real data and ready to lower onto
+esp32-class edge hardware. Built with an emphasis on **honest evaluation**:
+leakage-proof, cross-dataset, and hard-negative tests over the optimistic
+in-distribution numbers most of the field reports.
 
 ![Acoustic drone detection - signal chain & physics](assets/signal_chain.png)
 
 <sub>The full signal chain, with this project's real parameters: rotor acoustics → pressure wave → sampling (Nyquist) → ADC quantization → STFT blade-pass comb → detection pipeline → hardware tiers. Regenerate with `docker compose run --rm --entrypoint python plot scripts/infographic.py` ([`scripts/infographic.py`](scripts/infographic.py)).</sub>
 
-**State of project:** We can detect drones qualitatively. We benchmarked the performance of different algorithms and models for detection on different hardwares, and bundle everything into an extensible rust crate toolbox, that can be controlled via CLI and also be lowered to esp32-s3 or other edge hardware. Approaches for detecting drone situational attributes (`distance`, `elevation`, `speed`) and hardware attributes (`type`, `vendor`, `rotor_count`, `drone_health`, `drone_weight`) are wired in and ready to be perf-optimized and extended.
+**State of the project:** detection works. We benchmarked a range of detection
+algorithms and models across hardware tiers and bundled everything into an
+extensible Rust crate toolbox, driven from a CLI and lowerable onto esp32-S3 or
+other edge hardware. Heads for drone situational attributes (`distance`,
+`elevation`, `speed`) and hardware attributes (`type`, `vendor`, `rotor_count`,
+`drone_health`, `drone_weight`) are wired in and ready to be performance-tuned
+and extended.
 
 **Notable mention** worth checking out: [batear-io/batear](https://github.com/batear-io/batear) for simple drone detection on esp32-S3+mic.
 
@@ -17,15 +35,14 @@ Detecting drones accoustically.
 3. [Problem Layers](#3-problem-layers-human-reasoning) (human reasoning)
 4. [Possible Approaches](#4-possible-approaches-human-reasoning) (human reasoning)
 5. [Constraints of v0.1.0](#5-constraints-of-this-projects-first-iteration-v010) (human reasoning)
-6. [Implementation](#6-implementation-v010) (ai summary)
+6. [Implementation](#6-implementation-v010)
 7. [Contributing](#7-contributing)
 8. [License](#8-license)
 
 ## 1. Scope
 
-Design an acoustic drone detection pipeline, and validate your ideas in simulation.
-
-Questions we answer with this porject:
+Design an acoustic drone detection pipeline, and validate the ideas in
+simulation. The questions this project answers:
 
 - Detection. What makes a drone signature distinguishable from background sound? What features or representations would you feed a model, and how would you know it's actually working?
 - Direction of Arrival. If you used multiple microphones, how would you estimate where the drone is? What does array geometry buy you, and what are the trade-offs?
@@ -34,23 +51,23 @@ Questions we answer with this porject:
 
 ## 2. On Audio and Sound (Human reasoning)
 
-**Sound** is the pressure of a material (mostly air) fluctuating over time. Sound has a speed of `355 m/s` m air at 40 degrees celsius and a speed of `343m/s` in air at 20 degrees celsius. So environmental conditions are relevant to detection.
+**Sound** is the pressure of a material (mostly air) fluctuating over time. Sound travels at `355 m/s` in air at 40 degrees Celsius and `343 m/s` in air at 20 degrees Celsius, so environmental conditions are relevant to detection.
 
-**Microphones** exist in different types, based on different physical quantities that changes with pressure:
-  + magnetic microphones measure the vibration of air by it moving the microphone head up and down, they are omnidirectional
-  + laser microphones measure the vibration (pressure) of an object that the laser points at, interferometrically, they are unidirectional
-  + other types of microphone exist, for example gyroscopes of phones can sample audio at a low amount. also smart materials like piezzo-crystals can be used to turn pressure on a surface to electrical impulses
+**Microphones** come in different types, based on the physical quantity that changes with pressure:
+  + magnetic (dynamic) microphones measure the vibration of air as it moves the microphone head up and down; they are omnidirectional
+  + laser microphones measure the vibration (pressure) of an object the laser points at, interferometrically; they are unidirectional
+  + other types exist: the gyroscopes in phones can sample audio at a low rate, and smart materials like piezo crystals turn pressure on a surface into electrical impulses
 
-**Sample frequency** is how many times per second microphones measure this pressure in one point.
-  + old phones like a nokia have around 8k measurements per second
-  + common sampling rate is `44.1kHZ` which most microphones and hardwares can do today
-  + there exist better sampling rates for studio or specialised hardware equipment
+**Sample frequency** is how many times per second a microphone measures this pressure at one point.
+  + old phones like a Nokia sampled around 8k measurements per second
+  + a common rate today is `44.1 kHz`, which most microphones and hardware support
+  + higher rates exist for studio or specialised equipment
 
 **Audio** is how the sound is stored by digital devices:
   + an ADC (Analog-Digital-Converter) converts electrical pulses from a microphone to a binary signal / value
-  + the qualitative resolution off this conversion depends on the adc, older ones got `8 bit`, newer ones `24 bit`, `32 bit` or even better quality
-  + audio is usually stored compressedly, as storing it as a raw `.wav` file / pickled numpy array takes too much storage.
-  + audio compression is lossy, as humans dont need to head all the spectrum to detect voice for example. different audio codecs exist, for example implemented in the `ffmpeg project` (c++). modern codecs include `.mp3`, `.m4a`, `.opus` (whatsapp). it is important to consider these differences for data quality also, as a lossy codec might ruin predictions of more precise properties of a drone or situation.
+  + the resolution of this conversion depends on the ADC: older ones gave `8 bit`, newer ones `24 bit`, `32 bit`, or better
+  + audio is usually stored compressed, since a raw `.wav` file (a pickled array of samples) takes a lot of storage
+  + audio compression is lossy: humans do not need the whole spectrum to, for example, recognize a voice. Many codecs exist (e.g. those implemented in the `ffmpeg` project); modern ones include `.mp3`, `.m4a`, and `.opus` (used by WhatsApp). These differences matter for data quality: a lossy codec can erase the cues needed to predict finer properties of a drone or the situation.
 
 ## 3. Problem Layers (Human reasoning)
 
@@ -160,11 +177,11 @@ realistic conditions*, not the most complex model.
 
 ## 5. Constraints of this projects first iteration (v0.1.0)
 
-- Only one real drone for testing
-- Limited hardware: esp32 s3, c6, p4 modules, and a ffew arduino boards notably the Q 4gb ram one
-- Hardly any specialised microphones here in our appartment (only one camera attached, rest phone and laptop ones)
-- Limited AI Budget of 50€ (claude weekly limit)
-- Limited dev time, only one afternoon time for v0.1.0
+- Only one real drone available for testing.
+- Limited hardware: esp32-S3, -C6, and -P4 modules, plus a few Arduino boards (notably the 4 GB-RAM one).
+- Hardly any specialised microphones on hand (one camera mic, otherwise phone and laptop mics).
+- Limited AI budget of 50 EUR (the Claude weekly limit).
+- Limited dev time: a single afternoon for v0.1.0.
 
 ## 6. Implementation (v0.1.0)
 
@@ -285,23 +302,34 @@ is tracked in [`agent-memory/`](agent-memory/MEMORY.md).
 
 ## 7. Contributing
 
-Welcome! fork -> branch `[name]/feat|fix-[feat/fix-name]` -> pr -> fix feedback -> get merged
+Contributions are welcome. The workflow is:
+
+```
+fork -> branch [name]/feat|fix-[short-name] -> PR -> address feedback -> merge
+```
+
+Everything builds and tests in Docker (no host Rust toolchain needed); run the
+full correctness oracle with `docker compose run --rm dev` before opening a PR.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for setup, conventions (no em-dashes,
+`no_std`-clean core, a `.folderinfo` per directory), and how the check suite
+runs in CI.
 
 ## 8. License
 
-Use in the open only.
-
-> what is the license that makes people need to open source if they modify or use it?
-
-Google says AGPLv3.
-
-let license = "AGPLv3";
+This project is licensed under the **GNU Affero General Public License v3.0**
+(AGPL-3.0-or-later) - strong copyleft with a network-use clause, so anyone who
+runs a modified version, including over a network, must share their source.
 
 ```
-ACOUSTIC-DRONE-DETECTION
-
+Acoustic Drone Detection
 Copyright (C) 2026 Julia Yukovich
 
-This project is licensed under the GNU Affero General Public License v3.0.
-See the LICENSE file for details.
+This program is free software: you can redistribute it and/or modify it under
+the terms of the GNU Affero General Public License as published by the Free
+Software Foundation, either version 3 of the License, or (at your option) any
+later version. See the LICENSE file for the full text.
 ```
+
+Datasets retain their original upstream licenses and are not redistributed here;
+see [DATA_SOURCES.md](DATA_SOURCES.md). If you use this work, citation metadata
+is in [CITATION.cff](CITATION.cff).
