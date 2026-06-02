@@ -86,6 +86,8 @@ crates/
   drone-mobile/    C ABI / JNI FFI over drone-edge (Android/iOS via cargo-ndk)
 docker/            Dockerfiles: runtime, dev toolchain (.dev), plot, data
 docker-compose.yml services: detector, dev, bench, plot, data
+.github/workflows/ ci.yml - runs scripts/check.sh on push / PR (mirrors `dev`)
+Makefile           convenience wrappers over docker compose (build/check/bench/...)
 scripts/           checks, dataset download, folderinfo + firmware build, infographic
 benchmarks/        results (JSON, gitignored) + matplotlib plots + MODEL_CARDS.md
 assets/            generated infographic (signal_chain.png)
