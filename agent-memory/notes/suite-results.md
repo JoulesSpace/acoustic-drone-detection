@@ -162,6 +162,16 @@ helicopter), exactly as the literature warns.
 - Caveat: DADS is 16 kHz native, so >8 kHz points are informational; frame fixed
   at 1024.
 
+## Blind source separation - `drone-bss` (multi-UAV / ego-noise layer)
+FastICA (from-scratch Jacobi eigensolver + tanh fixed-point) on simulated
+instantaneous mixtures: **mean SIR improvement 56 dB**, **100% drone recovery**.
+Payoff is detection-rescue on MASKED scenes: `hps` recall **17% -> 100%**
+(drone+noise), `spectral_gate` **0% -> 92%**; ~no lift when sources are
+equal-loudness (honest - BSS only helps when a source is buried). Caveats:
+instantaneous mixing only (real is convolutive -> freq-domain ICA/IVA is next),
+M>=K, synthetic. This is the "multiple drones / heavy noise" robustness layer
+Kang's review names.
+
 ## Caveats (carry into review)
 - DADS subset numbers are in-distribution; no recording-level grouping (DADS
   exposes none) → possible leakage. DoA & some synth numbers are simulation.
