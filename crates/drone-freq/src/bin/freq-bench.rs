@@ -3,7 +3,7 @@
 //! Two parts:
 //!
 //! 1. **Synthetic accuracy**: deterministically generate harmonic-stack clips
-//!    with a *known* f0 swept over 80–250 Hz at several SNR levels, estimate f0,
+//!    with a *known* f0 swept over 80-250 Hz at several SNR levels, estimate f0,
 //!    and report MAE, median absolute error (Hz and %), and the octave-error
 //!    rate (estimates near 0.5× or 2× the truth) per SNR.
 //!
@@ -175,7 +175,7 @@ fn percentile(xs: &[f32], p: f32) -> f32 {
 }
 
 fn run_synth(sr: u32, secs: f32) -> (Vec<f32>, Vec<SnrResult>) {
-    // Sweep f0 over 80–250 Hz (covers small-multirotor blade-pass).
+    // Sweep f0 over 80-250 Hz (covers small-multirotor blade-pass).
     let truths: Vec<f32> = (0..18).map(|i| 80.0 + i as f32 * 10.0).collect();
     // SNR levels (dB). `INFINITY` == clean (no added noise).
     let snrs = [f32::INFINITY, 20.0, 10.0, 5.0, 0.0];
@@ -273,10 +273,10 @@ fn main() -> Result<(), Box<dyn Error>> {
     let cli = Cli::parse();
 
     println!("=== drone-freq: blade-pass f0 estimator benchmark ===");
-    println!("search band: {F0_MIN_HZ}–{F0_MAX_HZ} Hz\n");
+    println!("search band: {F0_MIN_HZ}-{F0_MAX_HZ} Hz\n");
 
     // --- synthetic accuracy ---
-    println!("synthetic accuracy (f0 swept 80–250 Hz, deterministic):");
+    println!("synthetic accuracy (f0 swept 80-250 Hz, deterministic):");
     let (truths, synth) = run_synth(cli.sample_rate, cli.synth_secs);
     println!(
         "{:>8}  {:>5}  {:>8}  {:>10}  {:>8}  {:>9}  {:>10}",
@@ -308,10 +308,10 @@ fn main() -> Result<(), Box<dyn Error>> {
                 println!("  clips estimated : {}", r.n_clips);
                 println!("  median f0       : {:.1} Hz", r.median_f0_hz);
                 println!(
-                    "  IQR             : {:.1} – {:.1} Hz",
+                    "  IQR             : {:.1} - {:.1} Hz",
                     r.iqr_lo_hz, r.iqr_hi_hz
                 );
-                println!("  range           : {:.1} – {:.1} Hz", r.min_hz, r.max_hz);
+                println!("  range           : {:.1} - {:.1} Hz", r.min_hz, r.max_hz);
                 println!(
                     "  rotor RPM (B={}) : {:.0} rpm  (rate ≈ f0/B)",
                     r.blades_assumed, r.median_rotor_rpm

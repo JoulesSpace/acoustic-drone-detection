@@ -12,7 +12,7 @@ numbers are reproducible via the commands in the README / `benchmarks/README.md`
 
 ## Detection (12 approaches, real DADS 300+300, 50/50)
 Best `feature_fusion` F1 1.000 / ROC-AUC 1.000; `mfcc_lr` & `fusion` F1 0.997.
-8 of 12 meet/beat published CNN baselines (≈0.93–0.955 F1). All 90–2400×
+8 of 12 meet/beat published CNN baselines (≈0.93-0.955 F1). All 90-2400×
 real-time on desktop. Calibrated `F1*` shows even `template` is a strong ranker
 (0.706→0.986). Full table in the README and `benchmark-results.md`.
 
@@ -41,8 +41,8 @@ unknown 0.860. Confusion mostly membo↔unknown. Linear softmax on pooled MFCC
 mean/std - an MLP head would likely do better. Synth 4-class = 1.000.
 
 ## Blade-pass frequency - `drone-freq`
-Synth (known f0 80–250 Hz): MAE ~1 Hz (0.88 @20 dB, 1.98 @0 dB), **0% octave
-error** at all SNRs. Real DADS drones: median f0 ≈ **231 Hz** (IQR 227–234),
+Synth (known f0 80-250 Hz): MAE ~1 Hz (0.88 @20 dB, 1.98 @0 dB), **0% octave
+error** at all SNRs. Real DADS drones: median f0 ≈ **231 Hz** (IQR 227-234),
 secondary cluster ~120 Hz. RPM = f0/blades (context only; f0 is what's measured).
 
 ## Robustness - `drone-bench --snr` sweep (clean/20/10/0/−10 dB)
@@ -65,7 +65,7 @@ largely recording-fit (leakage), not drone recognition:
 | feature_fusion | 0.813 | 1.000 |
 | cepstrum | 0.699 | 0.993 |
 | mfcc_lr | 0.685 | 1.000 |
-| gtcc_lr / mfcc_mlp / spectral_gate | 0.61–0.63 | ~0.99 |
+| gtcc_lr / mfcc_mlp / spectral_gate | 0.61-0.63 | ~0.99 |
 | template / spectrogram_template | ~0.49 (chance) | ~0.99 |
 | band_ratio | 0.233 (inverted!) | 0.938 |
 
@@ -152,7 +152,7 @@ helicopter), exactly as the literature warns.
 
 ## Sample-rate & bit-depth limits - `ratesweep`
 - **Sample rate:** detection is essentially **flat from 8 kHz upward** for strong
-  detectors (mfcc_lr, feature_fusion, spectral_gate ~0.99–1.0). `hps`/`band_ratio`
+  detectors (mfcc_lr, feature_fusion, spectral_gate ~0.99-1.0). `hps`/`band_ratio`
   wobble (harmonic resolution suffers as the fixed-1024 frame coarsens at higher
   rates; 8 kHz also discards >4 kHz content). A cheap 8 kHz mic costs almost
   nothing for the strong detectors.

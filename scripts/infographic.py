@@ -79,7 +79,7 @@ def panel_rotor(ax):
                                 fc="#e9eef5", ec=INK, lw=1.4, zorder=4))
     ax.text(5, 1.7,
             "rotor RPM × blades → blade-pass $f_0$\n"
-            "$f_0 \\approx$ 100–250 Hz   (DADS drones ≈ 230 Hz)\n"
+            "$f_0 \\approx$ 100-250 Hz   (DADS drones ≈ 230 Hz)\n"
             "radiates at $c$ = 343 m/s,  $\\lambda=c/f$",
             ha="center", va="center", fontsize=8)
 
@@ -161,7 +161,7 @@ def panel_spectrum(ax):
     ax.set_yticks([])
     ax.grid(True, color=GRID, lw=0.5)
     ax.text(0.97, 0.93,
-            "frame 1024 @16 kHz = 64 ms · 15.6 Hz/bin\nHann · band 100–4000 Hz",
+            "frame 1024 @16 kHz = 64 ms · 15.6 Hz/bin\nHann · band 100-4000 Hz",
             transform=ax.transAxes, ha="right", va="top", fontsize=7.0)
 
 
@@ -178,12 +178,12 @@ def panel_hardware(ax):
     ax.axis("off")
     _box(ax, 0.3, 6.6, 9.4, 2.6,
          "TINY-EDGE · esp32-C3/C6 (riscv32imc)\n"
-         "drone-edge no_std · ~17–27 KB flash · ~0 static RAM\n"
+         "drone-edge no_std · ~17-27 KB flash · ~0 static RAM\n"
          "~26 µs/frame · band-ratio / HPS / spectral-gate", "#eaf4ef", GOOD)
     _box(ax, 0.3, 3.7, 9.4, 2.6,
          "BALANCED · phone / Raspberry Pi\n"
          "MFCC+logistic, GTCC, cepstrum, envelope\n"
-         "90–2400× real-time", "#eaf0f7", ACCENT)
+         "90-2400× real-time", "#eaf0f7", ACCENT)
     _box(ax, 0.3, 0.8, 9.4, 2.6,
          "MAX-ACCURACY · server\n"
          "feature-fusion / ensemble\n"
@@ -280,7 +280,7 @@ def panel_realtime(ax):
                 arrowprops=dict(arrowstyle="->", color=GOOD, lw=1.0))
     ax.text(67, 6.55, "64 ms\nframe", fontsize=7.3, fontweight="bold", va="center")
     ax.text(2, 4.0, "frame = $N/f_s$ = 1024/16000 = 64 ms", fontsize=7.8)
-    ax.text(2, 2.7, "→ 90–2400× real-time headroom · GPU-free, deterministic",
+    ax.text(2, 2.7, "→ 90-2400× real-time headroom · GPU-free, deterministic",
             fontsize=7.8, color=GOOD)
     ax.text(2, 1.3, "end-to-end alert latency ≈ window + hold ≈ 0.5 s",
             fontsize=7.8, color=ACCENT)

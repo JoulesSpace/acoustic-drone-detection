@@ -13,7 +13,7 @@ _Supersedes [the v0.1.0 scaffold handoff](2026-06-01-v0.1.0-scaffold.md)._
 
 Six detection approaches implemented against the `drone-bench` harness and
 benchmarked on a real **DADS** subset (300+300 clips). **Four beat/match the
-published upstream baseline** (CNN ≈0.93–0.955 F1) - goal met. Full table:
+published upstream baseline** (CNN ≈0.93-0.955 F1) - goal met. Full table:
 [benchmark-results](../notes/benchmark-results.md). Headline: `mfcc_lr` F1 1.00,
 `spectral_gate` 0.98, `cepstrum` 0.97, `hps` 0.95, all cheap classical/light
 methods.

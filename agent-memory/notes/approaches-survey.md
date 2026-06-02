@@ -9,7 +9,7 @@ tags: [detection, benchmark, reference]
 
 The drone acoustic signature is highly structured: a **blade-pass fundamental
 (BPF) + harmonic stack**, energy concentrated below ~2.5 kHz with tonal content
-up to ~10–16 kHz. Classical DSP is genuinely competitive for *binary detection*
+up to ~10-16 kHz. Classical DSP is genuinely competitive for *binary detection*
 at moderate SNR; ML (CNN) holds the robustness ceiling at distance/wind.
 
 All approaches must emit a **confidence score in [0,1]** so we can compare via
@@ -28,7 +28,7 @@ ROC/PR, not just one threshold.
    Drone = tonal → low flatness/entropy.
 4. **Spectral template + cosine similarity** - the owner's hunch: average drone
    magnitude spectra → template, score by cosine sim, score = confidence.
-   Include as simplest baseline; expect it to trail (1)–(3) under noise/model
+   Include as simplest baseline; expect it to trail (1)-(3) under noise/model
    variation (rewards envelope, ignores harmonic structure). Quantifies what the
    harmonic structure in (1) actually buys.
 5. **Cepstrum / autocorrelation periodicity** - cepstral peak at harmonic
@@ -52,6 +52,6 @@ ROC/PR, not just one threshold.
   insightface-style ensemble lens the owner asked for.
 
 ## Our plan
-Implement #1–#5 in Rust against the `drone-bench` harness (one approach per file,
+Implement #1-#5 in Rust against the `drone-bench` harness (one approach per file,
 each emits a [0,1] confidence). #6 CNN oracle = later Python. See the benchmark
 foundation in [`crates/drone-bench`](../../crates/drone-bench).

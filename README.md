@@ -195,7 +195,7 @@ design):
 
 | task | crate | headline result | notes |
 |---|---|---|---|
-| **Detection** (drone vs not) | `drone-bench` | best **F1 1.000 / ROC-AUC 1.000** (`feature_fusion`); 8/12 beat CNN baselines | all run 90–2400× real-time |
+| **Detection** (drone vs not) | `drone-bench` | best **F1 1.000 / ROC-AUC 1.000** (`feature_fusion`); 8/12 beat CNN baselines | all run 90-2400× real-time |
 | **Direction of arrival** | `drone-doa` | **RMSE 0.88°** @20 dB (±60°), 2.8° @10 dB | 4-mic ULA, simulated |
 | **Type ID** (bebop/membo/unknown) | `drone-id` | **macro-F1 0.86** on Al-Emadi multiclass | linear softmax; honest |
 | **Blade-pass freq / RPM** | `drone-freq` | synth **f0 MAE ~1 Hz, 0% octave error** | real DADS drones cluster ~230 Hz |

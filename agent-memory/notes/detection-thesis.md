@@ -12,7 +12,7 @@ rate, and the blades produce a blade-pass fundamental (tens to low hundreds of
 Hz) plus a stack of harmonics extending into the low kHz. Background noise
 (wind, traffic, speech) is broadband or has different harmonic structure.
 
-So the signal concentrates energy in a **band** (~100–4000 Hz here) and in
+So the signal concentrates energy in a **band** (~100-4000 Hz here) and in
 **tonal peaks**. The v0.1.0 detector ([0006](../decisions/0006-heuristic-detector-v0.1.0.md)):
 
 > `band_energy / total_energy >= 0.5` **and** the dominant bin sits in the band.

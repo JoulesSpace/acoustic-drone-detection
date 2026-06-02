@@ -35,7 +35,7 @@ use drone_dsp::FRAME_SIZE;
 use serde::Serialize;
 
 /// Default DADS dataset location (absolute, per the project layout).
-const DEFAULT_DATA: &str = "C:/Users/julia/Development/acoustic-drone-detection/data/dads";
+const DEFAULT_DATA: &str = "data/dads";
 
 #[derive(Parser)]
 #[command(

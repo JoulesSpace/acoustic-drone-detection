@@ -40,14 +40,14 @@ dimension, used as a relative compute-cost proxy.
 - **Feature set:** band energy ratios (`band_ratio`), a 5-element spectral
   summary fed to a tiny learned gate (`spectral_gate`), and a
   harmonic-product-spectrum / comb score (`hps`).
-- **Approx. params / feature-dim:** 1–5 features; effectively no model state
+- **Approx. params / feature-dim:** 1-5 features; effectively no model state
   beyond a threshold (`spectral_gate` carries a 5-weight logistic gate).
 - **Measured latency & real-time factor (release build, host CPU):**
   - `band_ratio` - ~25 us/frame, ~2500× RT.
   - `hps` - ~26 us/frame, ~2460× RT.
   - `spectral_gate` - ~33 us/frame, ~1950× RT.
 - **Expected accuracy (leakage caveat applies):** ROC-AUC 0.94 (`band_ratio`) to
-  0.99 (`hps`, `spectral_gate`); best-F1 0.92–0.99. `hps` is on the Pareto
+  0.99 (`hps`, `spectral_gate`); best-F1 0.92-0.99. `hps` is on the Pareto
   frontier's "good enough, near-free" shoulder - strong harmonic structure is
   the cheapest reliable drone cue.
 - **Use when…** you are on bare metal / an MCU, power and RAM are the binding
@@ -79,8 +79,8 @@ dimension, used as a relative compute-cost proxy.
   - `gtcc_lr` - ~36 us/frame, ~1770× RT.
   - `cepstrum` - ~740 us/frame, ~87× RT (autocorrelation-heavy).
   - `envelope_periodicity` - ~1066 us/frame, ~60× RT (long envelope analysis).
-- **Expected accuracy (leakage caveat applies):** ROC-AUC 0.98–1.00; best-F1
-  0.97–0.99. `mfcc_lr` is the headline balanced choice - it sits on the Pareto
+- **Expected accuracy (leakage caveat applies):** ROC-AUC 0.98-1.00; best-F1
+  0.97-0.99. `mfcc_lr` is the headline balanced choice - it sits on the Pareto
   frontier as the fastest model that still reaches ~1.0 AUC on this split.
 - **Use when…** you have a phone / Pi-class CPU and want the best accuracy per
   millisecond. Default to `mfcc_lr`; reach for `mfcc_mlp` or `gtcc_lr` only if a

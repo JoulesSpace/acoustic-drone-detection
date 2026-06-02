@@ -81,27 +81,18 @@ const NEG_CONTROL_CLASSES: &[&str] = &["rain", "sea_waves", "clapping"];
 )]
 struct Cli {
     /// DADS dataset root containing `labels.csv` (the TRAIN source).
-    #[arg(
-        long,
-        default_value = "C:/Users/julia/Development/acoustic-drone-detection/data/dads"
-    )]
+    #[arg(long, default_value = "data/dads")]
     dads: PathBuf,
     /// DADS manifest filename inside `--dads`.
     #[arg(long, default_value = "labels.csv")]
     dads_manifest: String,
     /// Root of the 32-brand drone-visualization clone; WAVs live under
     /// `public/droneAudio/` (TEST positives, truly held out).
-    #[arg(
-        long,
-        default_value = "C:/Users/julia/Development/acoustic-drone-detection/workspace/dv"
-    )]
+    #[arg(long, default_value = "workspace/dv")]
     drones: PathBuf,
     /// ESC-50 root containing `audio/` and `meta/esc50.csv` (TEST negatives;
     /// NOT held out - in DADS). Defaults to the main repo workspace clone.
-    #[arg(
-        long,
-        default_value = "C:/Users/julia/Development/acoustic-drone-detection/workspace/esc50"
-    )]
+    #[arg(long, default_value = "workspace/esc50")]
     esc50: PathBuf,
     /// Fraction of each DADS class used for fitting; the remainder is the DADS
     /// calibration slice used to pick the best-F1 operating threshold.

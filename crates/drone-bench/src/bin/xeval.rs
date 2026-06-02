@@ -79,25 +79,16 @@ const EXTRA_NEG_CLASSES: &[&str] = &["rain", "sea_waves", "clapping", "dog"];
 )]
 struct Cli {
     /// DADS dataset root containing `labels.csv` (the TRAIN source).
-    #[arg(
-        long,
-        default_value = "C:/Users/julia/Development/acoustic-drone-detection/data/dads"
-    )]
+    #[arg(long, default_value = "data/dads")]
     dads: PathBuf,
     /// DADS manifest filename inside `--dads`.
     #[arg(long, default_value = "labels.csv")]
     dads_manifest: String,
     /// Al-Emadi root containing `Binary_Drone_Audio/yes_drone` (TEST positives).
-    #[arg(
-        long,
-        default_value = "C:/Users/julia/Development/acoustic-drone-detection/workspace/al-emadi"
-    )]
+    #[arg(long, default_value = "workspace/al-emadi")]
     alemadi: PathBuf,
     /// ESC-50 root containing `audio/` and `meta/esc50.csv` (TEST negatives).
-    #[arg(
-        long,
-        default_value = "C:/Users/julia/Development/acoustic-drone-detection/workspace/esc50"
-    )]
+    #[arg(long, default_value = "workspace/esc50")]
     esc50: PathBuf,
     /// Fraction of each DADS class used for training (the rest is the
     /// in-distribution comparison split).

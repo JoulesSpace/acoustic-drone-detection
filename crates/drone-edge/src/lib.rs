@@ -10,7 +10,7 @@
 //! exactly how firmware would feed it from a DMA ring buffer. There is no model
 //! and no training: the drone-likeness score is a fixed monotonic rule over three
 //! cheap spectral features - spectral flatness, spectral entropy, and the
-//! 100–4000 Hz band-energy ratio - squashed through a logistic. This is a direct
+//! 100-4000 Hz band-energy ratio - squashed through a logistic. This is a direct
 //! port of the *rule* (untrained) path of `drone-bench`'s `spectral_gate`
 //! approach, which is the natural tiny-edge detector because it needs no learned
 //! weights.

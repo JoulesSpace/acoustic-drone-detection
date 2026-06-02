@@ -1,12 +1,12 @@
-//! Physics-fused drone detector — engineered for CROSS-DATASET generalization.
+//! Physics-fused drone detector - engineered for CROSS-DATASET generalization.
 //!
 //! Our leakage-honest `xeval` (train DADS → test Al-Emadi drones + ESC-50 hard
 //! negatives) exposed a sharp split between two kinds of detector:
 //!
 //! * **Physical / structural cues generalize.** Methods that key on the *physics*
-//!   of a multirotor — a regularly-spaced harmonic comb at the blade-pass
+//!   of a multirotor - a regularly-spaced harmonic comb at the blade-pass
 //!   fundamental, periodic amplitude modulation from the rotors, tonality of the
-//!   spectrum — keep most of their in-distribution ROC-AUC when moved to a
+//!   spectrum - keep most of their in-distribution ROC-AUC when moved to a
 //!   completely different corpus (different mics, rooms, drones, noise).
 //!   `envelope_periodicity` (0.872), `hps` (0.852), and the fusions (0.848 /
 //!   0.813) all held up.
@@ -15,31 +15,31 @@
 //!   (0.685) and the averaged-spectrum `template` (~0.49) collapsed cross-dataset:
 //!   they memorize the *timbre of the training recordings* (mic colour, room,
 //!   specific motor whine), which does not transfer. Training augmentation made
-//!   it WORSE — it erodes the recording lineage the template was leaning on.
+//!   it WORSE - it erodes the recording lineage the template was leaning on.
 //!
 //! `physics_fused` acts on that finding directly: it fuses **only** the
 //! physics/structure features and *deliberately excludes* the two things that
-//! overfit — raw MFCC-mean templates and cosine-to-an-averaged-spectrum. The hope
+//! overfit - raw MFCC-mean templates and cosine-to-an-averaged-spectrum. The hope
 //! (borne out empirically) is that physics features transfer where raw spectral
 //! templates do not, so a small classifier over them generalizes better than any
 //! single physical cue alone.
 //!
 //! ## Feature vector (all timbre-invariant, level-invariant where possible)
-//!  0. **Harmonic-comb contrast** — HPS-guided, blade-pass band ~80–330 Hz. Each
+//!  0. **Harmonic-comb contrast** - HPS-guided, blade-pass band ~80-330 Hz. Each
 //!     predicted harmonic is scored against its *local* inter-harmonic background
 //!     (a contrast, so absolute level / broadband motor hiss cannot inflate or
 //!     invert it), robustly aggregated across frames.
-//!  1. **Consistent harmonic count** — how many comb teeth stand clearly above
+//!  1. **Consistent harmonic count** - how many comb teeth stand clearly above
 //!     their local floor (a regular *stack*, not one lone tone).
-//!  2. **Cepstral periodicity peak** — peak-to-baseline of the real cepstrum in
+//!  2. **Cepstral periodicity peak** - peak-to-baseline of the real cepstrum in
 //!     the blade-pass quefrency band (harmonic comb is periodic in frequency).
-//!  3. **Autocorrelation periodicity peak** — time-domain period strength.
-//!  4. **Envelope AM strength** — fraction of envelope variance in the single
-//!     strongest modulation line, 5–200 Hz (rotor / blade-pass AM).
-//!  5. **Harmonic-to-noise ratio** — comb-band energy vs. off-comb residual.
-//!  6. **Spectral flatness** (clip mean) — tonal vs. noise-like.
-//!  7. **Spectral entropy** (clip mean) — tonality (concentrated vs. flat).
-//!  8. **Fundamental-band energy ratio** — fraction of energy in 80–330 Hz.
+//!  3. **Autocorrelation periodicity peak** - time-domain period strength.
+//!  4. **Envelope AM strength** - fraction of envelope variance in the single
+//!     strongest modulation line, 5-200 Hz (rotor / blade-pass AM).
+//!  5. **Harmonic-to-noise ratio** - comb-band energy vs. off-comb residual.
+//!  6. **Spectral flatness** (clip mean) - tonal vs. noise-like.
+//!  7. **Spectral entropy** (clip mean) - tonality (concentrated vs. flat).
+//!  8. **Fundamental-band energy ratio** - fraction of energy in 80-330 Hz.
 //!
 //! These are standardized with train-set statistics and fed to a deterministic
 //! L2-regularized logistic regression (zero-init, batch gradient descent, no
@@ -61,7 +61,7 @@ use crate::util::spectra;
 const N_FEAT: usize = 9;
 
 /// Blade-pass fundamental search band, Hz. Covers real DADS/Al-Emadi multirotors
-/// (~200–260 Hz) and lower synthetic fundamentals (~110–120 Hz) while excluding
+/// (~200-260 Hz) and lower synthetic fundamentals (~110-120 Hz) while excluding
 /// the sub-80 Hz urban/wind rumble that dominates the negatives.
 const BPF_LO_HZ: f32 = 80.0;
 const BPF_HI_HZ: f32 = 330.0;
@@ -87,7 +87,7 @@ const ITERS: usize = 2000;
 const LR: f32 = 0.5;
 /// L2 regularization strength. Slightly stronger than `feature_fusion` so the
 /// classifier leans on the broad physics consensus rather than fitting any one
-/// feature's training-set quirk — which is what we want for generalization.
+/// feature's training-set quirk - which is what we want for generalization.
 const L2: f32 = 3e-3;
 
 /// Physics-only fused detector.
@@ -133,7 +133,7 @@ impl Approach for PhysicsFused {
 
     fn description(&self) -> &str {
         "Physics-only fusion (harmonic comb, cepstral/ACF periodicity, rotor AM, \
-         HNR, tonality) + logistic regression — engineered for cross-dataset transfer"
+         HNR, tonality) + logistic regression - engineered for cross-dataset transfer"
     }
 
     fn fit(&mut self, train: &[Sample]) {
@@ -239,7 +239,7 @@ fn sigmoid(z: f32) -> f32 {
 }
 
 // ----------------------------------------------------------------------------
-// Feature extraction — physics / structure only.
+// Feature extraction - physics / structure only.
 // ----------------------------------------------------------------------------
 
 /// Build the full physics feature vector for a clip. Returns a zero vector for
@@ -317,7 +317,7 @@ fn physics_features(samples: &[f32], sample_rate: u32) -> [f32; N_FEAT] {
 /// HPS picks the candidate fundamental (with an octave-error guard), then each
 /// predicted harmonic is scored against its *local* inter-harmonic background.
 /// A regular stack has every tooth standing above its local floor regardless of
-/// absolute level or broadband motor hiss — exactly the recording-invariant cue
+/// absolute level or broadband motor hiss - exactly the recording-invariant cue
 /// that transfers cross-dataset.
 fn frame_harmonic_stats(
     spec: &[f32; NUM_BINS],
@@ -370,7 +370,7 @@ fn frame_harmonic_stats(
 ///
 /// `contrast` rewards both the number of well-formed teeth and their average
 /// prominence above the local background. `harmonic_to_noise` is the ratio of
-/// on-comb energy to the off-comb (inter-harmonic) residual — high for a clean
+/// on-comb energy to the off-comb (inter-harmonic) residual - high for a clean
 /// rotor stack, low for broadband noise.
 fn comb_stats(spec: &[f32; NUM_BINS], f0_bin: usize, sample_rate: u32) -> (f32, f32, f32) {
     if f0_bin == 0 {
@@ -543,7 +543,7 @@ fn autocorr_periodicity(samples: &[f32], sample_rate: u32) -> f32 {
 }
 
 /// Rotor amplitude-modulation strength: fraction of the envelope's total
-/// variance concentrated in the single strongest modulation line (5–200 Hz).
+/// variance concentrated in the single strongest modulation line (5-200 Hz).
 /// Periodic blade-pass AM dumps most of its envelope variance into one line;
 /// noise and steady tones spread it flat. Level- and timbre-invariant.
 fn envelope_am_strength(samples: &[f32], sample_rate: u32) -> f32 {

@@ -101,7 +101,7 @@ pub fn best_f1(scored: &[(f32, u8)]) -> (f32, f32) {
     best
 }
 
-/// ROC-AUC via the rank-sum (Mann–Whitney U) statistic, tie-aware.
+/// ROC-AUC via the rank-sum (Mann-Whitney U) statistic, tie-aware.
 pub fn roc_auc(scored: &[(f32, u8)]) -> f32 {
     let n_pos = scored.iter().filter(|&&(_, y)| y == 1).count();
     let n_neg = scored.len() - n_pos;

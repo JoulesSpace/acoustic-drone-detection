@@ -18,10 +18,10 @@
 //!      double as the decimation anti-alias filter.
 //!   2. **Downsample.** Decimate the smoothed envelope to an envelope rate
 //!      `fe ~= 1 kHz` (one sample per ~1 ms). The modulation band of interest
-//!      (5–200 Hz) is far below the Nyquist of that rate.
+//!      (5-200 Hz) is far below the Nyquist of that rate.
 //!   3. **Modulation spectrum.** Convert the envelope to a *modulation index*
 //!      (divide by its mean, subtract 1), window it, and take a direct DFT
-//!      periodogram over the 5–200 Hz band.
+//!      periodogram over the 5-200 Hz band.
 //!   4. **Confidence.** The raw strength is the **peak modulation-band power /
 //!      total envelope-spectrum power** - the fraction of envelope variation in
 //!      the single strongest periodic line. It is mapped through a logistic into

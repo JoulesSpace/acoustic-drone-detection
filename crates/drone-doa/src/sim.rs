@@ -187,7 +187,7 @@ fn pow10(x: f32) -> f32 {
     expf(x * core::f32::consts::LN_10)
 }
 
-/// Tiny seeded xorshift32 with a Box–Muller Gaussian, so noise is deterministic
+/// Tiny seeded xorshift32 with a Box-Muller Gaussian, so noise is deterministic
 /// and `std`-free.
 struct Xorshift {
     state: u32,
@@ -215,7 +215,7 @@ impl Xorshift {
         (self.next_u32() as f32 + 1.0) / (u32::MAX as f32 + 2.0)
     }
 
-    /// Standard-normal sample via Box–Muller.
+    /// Standard-normal sample via Box-Muller.
     fn next_gaussian(&mut self) -> f32 {
         let u1 = self.next_unit();
         let u2 = self.next_unit();

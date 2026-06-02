@@ -13,13 +13,13 @@ _Supersedes [multi-task suite](2026-06-01-multitask-suite.md). Read
 
 ## What this wave added (all committed; `docker compose run --rm dev` green, 9 crates)
 - **Honesty:** `xeval` proved the in-dist ~1.0 numbers are **leakage-inflated** -
-  cross-dataset ROC-AUC collapses to **0.49–0.87**, physics methods (envelope/
+  cross-dataset ROC-AUC collapses to **0.49-0.87**, physics methods (envelope/
   hps/fusion/feature_fusion) generalize, learned templates don't. Hard-negative
   FP rates measured (chainsaw fools hps 0.82; engine/heli fool envelope 0.32).
 - **Live + hardware:** `drone-live` (cpal) - `devices` probe (this laptop = one
   Intel Smart Sound 2-ch 48 kHz array) + `listen` real-time alert loop.
 - **Edge:** `drone-edge` `no_std` detector **cross-builds for riscv32imc &
-  Cortex-M4F**, ~17–27 KB flash / ~0 static RAM. In CI. Xtensa (esp32-S3) needs
+  Cortex-M4F**, ~17-27 KB flash / ~0 static RAM. In CI. Xtensa (esp32-S3) needs
   the esp-rs fork - documented.
 - **Tiers + speed↔accuracy:** `pareto` frontier (band_ratio→hps→mfcc_lr→
   feature_fusion) + `benchmarks/MODEL_CARDS.md` (tiny-edge / balanced / max).

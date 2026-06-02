@@ -65,10 +65,7 @@ const BITS: &[u32] = &[16, 12, 10, 8, 6, 4];
 )]
 struct Cli {
     /// DADS dataset root containing `labels.csv` (header `path,label`).
-    #[arg(
-        long,
-        default_value = "C:/Users/julia/Development/acoustic-drone-detection/data/dads"
-    )]
+    #[arg(long, default_value = "data/dads")]
     data: PathBuf,
     /// Manifest filename inside `--data`.
     #[arg(long, default_value = "labels.csv")]

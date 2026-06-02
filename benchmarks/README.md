@@ -29,7 +29,7 @@ Run any via the dev container, e.g.
 | `drone-bench` (main) | per-approach metrics on one split | metrics_bar / roc / pr / cost_quality |
 | `xeval` | **honest cross-dataset** (train DADS → test Al-Emadi + ESC-50) + per-confounder false-positive rate | - (JSON) |
 | `pareto` | **speed↔accuracy frontier** + hardware-tier assignment | `pareto.py` → pareto.png |
-| `ratesweep` | accuracy vs **sample rate** {8k–44.1k} and **bit depth** {4–16} | `ratesweep.py` → ratesweep.png |
+| `ratesweep` | accuracy vs **sample rate** {8k-44.1k} and **bit depth** {4-16} | `ratesweep.py` → ratesweep.png |
 | `robust` | does training-time **augmentation** narrow the cross-dataset gap | - (JSON) |
 
 Robustness SNR sweep: `bench --snr <dB> --out-dir results/snr_<dB>` for several
@@ -40,7 +40,7 @@ levels, then `robustness.py` → robustness_{roc,f1}.png.
 In-distribution DADS numbers are **leakage-inflated** (DADS is a *merge superset*
 of short clips; a random split puts near-duplicates in train+test). The honest
 signal is **cross-dataset** (`xeval`): in-dist ROC-AUC ~1.0 **collapses to
-0.49–0.87**. Best generalizers are the *physics* methods (`envelope_periodicity`
+0.49-0.87**. Best generalizers are the *physics* methods (`envelope_periodicity`
 0.87, `hps` 0.85, `fusion` 0.85, `feature_fusion` 0.81); learned templates fall to
 chance. Even that is optimistic (Al-Emadi/ESC-50 are inside DADS). Full honesty
 writeup: [`agent-memory/notes/honest-limitations.md`](../agent-memory/notes/honest-limitations.md)
@@ -51,7 +51,7 @@ and [`suite-results.md`](../agent-memory/notes/suite-results.md).
 `pareto` assigns each detector to a tier; see
 [`MODEL_CARDS.md`](MODEL_CARDS.md):
 - **tiny-edge** (esp32-class MCU): `band_ratio`, `hps`, `spectral_gate` - and the
-  `drone-edge` crate cross-compiles the rule detector to riscv32imc (~17–27 KB).
+  `drone-edge` crate cross-compiles the rule detector to riscv32imc (~17-27 KB).
 - **balanced** (phone / Pi): `mfcc_lr`, `gtcc_lr`, `mfcc_mlp`, `cepstrum`,
   `envelope_periodicity`, `template`, `spectrogram_template`.
 - **max-accuracy** (server): `feature_fusion`, `fusion`.

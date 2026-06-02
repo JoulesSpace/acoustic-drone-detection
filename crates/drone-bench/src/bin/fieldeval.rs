@@ -47,10 +47,7 @@ use drone_bench::Approach;
 )]
 struct Cli {
     /// DADS dataset root containing `labels.csv` (the TRAIN source).
-    #[arg(
-        long,
-        default_value = "C:/Users/julia/Development/acoustic-drone-detection/data/dads"
-    )]
+    #[arg(long, default_value = "data/dads")]
     dads: PathBuf,
     /// DADS manifest filename inside `--dads`.
     #[arg(long, default_value = "labels.csv")]

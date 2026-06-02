@@ -63,25 +63,16 @@ const OURS: &[(&str, f32, f32, f32)] = &[
 )]
 struct Cli {
     /// DADS dataset root containing `labels.csv` (the TRAIN source).
-    #[arg(
-        long,
-        default_value = "C:/Users/julia/Development/acoustic-drone-detection/data/dads"
-    )]
+    #[arg(long, default_value = "data/dads")]
     dads: PathBuf,
     /// DADS manifest filename inside `--dads`.
     #[arg(long, default_value = "labels.csv")]
     dads_manifest: String,
     /// Root of the 32-brand drone-visualization clone (unseen-drone positives).
-    #[arg(
-        long,
-        default_value = "C:/Users/julia/Development/acoustic-drone-detection/workspace/dv"
-    )]
+    #[arg(long, default_value = "workspace/dv")]
     drones: PathBuf,
     /// ESC-50 root (unseen-drone-test negatives; NOT held out - in DADS).
-    #[arg(
-        long,
-        default_value = "C:/Users/julia/Development/acoustic-drone-detection/workspace/esc50"
-    )]
+    #[arg(long, default_value = "workspace/esc50")]
     esc50: PathBuf,
     /// Fraction of DADS used for the train+val pool; the rest is in-dist test.
     #[arg(long, default_value_t = 0.7)]

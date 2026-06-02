@@ -11,10 +11,10 @@ Read this BEFORE quoting any headline number. The infra is solid; the
 *evaluation* is not yet trustworthy.
 
 ## The big one: dataset leakage → inflated numbers - NOW CONFIRMED
-DADS clips are short (0.5–7 s) fragments cut from shared source recordings. Our
+DADS clips are short (0.5-7 s) fragments cut from shared source recordings. Our
 random clip-level split places near-duplicates in train AND test, so models learn
 "which recording" more than "droneness." **The `xeval` cross-dataset test
-confirmed this**: in-distribution ROC-AUC ~1.0 collapses to **0.49–0.87**
+confirmed this**: in-distribution ROC-AUC ~1.0 collapses to **0.49-0.87**
 cross-dataset (best `envelope_periodicity` 0.872; `mfcc_lr` 0.685; `template`
 ~0.49; `band_ratio` 0.233 inverted). See [suite-results](suite-results.md#-cross-dataset-reality-check-the-honest-headline--xeval).
 
@@ -58,7 +58,7 @@ frame size, distance/SNR regression, multi-recording-per-brand vendor data.
   Researched ~7. NOT "12 datasets" (12 = approaches). No cross-dataset eval.
 - **Vendors/types:** only 3 Al-Emadi types, macro-F1 0.86. Not broad vendors.
 - **Live/real-time from a mic:** NOT built. We proved the compute budget offline
-  (90–2400× RT) but there is no cpal capture / alert demo yet.
+  (90-2400× RT) but there is no cpal capture / alert demo yet.
 - **Edge (esp32 / Android):** only `--no-default-features` *hygiene* builds. No
   cross-compile, no firmware, no Android. Strong detectors still std-only.
 - **Hard negatives (wind turbine / car / airplane / helicopter):** UNTESTED.

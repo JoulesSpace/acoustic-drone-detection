@@ -79,7 +79,7 @@ reproducible cross-dataset eval exists.** That's our gap to own.
   around corners" (non-LOS, forested/built-up), combinable with radar/camera/
   lidar; **50-200 m**, 360 deg, 1 s resolution, battery-autonomous; *cues* other
   sensors after acoustic contact (projects AMBOS / ALADDIN). `[V]`
-- Class typical best-case **300–500 m**, degrades hard in noise. `[V]`
+- Class typical best-case **300-500 m**, degrades hard in noise. `[V]`
 
 **Real-world calibration band (acoustic, single array).** Effective range is
 typically **50-200 m** (Ghouli 50-60, Fraunhofer 50-200, most cited works
@@ -92,10 +92,10 @@ field-typical.
 - **32-class brand set** (arXiv 2509.04715): 3,200 clips/16,000 s, 32 brand/model
   classes (DJI×15, Syma×6, …); EfficientNet 96.31%. SR/channels/license **[~]**.
 - **DroneAudioset** (arXiv 2510.15383, ahlab): **23.5 h**, 17 mics (two 8-ch
-  circular arrays 25/50 cm + center), 60 Hz–20 kHz, **SNR −57.2..−2.5 dB**,
+  circular arrays 25/50 cm + center), 60 Hz-20 kHz, **SNR −57.2..−2.5 dB**,
   **MIT**. Great for DoA + low-SNR. `[V]`
 - **RWDA** (IEEE-DataPort): **32-ch @48 kHz, 64-ch @150 kHz**, DJI Air 3S/Mini,
-  alt 5–120 m, urban-train/mountain-test; login required. `[V]`
+  alt 5-120 m, urban-train/mountain-test; login required. `[V]`
 - **AudioSet** aircraft/helicopter/propeller/aircraft-engine subsets for hard
   negatives (verify /m/ IDs in ontology.json). `[~]`
 - DREGON: **8-ch @44.1 kHz**, UAV-embedded, Vicon DoA ground truth; academic-only.
