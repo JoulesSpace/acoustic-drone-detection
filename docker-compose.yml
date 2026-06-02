@@ -21,7 +21,7 @@ services:
   detector:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: docker/Dockerfile
     image: drone-detect:dev
     volumes:
       - ./data:/data
@@ -30,7 +30,7 @@ services:
   dev:
     build:
       context: .
-      dockerfile: Dockerfile.dev
+      dockerfile: docker/Dockerfile.dev
     image: drone-dev:toolchain
     working_dir: /work
     volumes:
@@ -44,7 +44,7 @@ services:
   bench:
     build:
       context: .
-      dockerfile: Dockerfile.dev
+      dockerfile: docker/Dockerfile.dev
     image: drone-dev:toolchain
     working_dir: /work
     volumes:
@@ -62,7 +62,7 @@ services:
   plot:
     build:
       context: .
-      dockerfile: Dockerfile.plot
+      dockerfile: docker/Dockerfile.plot
     image: drone-plot:dev
     volumes:
       - ./:/work
@@ -72,7 +72,7 @@ services:
   data:
     build:
       context: .
-      dockerfile: Dockerfile.data
+      dockerfile: docker/Dockerfile.data
     image: drone-data:dev
     working_dir: /work
     volumes:
