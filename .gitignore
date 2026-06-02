@@ -31,3 +31,6 @@ Thumbs.db
 
 # Agent worktrees
 /.claude/worktrees/
+
+# Prompt log (kept locally, not tracked)
+PROMPTS.md
